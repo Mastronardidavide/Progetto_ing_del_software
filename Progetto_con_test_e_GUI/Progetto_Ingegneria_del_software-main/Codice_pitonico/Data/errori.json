@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2026-06-15 13:48:35",
+    "tipo": "ERROR",
+    "messaggio": "GestoreScenario.check_automazioni_coordinate() fallito: 'Attuatore' object has no attribute 'misurazione'"
+  },
+  {
+    "timestamp": "2026-06-15 13:49:35",
+    "tipo": "ERROR",
+    "messaggio": "GestoreScenario.check_automazioni_coordinate() fallito: 'Attuatore' object has no attribute 'misurazione'"
+  },
+  {
+    "timestamp": "2026-06-15 13:58:06",
+    "tipo": "ERROR",
+    "messaggio": "GestoreScenario.check_automazioni_coordinate() fallito: 'Attuatore' object has no attribute 'misurazione'"
+  }
+]

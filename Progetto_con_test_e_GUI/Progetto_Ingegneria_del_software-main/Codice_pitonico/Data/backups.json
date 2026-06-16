@@ -1,0 +1,4 @@
+{
+  "orario": "2026-06-16T17:41:09.455765",
+  "contenuto": "[{'id': '23', 'tipo': 'attuatore', 'nome': 'a', 'orarioAttivazione': '11:11:00', 'statoAttuatore': False}, {'id': '1', 'tipo': 'sensore', 'nome': 'Luce1', 'soglia': 12.0}, {'id': '24', 'tipo': 'attuatore', 'nome': 'finestra2', 'orarioAttivazione': '00:00:00', 'statoAttuatore': False}]"
+}

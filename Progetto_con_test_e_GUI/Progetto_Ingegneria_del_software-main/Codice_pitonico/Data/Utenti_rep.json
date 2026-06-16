@@ -1,0 +1,26 @@
+[
+    {
+        "id": "3",
+        "nome": "dav",
+        "password": "mas",
+        "tipo": "Ospite"
+    },
+    {
+        "id": "5",
+        "nome": "dav",
+        "password": "mas",
+        "tipo": "Ospite"
+    },
+    {
+        "id": "1",
+        "nome": "1",
+        "password": "1",
+        "tipo": "Ospite"
+    },
+    {
+        "id": "48",
+        "nome": "ricccccccc",
+        "password": "ciao",
+        "tipo": "Ospite"
+    }
+]

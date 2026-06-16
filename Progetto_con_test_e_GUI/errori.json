@@ -1,0 +1,372 @@
+[
+  {
+    "timestamp": "2026-06-10 20:01:50",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-10 20:07:50",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-10 20:13:50",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-10 20:19:50",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-10 20:25:50",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-10 20:31:50",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-10 20:39:33",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 00:12:06",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 08:55:08",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:01:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:07:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:13:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:19:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:25:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:31:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:37:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:43:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:49:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 09:55:09",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:01:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:07:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:13:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:19:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:25:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:31:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:37:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:43:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:49:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 10:55:10",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:01:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:07:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:13:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:19:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:25:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:31:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:37:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:43:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:49:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 11:55:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:01:13",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:07:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:13:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:19:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:25:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:31:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:37:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:43:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:49:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 12:55:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 13:01:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 13:07:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 13:13:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 13:19:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 13:25:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 13:31:14",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 15:18:27",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 15:24:29",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 15:33:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 16:25:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 16:31:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 16:37:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 16:43:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 16:49:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 16:55:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 17:01:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 17:07:12",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-11 17:16:26",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-12 10:53:31",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-12 10:59:31",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-12 11:05:32",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-12 11:11:32",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-12 11:17:32",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-12 11:23:33",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  },
+  {
+    "timestamp": "2026-06-12 11:29:33",
+    "tipo": "ERROR",
+    "messaggio": "GestoreDati: Salvataggio automatico fallito. Dettaglio: [Errno 2] No such file or directory: 'Data/backups.json'"
+  }
+]

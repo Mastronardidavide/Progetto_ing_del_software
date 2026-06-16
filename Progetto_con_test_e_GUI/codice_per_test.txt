@@ -1,0 +1,15 @@
+per i test: 
+    entrare da terminale dentro la cartella Coidce_pitonico
+    se si vuole testare tutti i testi in un singolo comando è:
+        python -m unittest
+se invece vogliamo testare un singolo componente
+    python -m unittest -v tests.test_******
+
+cosa ho modificato:
+mancava soltatno il metodo raise error sul attuatore dove se mettavamo una stringa in orario allora non era errore ma era definito il metodo time quindi:
+    
+    def setOrario(self, nuovo_orario: time) -> None:
+        if not isinstance(nuovo_orario, time):
+            raise TypeError("L'orario deve essere un oggetto time")
+        self._orarioAttivazione = nuovo_orario
+

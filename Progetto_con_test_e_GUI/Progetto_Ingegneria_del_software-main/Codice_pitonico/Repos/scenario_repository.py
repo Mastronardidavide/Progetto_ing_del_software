@@ -1,0 +1,47 @@
+import json
+from pathlib import Path
+from Models.scenario import Scenario
+#importo la classe Scenario dal package Models, ma se runni da errore perche una regola fondamentale dell'ECB dice che non si devono mai avviare file che stanno in sottocartelle
+#regola scritta nel documento 1.3 Entry Point
+class ScenarioRepository:
+    def __init__(self, path: str = "Data/scenario.json"):
+        self._path = self._risolvi_path(path)
+        self._scenari: dict = {} #dizionario che avrà come chiave l'ID.
+        self.carica() #carica automaticamente i dati dal file JSON nella memoria del programma nel momento in cui lo avvio.
+
+    def _risolvi_path(self, path: str) -> Path:
+        percorso = Path(path)
+        if not percorso.is_absolute():
+            percorso = Path(__file__).resolve().parent.parent / percorso
+        return percorso
+#da qui ho un metodo per trasformare i dati dal file Json e trasformarli in oggetti.
+    def carica(self) -> None:
+        try:
+            with open(self._path, "r", encoding = "utf-8") as f:
+                dati = json.load(f) #questo ricostrusce gli oggetti usando il metodo fromDict.
+                self._scenari = {d["id"]: Scenario.fromDict(d) for d in dati}
+        except FileNotFoundError:
+            self._scenari = {}     #da errore se il file non esiste ancora, come il primo avvio.
+
+#Qui utilizzo un altro metodo per salvare tutti gli oggetti e trasformandoli di nuovo in testo JSON
+    def salva(self) -> None:
+        self._path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self._path, "w", encoding="utf-8") as f:
+            # Usa toDict() per "decomporsi" prima del salvataggio
+            json.dump([z.toDict() for z in self._scenari.values()], f, indent=2, ensure_ascii=False)
+
+#Qui da altri metodi per interagire con le scenari dal resto del programma, lo riporto ma si puo sempre eliminare se non serve. mi sono riferito all esempio del libro.
+    def trovaPerId(self, id: int):
+        return self._scenari.get(id)  # Restituisce None se non trova la Scenario
+
+    def aggiungi(self, scenario: Scenario) -> None:
+        self._scenari[scenario.getId()] = scenario
+        self.salva()  # Salva automaticamente nel file ogni volta che aggiungi una scenario
+    def tutte(self) -> list: #dall esempio anche del libro qui il nostro programma consegna una lista completa di tutti gli oggetti Scenario che sono caricati in memoria dal file.
+        return list(self._scenari.values())
+    
+    def elimina(self, id: int) -> None:
+        #elimina un elemento e aggiorna il file
+        if id in self._scenari:
+            del self._scenari[id]
+            self.salva()

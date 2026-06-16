@@ -1,0 +1,278 @@
+DOCUMENTO MODIFICHE - ERRORI LOGIN E REGISTRAZIONE
+
+Questo documento spiega cosa e' stato cambiato nel progetto per risolvere
+gli errori che comparivano nel terminale quando provavi a registrarti o a
+fare il login.
+
+
+1. QUAL ERA IL PROBLEMA PRINCIPALE
+
+Quando provavi a registrare un nuovo utente, il programma arrivava a questo
+punto:
+
+    self._utenti_repo.aggiungi(nuovo_utente)
+
+Poi la repository degli utenti provava a salvare il nuovo utente nel file:
+
+    Data/Utenti_rep.json
+
+Il problema era che il percorso "Data/Utenti_rep.json" era relativo alla
+cartella da cui veniva avviato Python.
+
+Quindi, se il programma veniva lanciato da una cartella diversa, Python cercava
+la cartella "Data" nel posto sbagliato. Siccome quella cartella non esisteva,
+usciva l'errore:
+
+    FileNotFoundError: [Errno 2] No such file or directory: 'Data/Utenti_rep.json'
+
+In pratica: il codice era giusto come idea, ma il percorso del file JSON non
+era abbastanza robusto.
+
+
+2. COSA HO CAMBIATO IN utente_repository.py
+
+File modificato:
+
+    Codice_pitonico/Repos/utente_repository.py
+
+Prima il codice faceva:
+
+    self._path = path
+
+Questo voleva dire: "usa il percorso cosi' com'e'".
+
+Ora invece il codice usa pathlib:
+
+    from pathlib import Path
+
+E poi passa il path dentro una funzione:
+
+    self._path = self._risolvi_path(path)
+
+Ho aggiunto questa funzione:
+
+    def _risolvi_path(self, path: str) -> Path:
+        percorso = Path(path)
+        if not percorso.is_absolute():
+            percorso = Path(__file__).resolve().parent.parent / percorso
+        return percorso
+
+Spiegazione:
+
+- Path(path) trasforma la stringa del percorso in un oggetto Path.
+- percorso.is_absolute() controlla se il percorso e' gia' assoluto.
+- Se non e' assoluto, viene costruito partendo dalla posizione reale del file
+  della repository.
+- __file__ indica il file Python corrente.
+- Path(__file__).resolve() prende il percorso completo del file.
+- .parent.parent risale dalla cartella Repos alla cartella Codice_pitonico.
+- Poi viene aggiunto Data/Utenti_rep.json.
+
+Risultato:
+
+    Codice_pitonico/Data/Utenti_rep.json
+
+Quindi il file degli utenti viene sempre cercato e salvato nella cartella
+giusta, indipendentemente da dove lanci il programma.
+
+
+3. CREAZIONE AUTOMATICA DELLA CARTELLA Data
+
+Sempre in utente_repository.py, prima di scrivere il file JSON, ho aggiunto:
+
+    self._path.parent.mkdir(parents=True, exist_ok=True)
+
+Spiegazione:
+
+- self._path e' il file Utenti_rep.json.
+- self._path.parent e' la cartella Data.
+- mkdir crea la cartella.
+- parents=True crea anche eventuali cartelle mancanti.
+- exist_ok=True evita errori se la cartella esiste gia'.
+
+Quindi se Data non esiste, il programma la crea da solo.
+
+
+4. STESSO FIX APPLICATO ALLE ALTRE REPOSITORY
+
+Ho applicato lo stesso tipo di correzione anche alle altre repository che
+leggono o scrivono file JSON.
+
+File modificati:
+
+    Codice_pitonico/Repos/backup_repository.py
+    Codice_pitonico/Repos/dispositivo_repository.py
+    Codice_pitonico/Repos/zona_repository.py
+    Codice_pitonico/Repos/scenario_repository.py
+    Codice_pitonico/Repos/log_repository.py
+
+Motivo:
+
+Anche questi file usavano percorsi tipo:
+
+    Data/backups.json
+    Data/dispositivi.json
+    Data/zona.json
+    Data/scenario.json
+    errori.json
+
+Questi percorsi potevano creare lo stesso problema degli utenti.
+
+Ora anche questi file vengono salvati dentro:
+
+    Codice_pitonico/Data/
+
+E la cartella Data viene creata automaticamente se manca.
+
+
+5. CAMBIAMENTO SU dispositivo_repository.py
+
+Prima c'era questo path:
+
+    "Data\dispositivi.json"
+
+L'ho cambiato in:
+
+    "Data/dispositivi.json"
+
+Motivo:
+
+In Python il backslash puo' creare problemi nelle stringhe perche' viene usato
+anche per sequenze speciali. Lo slash normale funziona bene anche su Windows
+quando si usa pathlib.
+
+
+6. CAMBIAMENTO SU log_repository.py
+
+Prima il file degli errori veniva salvato cosi':
+
+    errori.json
+
+Questo lo avrebbe creato nella cartella da cui avviavi il programma.
+
+Ora invece il default e':
+
+    Data/errori.json
+
+Quindi anche gli errori vengono salvati in modo ordinato dentro:
+
+    Codice_pitonico/Data/errori.json
+
+
+7. COSA HO CAMBIATO IN main.py
+
+File modificato:
+
+    Codice_pitonico/main.py
+
+Prima main.py importava cose che nel progetto non esistevano con quei nomi:
+
+    from FormSmartHome import FormSmartHome
+    from Repositories.dispositivo_repository import DispositivoRepository
+    from Repositories.backup_repository import BackupRepository
+
+Problemi:
+
+- FormSmartHome non si trova direttamente dentro Codice_pitonico.
+- Il file reale e' dentro Views/formSmartHome.py.
+- La cartella Repositories non esiste.
+- Nel progetto la cartella si chiama Repos.
+
+Infatti, avviando main.py, usciva:
+
+    ModuleNotFoundError: No module named 'FormSmartHome'
+
+Pero' nel progetto esisteva gia' un file piu' completo:
+
+    Codice_pitonico/test_main.py
+
+Quel file contiene davvero:
+
+- registrazione
+- login
+- menu principale
+- gestione dispositivi
+- gestione utenti
+- gestione zone
+- gestione scenari
+- timer
+- backup
+
+Quindi ho trasformato main.py in un entry point semplice:
+
+    from test_main import main
+
+
+    if __name__ == "__main__":
+        main()
+
+Spiegazione:
+
+Ora quando avvii main.py, lui richiama direttamente il main corretto che sta
+in test_main.py.
+
+In questo modo puoi avviare il progetto con:
+
+    python Codice_pitonico\main.py
+
+senza dover ricordare di lanciare test_main.py.
+
+
+8. TEST CHE HO FATTO
+
+Ho eseguito il programma simulando questi comandi:
+
+    registra
+    u1
+    Mario
+    pass
+    login
+    u1
+    Mario
+    pass
+    esci
+
+Risultato:
+
+- La registrazione non ha piu' dato FileNotFoundError.
+- Il file degli utenti e' stato creato correttamente in Codice_pitonico/Data.
+- Il login ha funzionato.
+- Il programma e' entrato nella schermata principale.
+- Il comando esci ha chiuso il programma correttamente.
+
+Poi ho eliminato il file Utenti_rep.json creato durante il test, cosi' non ti
+rimane dentro l'utente finto "u1".
+
+
+9. COME AVVIARE ORA IL PROGRAMMA
+
+Dalla cartella principale del progetto usa:
+
+    python Codice_pitonico\main.py
+
+Poi puoi fare:
+
+    registra
+
+Inserisci ID, nome e password.
+
+Poi fai:
+
+    login
+
+E inserisci gli stessi dati.
+
+
+10. RIASSUNTO BREVE
+
+In sintesi ho sistemato:
+
+- errore FileNotFoundError durante la registrazione;
+- percorsi JSON troppo fragili;
+- creazione automatica della cartella Data;
+- salvataggio ordinato dei dati dentro Codice_pitonico/Data;
+- main.py che prima puntava a import sbagliati;
+- avvio del programma dal comando python Codice_pitonico\main.py.
+
+Il problema non era il login in se': era il salvataggio dell'utente su file JSON
+che falliva prima ancora che il programma potesse completare la registrazione.

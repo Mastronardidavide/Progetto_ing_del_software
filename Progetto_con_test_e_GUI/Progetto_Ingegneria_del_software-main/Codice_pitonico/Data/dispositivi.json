@@ -1,0 +1,22 @@
+[
+  {
+    "id": "23",
+    "tipo": "attuatore",
+    "nome": "a",
+    "orarioAttivazione": "11:11:00",
+    "statoAttuatore": false
+  },
+  {
+    "id": "1",
+    "tipo": "sensore",
+    "nome": "Luce1",
+    "soglia": 12.0
+  },
+  {
+    "id": "24",
+    "tipo": "attuatore",
+    "nome": "finestra2",
+    "orarioAttivazione": "00:00:00",
+    "statoAttuatore": false
+  }
+]

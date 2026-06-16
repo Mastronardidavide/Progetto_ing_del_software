@@ -1,0 +1,54 @@
+molteplicità utente centralinA in diagramma delle classi
+
+se l'admin ha accesso a casi d'uso diversi rispetto all 'ospite i casi d'uso sono chiusi rispetto all'osipite, se fa il login l'adimn, l'admin da l'opzione gestione utenti
+nel nostro caso 
+
+centralina diventa control, bisogna implementare un boundary come finestra che mi fa da tramite, mentre admin e ospite, quindi utente non sono classi. oppure sono classi che servono solo per salvare dati nelle repository
+
+gestore scenari è in associazione con scenari, da rivedere le associazioni
+
+lo scenario dovrebbe avere una lista di soglie o un dizionario che attribuisce ad ogni attuatore la propria soglia
+
+backup può essere eliminato come classe ed implementato come metodo del controller
+
+le linee di vita dei diagrammi di creazione iniziano QUANDO è stato creata l'entity
+
+centralina diventa form perchè è boundary non control
+
+l'admin nei diagrammi di analisi sta per conto suo, centralina è proprio da togliere qua
+
+backup non ha bisogno di una repository, è la repository.
+
+libreria multithread per il tempo.
+
+L'interfaccia grafica deve richiamare delle funzioni dai controller, non può comprendere logica interna.
+al massimo può includere dei check sull'input dell'utente, 
+come controllare che l'utente abbia inserito una stringa di numeri e non di testo
+
+sys.exit serve a dire al sistema operativo che se l'utente esce dall'app, non c'è bisogno di continuare ad aspettarsi che interagisca
+
+quando si passa da form da terminale a interfaccia grafica, deve continuare a funzionare tutto come prima,
+senza bisogno di modificare controller o entity
+
+per l'implementazione del tempo si deve scaricare la libreria multithread
+
+git è il software per il versionamento, github è una piattaforma web
+
+basta lo screen dell'interfaccia grafica, senza mockup
+
+al progetto apre il codice e lo fa runnare al di fuori dei 10 min. può rispondere solo 1.
+
+il ppt e/o la documentazione UML dovrebbe includere screen anche dell'intefraccia grafica, di diagrammi e del codice.
+ il ppt non deve includere tutti i diagrammi, ma solo alcuni casi d'uso importanti
+
+ versionare vuol dire mantenere traccia dei cambiamenti che avvengono nel progetto, in generale quando chiede git bastano le due slide teoriche 
+tipo cos'è commit e ste cose
+
+ nel read me bisogna scrivere il progetto è così bla bla e si fa partire così
+
+ dai progetti
+ slide 1 di presentazione del progetto,slide 2 su come è stato fatto il progetto (avvio, e ste cose), slide 3 au come è suddiviso il lavoro, slide 4 architettura di sistema trmite diagrmma di classi di progettazione
+ slide 5 sull'interfcci grafica, slide 6 diagramma di sequenza, focus su ECB, focus sulla prestazione e un occhiata su i mock up, demo e dimostrazione dle programma, ha chiesto la parte del codice uml e del python
+ e la dismostrazione del qr code. commento 2 minuti dell implementazione del codice QR.
+
+ eliminare metodo modificapermessi, sogliascenari

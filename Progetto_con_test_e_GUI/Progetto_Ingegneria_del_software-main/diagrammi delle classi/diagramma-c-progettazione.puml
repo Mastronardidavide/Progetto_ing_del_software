@@ -1,0 +1,138 @@
+@startuml digrammacprogettazione
+title Smart Home diagramma di progettazione delle classi
+skinparam linetype ortho
+
+package "Organizzazioni" {
+    class Zona <<entity>> {
+        - id: int
+        - nome: str
+        + sogliaZona: list
+        + orarioZona: datetime
+        + getId(Zona): int
+        + getNome(Zona): str       
+    }
+    class Scenario <<entity>> {
+        - id: int
+        - nome: str
+        + sogliaScenario: float
+        + orarioScenario: datetime
+        + getId(Scenario): str
+        + getNome(Scenario): str
+    }
+}
+
+package "Log"{
+
+    class Log <<entity>> {
+        - orario: datetime
+        - errori: list
+
+        +getOrarioLog(Log): datetime
+        + getErrori(Log): list
+    }
+}
+
+package "Dispositivi" {
+    abstract class Dispositivo <<entity>> {
+        - id: str
+        -tipo: str
+        + getId(Dispositivo): str
+        + getTipo(Dispositivo): str
+    }
+    class Sensore <<entity>> extends Dispositivo {
+        - soglie: list
+        - tipo: str
+        + aggiungiSoglia(float): void
+        + getSoglie(): list
+    }
+    class Attuatore <<entity>> extends Dispositivo {
+        - orarioAttivazione: datetime
+        - statoAttuatore: bool
+        - tipo: str
+        + setOrario(orarioAttivazione): void
+        + getStato(Attuatore): bool
+        + getOrario(Attuatore): datetime
+    }
+
+}
+
+package "Gestione" {
+    class GestoreZone <<control>> {
+        + creaZona(): Zona
+        + visualizzaZona(Zona)
+        + personalizzaDispositivo(Dispositivo, Zona)
+        + eliminaZona(Zona)
+    }
+    class GestoreScenari <<control>>  {
+        + creaScenario(): Scenario
+        + eseguiScenario(Scenario)
+        + eliminaScenario(Scenario)
+        + modificaScenario(Scenario)
+    }
+    class GestoreDati <<control>>  {
+        + eseguiBackup(): dict
+        + scriviLog(str): Log
+        + caricaBackup(dict)
+        + visualizzaLog(Log)
+    }
+    class GestoreUtenti <<control>> {
+        + creaAccount(): Account
+        + modificaPermessi(Account)
+        + eliminaAccount(Account)
+    }
+    class GestoreDispositivi <<control>>  {
+        + aggiungiDispositivo(): Dispositivo
+        + configuraDispositivo(Dispositivo)
+        + rimuoviDispositivo(Dispositivo)
+        + visualizzaDispositivo(Dispositivo)
+    }
+    class GestoreTempo <<control>>{
+        + checkOrario(getOrario)
+    }
+}
+
+class Timer <<entity>>{
+    getTime(): datetime
+}
+
+    class Utente <<entity>> {
+    -id: str
+    -nome: str
+    + getId(Utente): str
+    + getNome(Utente): str
+    }
+
+
+
+class Form <<boundary>> {
+    + gestisciZone()
+    + gestisciScenari()
+    + gestisciUtenti()
+    + gestisciDispositivi()
+    + gestisciTempo()
+    + segnalaErrore():str
+}
+
+
+
+Utente --> Form : usa
+
+Form "1" o-down- "1" GestoreZone
+Form "1" o-down- "1" GestoreScenari
+Form "1" o-down- "1" GestoreUtenti
+Form "1" o-down- "1" GestoreDispositivi
+Form "1" o-down- "1" GestoreDati
+
+GestoreZone "1" *-- "*" Zona
+GestoreScenari "1" *-- "*" Scenario
+GestoreDispositivi "1" *-- "*" Dispositivo
+GestoreDati "1" *-- "*" Log
+
+Zona "1" o-- "*" Dispositivo
+Scenario "1" o-- "*" Dispositivo
+
+Timer "1" --* "1" GestoreTempo
+Form "1" o-- "1" GestoreTempo
+
+
+@enduml
