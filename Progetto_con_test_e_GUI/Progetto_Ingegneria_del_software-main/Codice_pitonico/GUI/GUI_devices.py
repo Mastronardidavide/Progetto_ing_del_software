@@ -21,7 +21,7 @@ class domOS_devices(QWidget):
 
             self.sfondo = QLabel(self)
             cartella_corrente = Path(__file__).resolve().parent                     #]---|questa parte qui si occupa di fetchare il percorso
-            percorso_immagine = cartella_corrente / "schermatagenpurp_prot.png"     #    |dell'immagine che si vuole utilizzare come sfondo,
+            percorso_immagine = cartella_corrente / "schermatamultipurpose_prot.png"     #    |dell'immagine che si vuole utilizzare come sfondo,
             percorso_str = str(percorso_immagine)                                   #    |(per motivi di compatibilità)
             self.pixmap_per_sfondo = QPixmap(percorso_str)                          #]---|
 
@@ -330,7 +330,7 @@ class domOS_devices(QWidget):
 
                 #prendo l'id da campo 1
                 self.id_disp = self.campo1.text().strip()
-                self.usoConferma = 5 #imposto usoconferma a 5, che mi servirà più avanti
+                self.usoConferma = 5 #imposto usoConferma a 5, che mi servirà più avanti
                 #controllo id: deve essere intero positivo
                 check_id = False
             
