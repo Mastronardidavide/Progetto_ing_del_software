@@ -4,30 +4,52 @@ skinparam linetype ortho
 
 package "Organizzazioni" {
     class Zona <<entity>> {
-        - id: int
+        - id: str
         - nome: str
-        + sogliaZona: list
-        + orarioZona: datetime
-        + getId(Zona): int
-        + getNome(Zona): str       
+        - sogliaZona: float
+        - orarioZona: time
+        - orarioDisattivazione: time
+        - idAttuatori: list
+        - idSensore: str
+        + getId(Zona): str
+        + getNome(Zona): str
+        + getOrarioZona(Zona): time
+        + getOrarioDisattivazione(Zona): time
+        + getSogliaZona(Zona): float
+        + getIdAttuatori(Zona): list
+        + getIdSensore(Zona): str
+        + impostaSoglia(float): void
+        + associaAttuatore(str): void
+        + rimuoviAttuatore(str): void    
     }
     class Scenario <<entity>> {
-        - id: int
+        - id: str
         - nome: str
-        + sogliaScenario: float
-        + orarioScenario: datetime
+        - sogliaScenario: float
+        - orarioScenario: time
+        - orarioDisattivazione: time
+        - idAttuatori: list
+        - idSensore: str
         + getId(Scenario): str
         + getNome(Scenario): str
+        + getOrarioScenario(Scenario): time
+        + getOrarioDisattivazione(Scenario): time
+        + getSogliaScenario(Scenario): float
+        + getIdAttuatori(Scenario): list
+        + getIdSensore(Scenario): str
+        + impostaSoglia(float): void
+        + associaAttuatore(str): void
+        + rimuoviAttuatore(str): void
     }
 }
 
 package "Log"{
 
     class Log <<entity>> {
-        - orario: datetime
+        - orario: time
         - errori: list
 
-        +getOrarioLog(Log): datetime
+        +getOrarioLog(Log): time
         + getErrori(Log): list
     }
 }
@@ -40,18 +62,19 @@ package "Dispositivi" {
         + getTipo(Dispositivo): str
     }
     class Sensore <<entity>> extends Dispositivo {
-        - soglie: list
-        - tipo: str
-        + aggiungiSoglia(float): void
-        + getSoglie(): list
+        - soglia: list
+        + setSoglia(float): void
+        + getSoglia(): list
+        + misurazione(): float
     }
     class Attuatore <<entity>> extends Dispositivo {
-        - orarioAttivazione: datetime
+        - orarioAttivazione: time
         - statoAttuatore: bool
-        - tipo: str
         + setOrario(orarioAttivazione): void
         + getStato(Attuatore): bool
-        + getOrario(Attuatore): datetime
+        + getOrario(Attuatore): time
+        + setStato(bool): void
+        +cambiaStato(): void
     }
 
 }
@@ -92,7 +115,7 @@ package "Gestione" {
 }
 
 class Timer <<entity>>{
-    getTime(): datetime
+    getTime(): time
 }
 
     class Utente <<entity>> {
