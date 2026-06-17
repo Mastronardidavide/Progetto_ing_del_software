@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 from pathlib import Path
 from PyQt6.QtWidgets import QWidget, QLabel
 
+#genero la finestra per il menù dispositvi
 class domOS_devices(QWidget): 
         def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
             super().__init__()
@@ -18,6 +19,22 @@ class domOS_devices(QWidget):
             self.resize(800, 600)           #dimensione
             self.setMinimumSize(600, 400)   #dimensione minima
 
+            self.sfondo = QLabel(self)
+            cartella_corrente = Path(__file__).resolve().parent                     #]---|questa parte qui si occupa di fetchare il percorso
+            percorso_immagine = cartella_corrente / "schermatagenpurp_prot.png"     #    |dell'immagine che si vuole utilizzare come sfondo,
+            percorso_str = str(percorso_immagine)                                   #    |(per motivi di compatibilità)
+            self.pixmap_per_sfondo = QPixmap(percorso_str)                          #]---|
+
+#---------------------------------------------------------------------------
+#----------- GENERAZIONE PULSANTI, LISTE E CAMPI VARI PER LA GUI -----------
+#---------------------------------------------------------------------------           
+#le variabili click servono a contare quante volte un determinato pulsante
+#viene premuto, per eseguire determinate azioni (es: mostrare e nascondere parti della gui)
+#la variabile usoConferma serve a selezionare l'azione del pulsante conferma:
+#siccome questo pulsante viene "riciclato", ovvero viene utilizzato lo stesso pulsante 
+#associato alla stessa funzione in parti diverse di codice, usoConferma seleziona
+#la funzione che il pulsante conferma dovrà svolgere.
+
             self.listaDisp = QListWidget(self)
             self.listaDisp.setStyleSheet("""
                 background-color: #3a7bff;
@@ -27,12 +44,6 @@ class domOS_devices(QWidget):
             """)
             self.listaDisp.hide()
             self.click0 = 0
-
-            self.sfondo = QLabel(self)
-            cartella_corrente = Path(__file__).resolve().parent
-            percorso_immagine = cartella_corrente / "schermatamultipurpose_prot.png"
-            percorso_str = str(percorso_immagine)
-            self.pixmap_per_sfondo = QPixmap(percorso_str)
 
             self.campo1 = QLineEdit(self)
             self.campo1.setPlaceholderText("Inserisci il tuo ID")
@@ -117,14 +128,20 @@ class domOS_devices(QWidget):
             """)
             self.btnIndietro.clicked.connect(self.indietro)
 
+        #"conferma" è la funzione associata al tasto omonimo e può svolgere più azioni,
+        #le quali dipendono dalla variabile usoConferma:
         def conferma(self):
             
+            #se usoConferma è 0, "conferma" si occupa della generazione di nuovi dispositivi
             if self.usoConferma == 0:
 
+                #prendo id, tipo e nome dai campi
                 self.id = self.campo1.text().strip()
                 self.tipo = self.campo2.text().strip().lower()
                 self.nomeDisp = self.campo3.text().strip()
-                self.comando = "aggiungi"
+                self.comando = "aggiungi"   #comando = "aggiungi" da passare alla boundary
+
+                #controllo: l'id deve essere intero positivo
                 check_id = False
             
                 if not check_id:
@@ -134,6 +151,7 @@ class domOS_devices(QWidget):
                             raise ValueError
                         check_id = True
                     except ValueError:
+                        #se non lo è mostro un warning
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
                             self, 
@@ -141,20 +159,27 @@ class domOS_devices(QWidget):
                             "L'ID deve essere un numero intero positivo."
                             )
                         return
-                    
+                
+                #se come tipo è stato digitato "sensore"
                 if self.tipo == "sensore":
-                    self.usoConferma = 2
+                    self.usoConferma = 1 #imposto usoconferma a 1
+                    #pulisco campo 1,2 e 3, nascondo 2 e 3 e rinomino 1
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.hide() for campo in [self.campo2, self.campo3]]
                     self.campo1.setPlaceholderText("Soglia Sensore (float)")
 
-                elif self.tipo == "attuatore":
-                    self.usoConferma = 3
+                #se come tipo è stato digitato "attuatore"
+                elif self.tipo == "attuatore": 
+                    self.usoConferma = 2    #imposto usoConferma a 2
+                    #pulisco campo 1,2 e 3, nascondo 3 e rinomino 1 e 2
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     self.campo3.hide()
                     self.campo1.setPlaceholderText("Orario Attivazione (HH:MM)")
                     self.campo2.setPlaceholderText("Stato Iniziale (On/Off)")
+                
+                #per qualsiasi altro tipo
                 else:
+                    #mostro un error
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.critical(self, "Errore", "Tipo dispositivo non valido")
 
@@ -162,8 +187,10 @@ class domOS_devices(QWidget):
                 orario_attivazione = None
                 self.soglia = None
 
-            elif self.usoConferma == 2:
-
+            #in questo caso stiamo aggiungendo un dispostivo di tipo "sensore"
+            elif self.usoConferma == 1:
+                
+                #controllo:la soglia deve essere float
                 if not self.soglia_valida:
                     try:
                         soglia_input = self.campo1.text().strip()
@@ -171,6 +198,7 @@ class domOS_devices(QWidget):
                         self.soglia_valida = True
 
                     except ValueError:
+                        #se non lo è mostro un warning
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
                             self, 
@@ -179,9 +207,10 @@ class domOS_devices(QWidget):
                         )
                         self.campo1.clear()
                         return
-
+                
+                #passo tutto a menu_disp dentro boundary dispositivi
                 self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, self.soglia)
-
+                #resetto il menù e mostro un info che notifica del successo dell'operazione
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btn1.hide()
@@ -194,14 +223,17 @@ class domOS_devices(QWidget):
                 )
                 self.click1 = 0
 
-            elif self.usoConferma == 3:
-
+            #in questo caso stiamo aggiungendo un attuatore
+            elif self.usoConferma == 2:
+                
+                #controlliamo e assegnamo il valore corretto a "stato"
                 stato_str = self.campo2.text().strip().lower()
                 if stato_str == "on":
                     stato_iniziale = True
                 elif stato_str == "off":
                     stato_iniziale = False
                 else:
+                    #se il valore è non ammesso, mostro un warning
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.warning(
                         self, 
@@ -209,13 +241,16 @@ class domOS_devices(QWidget):
                         "Formato stato non valido"
                     )
                     return
-                orario_str = self.campo1.text().strip()
+                
+                orario_str = self.campo1.text().strip() #prendo l'orario da campo 1
+                #controllo: l'orario deve avere formato HH:MM
                 self.check_orario = False
                 if not self.check_orario:
                     try:
                         orario_attivazione = datetime.strptime(orario_str, "%H:%M").time() #converto str in time tramite strinf parse time
                         self.check_orario = True
                     except ValueError:
+                        #se il formato è sbagliato, mostro un warning
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
                             self, 
@@ -223,9 +258,12 @@ class domOS_devices(QWidget):
                             "Formato orario non valido. Usa il formato HH:MM (es. 14:30)."
                         )
                         return
+                #siccome stiamo aggiungendo un attuatore, imposto soglia a None, poi passo tutto a 
+                #menu_disp dentro boundary dispositivi
                 soglia = None
                 self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, soglia, stato_iniziale, orario_attivazione)
                 
+                #resetto il menù e mostro un info che notifica del successo dell'operazione
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btn1.hide()
@@ -237,11 +275,15 @@ class domOS_devices(QWidget):
                     "Attuatore aggiunto con successo!"
                 )
                 self.click1 = 0
-                
-            elif self.usoConferma == 4:
+            
+            #se usoConferma è 3, "conferma" si occupa della rimozione di dispositivi
+            elif self.usoConferma == 3:
+                #imposto comando su "rimuovi", che verrà poi passato alla boundary
                 self.comando = "rimuovi"
-                self.tipo = self.nomeDisp = None
-                rimuovidisp = self.campo1.text().strip()
+                self.tipo = self.nomeDisp = None #imposto tipo e nome a None poichè non ci servono
+                rimuovidisp = self.campo1.text().strip() #prendo l'id del dispositivo da rimuovere da campo 1
+
+                #controllo: l'id deve essere intero positivo
                 check_id = False
             
                 if not check_id:
@@ -251,6 +293,7 @@ class domOS_devices(QWidget):
                             raise ValueError
                         check_id = True
                     except ValueError:
+                        #se non lo è, mostro un warning
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
                             self, 
@@ -259,14 +302,17 @@ class domOS_devices(QWidget):
                             )
                         return
                 
+                #passo tutto alla boundary
                 feedback = self.boundary_disp.menu_disp(self.comando, rimuovidisp, self.tipo , self.nomeDisp)
-                print(feedback)
+                print(feedback) #prendo il feedback per eseguire controlli
                 if feedback == f"Errore: Dispositivo {rimuovidisp} non trovato":
+                    #se l'id non è associato a nesun dispositivo, mostro un error
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.critical(self, "Errore", "Dispositivo non trovato")
                     self.campo1.clear()
                     return
                 elif feedback == f"Dispositivo {rimuovidisp} rimosso con successo":
+                    #se invece riesco a rimuovere il dispositivo, mostro un info
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.information(
                         self, 
@@ -274,13 +320,18 @@ class domOS_devices(QWidget):
                         f"Dispositivo {rimuovidisp} rimosso con successo"
                     )
                     self.click2 = 0
+                #pulisco il menù
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.campo1.hide()
                 self.btn1.hide()
             
-            elif self.usoConferma == 5:
+            #se usoConferma è 4, "conferma" ha la funzione di modificare un dispositivo
+            elif self.usoConferma == 4:
+
+                #prendo l'id da campo 1
                 self.id_disp = self.campo1.text().strip()
-                self.usoConferma = 6
+                self.usoConferma = 5 #imposto usoconferma a 5, che mi servirà più avanti
+                #controllo id: deve essere intero positivo
                 check_id = False
             
                 if not check_id:
@@ -290,6 +341,7 @@ class domOS_devices(QWidget):
                             raise ValueError
                         check_id = True
                     except ValueError:
+                        #se non lo è, mostro un warning
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
                             self, 
@@ -297,24 +349,30 @@ class domOS_devices(QWidget):
                             "L'ID deve essere un numero intero positivo."
                             )
                         return
-                    
+                #dopodichè preparo il menù per raccogliere: soglia, stato iniziale e orario.
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.campo1.setPlaceholderText("Nuova Soglia")
                 self.campo2.setPlaceholderText("Nuovo Stato Iniziale(On/Off)")
                 self.campo3.setPlaceholderText("Nuovo Orario (HH:MM)")
                 [campo.show() for campo in [self.campo1, self.campo2, self.campo3]]
 
-            elif self.usoConferma == 6:
-            
+            #adesso "conferma" avrà le seguenti funzioni
+            elif self.usoConferma == 5:
+                
+                #prendo soglia da campo1
                 soglia_input = self.campo1.text().strip()
+                #controllo: soglia deve essere float
                 nuova_soglia = float(soglia_input) if soglia_input else None
                 if nuova_soglia == None:
+                    #se non lo è, mostro un warning
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.warning(
                         self, 
                         "Attenzione", 
                         "Formato soglia non valido o vuota. La soglia non verrà modificata."
                     )
+                #prendo stato da campo 2 e controllo che abbia una forma valida. Se si, assegno
+                #il valore gusto di stato
                 nuovo_stato = False
                 stato_input = self.campo2.text().strip().lower()
                 if stato_input == "on":
@@ -322,12 +380,14 @@ class domOS_devices(QWidget):
                 elif stato_input == "off":
                     nuovo_stato = False
                 else:
+                    #se non ha una forma valida, mostro un warning
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.warning(
                         self, 
                         "Attenzione", 
                         "Formato stato non valido o vuoto. Lo stato non verrà modificato."
                     )
+                #prendo orario da campo 3 e controllo che sia HH:MM
                 nuovo_orario = None
                 orario_input = self.campo3.text().strip()
                 self.check_orario = False
@@ -336,128 +396,157 @@ class domOS_devices(QWidget):
                         nuovo_orario = datetime.strptime(orario_input, "%H:%M").time() #converto str in time tramite strinf parse time
                         self.check_orario = True
                     except ValueError:
+                        #se non è HH:MM, mostro un warning
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
                             self, 
                             "Attenzione", 
                             "Formato orario non valido o vuoto. L'orario non verrà modificato."
                         )
+                #passo tutto a menu_disp dentro boundary dispositivi, dopodichè mostro un'info di avvenuta configurazione
+                #configurazione e pulisco il menu
+                self.comando = "configura"
+                self.tipo = self.nomeDisp = None
+                self.boundary_disp.menu_disp(self.comando, self.id_disp, self.tipo, self.nomeDisp, nuova_soglia, nuovo_stato, nuovo_orario)
                 from PyQt6.QtWidgets import QMessageBox
                 QMessageBox.information(
                     self, 
                     "Successo", 
                     "Dispositivo configurato con successo."
                 )
-                self.comando = "configura"
-                self.tipo = self.nomeDisp = None
-                self.boundary_disp.menu_disp(self.comando, self.id_disp, self.tipo, self.nomeDisp, nuova_soglia, nuovo_stato, nuovo_orario)
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btn1.hide()
                 self.click3 = 0
 
+        #funzione associata al pulsante "lista dispositivi"
         def lista(self):
 
+                #al primo click del pulsante:
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btn1.hide()
-                if self.click0 % 2 == 0:
-                    self.click1 = self.click2 = self.click3 = 0
-                    self.listaDisp.clear()
+                if self.click0 == 0:
+                    self.click1 = self.click2 = self.click3 = 0 #stessa cosa con le variabili click
+                    self.listaDisp.clear()  #pulisco la lista
+
+                    #prendo la lista dispositivi da boundary, la "spacchetto" e la carico sulal lista GUI
                     righe_dispositivi = self.boundary_disp._g_disp.lista()
                     if not righe_dispositivi:
                         self.listaDisp.addItem("Nessun dispositivo presente nel sistema.")
                     else:
                         self.listaDisp.addItems(righe_dispositivi)
+                    #mostro la lista e la porto in cima
                     self.listaDisp.show()
                     self.listaDisp.raise_()
-                    self.click0 += 1
+                    self.click0 = 1
 
+                #al secondo click: pulisco la lista e la nascondo
                 else:
                     self.listaDisp.clear()
                     self.listaDisp.hide()
-                    self.click0 += 1
-
-                if self.click0 >= 2:
                     self.click0 = 0
 
+        #"aggiungiDisp" si occupa di impostare il menù principale per l'aggiunta di dispositivi
+        #è una funzione puramente grafica
         def aggiungiDisp(self):
                 
-                if self.click1 % 2 == 0:
-                    self.click0 = self.click2 = self.click3 = 0
-                    self.listaDisp.hide()
+                #al primo click del pulsante "aggiungi dispositivo":
+                if self.click1 == 0:
+                    self.click0 = self.click2 = self.click3 = 0 #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
+                    self.usoConferma = 0 #imposto usoConferma a 0 per modificare il funzionamento dl pulsante "conferma"
+                    self.listaDisp.hide() #nascondo la lista dispositivi per lo stesso motivo
+                    #modifico il nome dei campi
                     self.campo1.setPlaceholderText("ID Dispositivo")
                     self.campo2.setPlaceholderText("Tipo Dispositivo")
                     self.campo3.setPlaceholderText("Nome Dispositivo")
+                    #li pulisco e li mostro
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.show() for campo in [self.campo1, self.campo2, self.campo3]]
-                    self.listaDisp.hide()
-                    self.btn1.setText("Conferma")
+                    #mostro anche il pulsante "conferma"
                     self.btn1.show()
-                    self.click1 += 1
+                    self.click1 = 1
 
+                #al secondo click del pulsante "aggiungi dispositivo":
                 else:
+                    #nascondo campi e pulsante conferma
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                     self.btn1.hide()
-                    self.click1 += 1
-
-                if self.click1 >= 2:
                     self.click1 = 0
 
+        #"rimuoviDisp" si occupa di impostare il menù principale per la rimozione di dispositivi
+        #è una funzione puramente grafica
         def rimuoviDisp(self):
 
+                #al primo click del pulsante "rimuovi dispositivo":
                 if self.click2 == 0:
-                    self.click1 = self.click0 = self.click3 = 0
-                    self.usoConferma = 4
+                    self.click1 = self.click0 = self.click3 = 0 #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
+                    self.usoConferma = 3    #imposto usoConferma a 3 per modificare il funzionamento dl pulsante "conferma"
+                    self.listaDisp.hide()   #nascondo la lista dispositivi per lo stesso motivo
+                    #pulisco i campi
+                    #modifico il nome del campo 1, gli altri 2 non servono
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.hide() for campo in [self.campo2, self.campo3]]
-                    self.listaDisp.hide()
-                    self.campo1.setPlaceholderText("ID Dispositivo da eliminare")
-                    self.btn1.setText("Conferma")
-                    self.campo1.show()
-                    self.btn1.show()
-                    self.click2 += 1
+                    self.campo1.setPlaceholderText("ID Dispositivo da eliminare") #cambio il suo nomes
+                    self.campo1.show() #mostro campo 1
+                    self.btn1.show() #mostro anche il pulsante "conferma"
+                    self.click2 = 1
+                
+                #al secondo click del pulsante "rimuovi dispositivo":
                 else :
+                    #nascondo campi e pulsante conferma
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                     self.btn1.hide()
                     self.listaDisp.hide()
-                    self.click2 += 1 
+                    self.click2 = 0 
 
-                if self.click2 >= 2:
-                    self.click2 = 0
-
+        #"modificaDisp" si occupa di impostare il menù principale per la modifica dei parametri di dispositivi
+        #è una funzione puramente grafica
         def modificaDisp(self):
                 
+                #al primo click del pulsante "rimuovi dispositivo":
                 if self.click3 == 0:
-                    self.click1 = self.click2 = self.click0 = 0
+                    self.click1 = self.click2 = self.click0 = 0 #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
+                    self.usoConferma = 4    #imposto usoConferma a 3 per modificare il funzionamento dl pulsante "conferma"
+                    self.listaDisp.hide()   #nascondo la lista dispositivi per lo stesso motivo
+                    #pulisco i campi
+                    #modifico il nome del campo 1, gli altri 2 non servono
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.hide() for campo in [self.campo2, self.campo3]]
-                    self.listaDisp.hide()
                     self.campo1.setPlaceholderText("ID Dispositivo da configurare")
-                    self.btn1.setText("Conferma")
-                    self.campo1.show()
-                    self.btn1.show()
-                    self.click3 += 1
-                    
+                    self.campo1.show()  #mostro campo 1
+                    self.btn1.show()    #mostro anche il pulsante "conferma"
+                    self.click3 = 1
+
+                #al secondo click del pulsante "rimuovi dispositivo":  
                 else:
+                    #nascondo campi e pulsante conferma
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                     self.btn1.hide()
                     self.listaDisp.hide()
-                    self.click3 += 1
-
-                if self.click3 >= 2:
                     self.click3 = 0
 
+        #"indietro" riporta l'utente al menù principale della gui
         def indietro(self):
+
             from GUI.GUI_mainMenu import domOS_mainmenu
             self.finestra_mainmenu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
             self.finestra_mainmenu.show()
             self.close()
 
+#---------------------------------------------------------------------------------------------------------------
+#----------- FUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI ------------
+#---------------------------------------------------------------------------------------------------------------         
+#ridimensionare dinamicamente nel senso che le dimensioni di tutti i componenti grafici sono proporzionali alla dimensione
+#della finestra, perciò se la dimensione della finestra cambia, cambiano anche le dimensioni dei componenti grafici.
+#Questo permette alla GUI di mantenere la sua organizzazione di default per qualsiasi dimensione scelta dall'utente
+
         def resizeEvent(self, event):
             
+            #le 7 righe seguenti servono a scalare l'immagine di sfondo cercando di
+            #mantenere la qualità originale, per poi assegnarla come sfondo.
             self.sfondo.resize(self.size())
             pixmap_scalata = self.pixmap_per_sfondo.scaled(
                 self.size(),
@@ -466,9 +555,12 @@ class domOS_devices(QWidget):
             )
             self.sfondo.setPixmap(pixmap_scalata)
             
+            #prendo le dimensini della finestra
             larghezza = self.width()
             altezza = self.height()
-        
+
+            #di seguito ogni componente grafico viene ridimensionato porporzionalmente
+            #ad altezza e larghezza correnti della finestra
             campol = (larghezza * 26) // 100
             campoa = (altezza * 5) // 100
             campox = int(((larghezza * 62) // 100) - 0.35*campol)
