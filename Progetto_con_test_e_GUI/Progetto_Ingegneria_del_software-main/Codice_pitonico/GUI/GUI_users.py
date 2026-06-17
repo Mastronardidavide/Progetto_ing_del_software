@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from pathlib import Path
 from PyQt6.QtWidgets import QWidget, QLabel
 
-#genero la finestra per il menù principale
+#genero la finestra per il menù utenti
 class domOS_users(QWidget): 
         def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
             super().__init__()
@@ -195,7 +195,7 @@ class domOS_users(QWidget):
                 self.listaUsers.clear() #svuoto la lista
                 self.listaUsers.hide()  #nascondo la lista
 
-        #"indietro" semplicemente riporta l'utente al menù principale della gui
+        #"indietro" riporta l'utente al menù principale della gui
         def indietro(self):
 
             from GUI.GUI_mainMenu import domOS_mainmenu
@@ -330,7 +330,7 @@ class domOS_users(QWidget):
                     return
                 
 #---------------------------------------------------------------------------------------------------------------
-#----------- FFUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI -----------
+#----------- FUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI ------------
 #---------------------------------------------------------------------------------------------------------------         
 #ridimensionare dinamicamente nel senso che le dimensioni di tutti i componenti grafici sono proporzionali alla dimensione
 #della finestra, perciò se la dimensione della finestra cambia, cambiano anche le dimensioni dei componenti grafici.
