@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt
 from pathlib import Path
 from PyQt6.QtWidgets import QWidget, QLabel
 
+#generiamo la finestra per la parte di login
 class domOS_login(QWidget): 
         def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
             super().__init__()
@@ -14,16 +15,20 @@ class domOS_login(QWidget):
             self.boundary_scenari = boundary_scenari
             self.utente_autenticato = None
 
-            self.setWindowTitle("domOS")
-            self.resize(800, 600)
-            self.setMinimumSize(600, 400)
+            self.setWindowTitle("domOS")    #titolo finestra
+            self.resize(800, 600)           #dimensione
+            self.setMinimumSize(600, 400)   #ridimensionamento minimo finestra
 
-            self.sfondo = QLabel(self)
-            cartella_corrente = Path(__file__).resolve().parent
-            percorso_immagine = cartella_corrente / "schermatalogin_prot.png"
-            percorso_str = str(percorso_immagine)
-            self.pixmap_per_sfondo = QPixmap(percorso_str)
+            self.sfondo = QLabel(self)                                          
+            cartella_corrente = Path(__file__).resolve().parent                     #]---|questa parte qui si occupa di fetchare il percorso
+            percorso_immagine = cartella_corrente / "schermatalogin_prot.png"       #    |dell'immagine che si vuole utilizzare come sfondo,
+            percorso_str = str(percorso_immagine)                                   #    |(per motivi di compatibilità)
+            self.pixmap_per_sfondo = QPixmap(percorso_str)                          #]---|
 
+#---------------------------------------------------------------------------
+#----------- GENERAZIONE PULSANTI, LISTE E CAMPI VARI PER LA GUI -----------
+#---------------------------------------------------------------------------           
+            
             self.campoID = QLineEdit(self)
             self.campoID.setPlaceholderText("Inserisci il tuo ID")
             self.campoID.setStyleSheet("""
@@ -63,11 +68,15 @@ class domOS_login(QWidget):
             """)
             self.btnRegistra.clicked.connect(self.raccoglidatireg)
 
-        def raccoglidatiacc(self):
+
+        def raccoglidatiacc(self):  #funzione che si occupa del login
                 
+                #raccolgo id, nome e password dai campi
                 id_ut = self.campoID.text().strip()
                 nome = self.campoNome.text().strip()
                 pswd = self.campoPass.text().strip()
+
+                #controllo: l'id deve essere un numero intero positivo
                 check_id = False
             
                 if not check_id:
@@ -77,6 +86,7 @@ class domOS_login(QWidget):
                             raise ValueError
                         check_id = True
                     except ValueError:
+                        #se non lo è, mostro una message box di avviso
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
                             self, 
@@ -84,9 +94,10 @@ class domOS_login(QWidget):
                             "L'ID deve essere un numero intero positivo."
                             )
                         return
-    
+                #controllo se sono stati compilati tutti i campi obbligatori
                 if not id_ut or not nome or not pswd:
-    
+                    
+                    #se manca qualcosa tra id, nome e password mostro un messagebox warning
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.warning(
                     self, 
@@ -94,25 +105,26 @@ class domOS_login(QWidget):
                     "Tutti i campi sono obbligatori! Compila ID, Nome e Password."
                     )
                     return
-        
+                #passo id, nome e password al boundary utenti per il login e controllo il feedback dalla gui
                 login = self.boundary_utenti.form_login(id_ut, nome, pswd)
-
+                #se le credenziali sono valide passo alla finestra del menù principale e poi chiudo la finestra di login
                 if login:
                     from GUI.GUI_mainMenu import domOS_mainmenu
                     self.finestra_menu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
                     self.finestra_menu.show()
                     self.close()
-
+                #altrimenti, mostro un message box di errore
                 else:
                     self.utente_autenticato = None
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.critical(self, "Errore", "Credenziali non valide!")
 
-        def raccoglidatireg(self):
-    
+        def raccoglidatireg(self):  #funzione che si occupa della registrazione
+            #cole il login, raccolgo id, nome e password dai campi
             id_ut = self.campoID.text().strip()
             nome = self.campoNome.text().strip()
             pswd = self.campoPass.text().strip()
+            #controllo che l'id sia intero positivo
             self.check_id = False
             
             if not self.check_id:
@@ -129,9 +141,9 @@ class domOS_login(QWidget):
                             "L'ID deve essere un numero intero positivo."
                             )
                         return
-                
+            #se manca qualcosa (id, nome, password)
             if not id_ut or not nome or not pswd:
-    
+                #mostro un messagebox di avviso
                 from PyQt6.QtWidgets import QMessageBox
                 QMessageBox.warning(
                 self, 
@@ -139,12 +151,12 @@ class domOS_login(QWidget):
                 "Tutti i campi sono obbligatori! Compila ID, Nome e Password."
                 )
                 return
+            #passo tutto alla boundary
             esito = self.boundary_utenti.form_registrazione(id_ut, nome, pswd)
-        
-            from PyQt6.QtWidgets import QMessageBox
-        
-
+            #controllo cosa mi ritorna la boundary
             if esito == "Utente creato":
+                #se tutto va a buon fine, mostro un message box di informazione
+                from PyQt6.QtWidgets import QMessageBox
                 QMessageBox.information(
                     self, 
                     "Successo", 
@@ -152,21 +164,33 @@ class domOS_login(QWidget):
                 )
             
             elif esito == "Utente già presente":
+                #se l'utente esiste già, mostro un messagrbox di warning
+                from PyQt6.QtWidgets import QMessageBox
                 QMessageBox.warning(
                     self, 
                     "Errore Registrazione", 
                     "Attenzione: esiste già un account con questo ID!"
                 )
             else:
-
+                #per qualsiasi altro errore, mostro un messagebox contenente l'errore
+                from PyQt6.QtWidgets import QMessageBox
                 QMessageBox.critical(
                     self, 
                     "Errore", 
                     f"Impossibile completare l'operazione: {esito}"
                 )
 
+#---------------------------------------------------------------------------------------------------------------
+#----------- FFUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI -----------
+#---------------------------------------------------------------------------------------------------------------         
+#ridimensionare dinamicamente nel senso che le dimensioni di tutti i componenti grafici sono proporzionali alla dimensione
+#della finestra, perciò se la dimensione della finestra cambia, cambiano anche le dimensioni dei componenti grafici.
+#Questo permette alla GUI di mantenere la sua organizzazione di default per qualsiasi dimensione scelta dall'utente
+
         def resizeEvent(self, event):
             
+            #le 7 righe seguenti servono a scalare l'immagine di sfondo cercando di
+            #mantenere la qualità originale.
             self.sfondo.resize(self.size())
             pixmap_scalata = self.pixmap_per_sfondo.scaled(
                 self.size(),
@@ -175,9 +199,12 @@ class domOS_login(QWidget):
             )
             self.sfondo.setPixmap(pixmap_scalata)
 
+            #raccolgo larghezza ed altezza correnti della finestra
             larghezza = self.width()
             altezza = self.height()
         
+            #di seguito ogni componente grafico viene ridimensionato porporzionalmente
+            #ad altezza e larghezza correnti della finestra
             campol = (larghezza * 26) // 100
             campoa = (altezza * 5) // 100
             campox = int(((larghezza * 62) // 100) - 0.35*campol)

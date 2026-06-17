@@ -8,11 +8,11 @@ from Repos.utente_repository import UtenteRepository
 from Repos.zona_repository import ZonaRepository
 from Repos.log_repository import LogRepository
 from Repos.scenario_repository import ScenarioRepository
-from Codice_pitonico.Services.gestore_dati_GUI import GestoreDati
-from Codice_pitonico.Services.gestore_dispositivi_GUI import GestoreDispositivi
-from Codice_pitonico.Services.gestore_utenti_GUI import GestoreUtenti
-from Codice_pitonico.Services.gestore_zone_GUI import GestoreZona
-from Codice_pitonico.Services.gestore_scenari_GUI import GestoreScenario
+from Services.gestore_dati_GUI import GestoreDati
+from Services.gestore_dispositivi_GUI import GestoreDispositivi
+from Services.gestore_utenti_GUI import GestoreUtenti
+from Services.gestore_zone_GUI import GestoreZona
+from Services.gestore_scenari_GUI import GestoreScenario
 from GUI.GUI_login import domOS_login
 from Views.Timer import Timer
 import json
