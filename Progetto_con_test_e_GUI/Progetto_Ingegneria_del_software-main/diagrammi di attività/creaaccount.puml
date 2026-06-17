@@ -2,15 +2,12 @@
 title Crea account
 
 start
-if (Admin autenticato?) then (no)
-    :Mostra messaggio di errore;
-    :Richiedi autenticazione;
-else (si)
-    :Seleziona "Crea nuovo account";
-    :Inserisci dati e permessi;
 
-    :Crea account;
-    :Account creato;
-endif
+:Seleziona "Crea nuovo account";
+:Inserisci dati e permessi;
+
+:Crea account;
+:Account creato;
+
 stop
 @enduml
