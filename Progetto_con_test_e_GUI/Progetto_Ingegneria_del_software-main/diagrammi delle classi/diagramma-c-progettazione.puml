@@ -83,24 +83,32 @@ package "Gestione" {
     class GestoreZone <<control>> {
         + creaZona(): Zona
         + visualizzaZona(Zona)
-        + personalizzaDispositivo(Dispositivo, Zona)
+        + modifcaZona(id, nuovoNome): str
         + eliminaZona(Zona)
+        + impostaAutomazioneSensore()
+        + associaAttuatoreZona()
+        + rimuoviAttuatoreDaZona()
+        + impostaProgramazioneOraria()
+        + calcolaPotenzialiAttuatori()
     }
     class GestoreScenari <<control>>  {
         + creaScenario(): Scenario
-        + eseguiScenario(Scenario)
+        + visualizzaScenario(Scenario)
+        + modifcaScenario(id, nuovoNome): str
         + eliminaScenario(Scenario)
-        + modificaScenario(Scenario)
+        + impostaAutomazioneSensore()
+        + associaAttuatoreScenario()
+        + rimuoviAttuatoreDaScenario()
+        + impostaProgramazioneOraria()
+        + checkAutomazioniPrioritarie()
     }
     class GestoreDati <<control>>  {
-        + eseguiBackup(): dict
-        + scriviLog(str): Log
-        + caricaBackup(dict)
-        + visualizzaLog(Log)
+        + eseguiBackup(str): void
+        + recuperaContenutoBackup(GestoreDati): str
     }
     class GestoreUtenti <<control>> {
         + creaAccount(): Account
-        + modificaPermessi(Account)
+        + login()
         + eliminaAccount(Account)
     }
     class GestoreDispositivi <<control>>  {
@@ -108,6 +116,9 @@ package "Gestione" {
         + configuraDispositivo(Dispositivo)
         + rimuoviDispositivo(Dispositivo)
         + visualizzaDispositivo(Dispositivo)
+        + checkAttuatori()
+        + checkSensori()
+        + lista(): list
     }
     class GestoreTempo <<control>>{
         + checkOrario(getOrario)
@@ -121,8 +132,12 @@ class Timer <<entity>>{
     class Utente <<entity>> {
     -id: str
     -nome: str
+    -passowrd: str
+    -tipo: str
     + getId(Utente): str
     + getNome(Utente): str
+    + getPassword(Utente): str
+    + getTipo(Utente): str
     }
 
 
