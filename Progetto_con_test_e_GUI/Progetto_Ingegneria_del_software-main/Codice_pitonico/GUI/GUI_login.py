@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from pathlib import Path
 from PyQt6.QtWidgets import QWidget, QLabel
 
-#generiamo la finestra per la parte di login
+#genero la finestra per la parte di login
 class domOS_login(QWidget): 
         def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
             super().__init__()
@@ -68,6 +68,9 @@ class domOS_login(QWidget):
             """)
             self.btnRegistra.clicked.connect(self.raccoglidatireg)
 
+#------------------------------------------------------------------------------------------
+#----------- FUNZIONI CHE SI OCCUPANO DELL'INTERFACCIAMENTO TRA GUI E PROGRAMMA -----------
+#------------------------------------------------------------------------------------------
 
         def raccoglidatiacc(self):  #funzione che si occupa del login
                 
@@ -190,7 +193,7 @@ class domOS_login(QWidget):
         def resizeEvent(self, event):
             
             #le 7 righe seguenti servono a scalare l'immagine di sfondo cercando di
-            #mantenere la qualità originale.
+            #mantenere la qualità originale, per poi assegnarla come sfondo.
             self.sfondo.resize(self.size())
             pixmap_scalata = self.pixmap_per_sfondo.scaled(
                 self.size(),

@@ -14,9 +14,9 @@ class domOS_devices(QWidget):
             self.boundary_zone = boundary_zone
             self.boundary_scenari = boundary_scenari
 
-            self.setWindowTitle("domOS")
-            self.resize(800, 600)
-            self.setMinimumSize(600, 400)
+            self.setWindowTitle("domOS")    #titolo
+            self.resize(800, 600)           #dimensione
+            self.setMinimumSize(600, 400)   #dimensione minima
 
             self.listaDisp = QListWidget(self)
             self.listaDisp.setStyleSheet("""
