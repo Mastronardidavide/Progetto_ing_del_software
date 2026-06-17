@@ -1,26 +1,23 @@
-from datetime import datetime
-
-from Boundary.boundary_dispositivi import BoundaryDispositivo
-from Boundary.boundary_utenti import BoundaryUtente
-from Boundary.boundary_zone import BoundaryZona
-from Boundary.boundary_scenari import BoundaryScenario
+from Boundary.boundary_dispositivi_GUI import BoundaryDispositivo
+from Boundary.boundary_utenti_GUI import BoundaryUtente
+from Boundary.boundary_zone_GUI import BoundaryZona
+from Boundary.boundary_scenari_GUI import BoundaryScenario
 from Repos.dispositivo_repository import DispositivoRepository
 from Repos.backup_repository import BackupRepository
 from Repos.utente_repository import UtenteRepository
 from Repos.zona_repository import ZonaRepository
 from Repos.log_repository import LogRepository
 from Repos.scenario_repository import ScenarioRepository
-from Services.gestore_dati import GestoreDati
-from Services.gestore_dispositivi import GestoreDispositivi
-from Services.gestore_utenti import GestoreUtenti
-from Services.gestore_zone import GestoreZona
-from Services.gestore_scenari import GestoreScenario
+from Codice_pitonico.Services.gestore_dati_GUI import GestoreDati
+from Codice_pitonico.Services.gestore_dispositivi_GUI import GestoreDispositivi
+from Codice_pitonico.Services.gestore_utenti_GUI import GestoreUtenti
+from Codice_pitonico.Services.gestore_zone_GUI import GestoreZona
+from Codice_pitonico.Services.gestore_scenari_GUI import GestoreScenario
 from GUI.GUI_login import domOS_login
 from Views.Timer import Timer
 import json
 import sys
-from PyQt6.QtWidgets import (QApplication, QListWidget, QTextEdit, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout)
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import (QApplication)
 
 def main():
     print("Avvio")

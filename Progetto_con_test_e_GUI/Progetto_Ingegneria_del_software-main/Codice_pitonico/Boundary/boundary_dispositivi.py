@@ -14,55 +14,104 @@ class BoundaryDispositivo():
 
 
     
-    def menu_disp(self, comando, id, tipo, nome, sogliaIn=None, stato_iniziale=None, orario_attivazione=None):
-            """print("\n=======================================================")
+    def menu_disp(self):
+        while True:
+            print("\n=======================================================")
             print("Comandi disponibili: \n'lista' (mostra dispositivi)\n'aggiungi' (aggiungi dispositivo) \n'rimuovi' (rimuovi dispositivo) \n'configura' (configura dispositivo) \n'indietro' (torna alla schermata principale)")
             print("=======================================================\n")
-            comando = input("Inserisci comando> ").strip().lower()"""
+            comando = input("Inserisci comando> ").strip().lower()
             if comando == "lista":
                 self._g_disp.lista()
                 
             elif comando == "aggiungi": # aggiungo dispositivo, chiedo i dati necessari e faccio il backup dopo ogni modifica
-                """id = input("ID dispositivo: ").strip()
+                id = input("ID dispositivo: ").strip()
                 tipo = input("Tipo dispositivo (sensore/attuatore): ").strip().lower() # Forziamo minuscolo per compatibilità
-                nome = input("Nome dispositivo: ").strip()"""
+                nome = input("Nome dispositivo: ").strip()
+                
+                soglia_valida = False
+                soglia = None
                 
                 if tipo == "sensore":
+                    while not soglia_valida: # controllo che la soglia sia un float valido, se è un attuatore non è obbligatoria
+                        try:
+                            soglia_input = input("Inserisci una soglia (float) per il sensore: ").strip()
+                            soglia = float(soglia_input)
+                            soglia_valida = True
+                        except ValueError:
+                            print("Soglia non valida. Per favore, inserisci un numero decimale (float).")
+                    
                     # Chiamata per il sensore passando il parametro soglia
-                    feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, soglia=sogliaIn)
+                    feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, soglia=soglia)
                     print(feedback)
                     
                 elif tipo == "attuatore":
+                    # Integrazione caso attuatore
+                    stato_str = input("Stato iniziale (on/off - default 'off'): ").strip().lower()
+                    stato_iniziale = True if stato_str == "on" else False
+                    
+                    orario_attivazione = None
+                    while True:
+                        orario_str = input("Orario attivazione (formato HH:MM, premi Invio per nessuno): ").strip()
+                        if not orario_str:
+                            break
+                        try:
+                            orario_attivazione = datetime.strptime(orario_str, "%H:%M").time() #converto str in time tramite strinf parse time
+                            break
+                        except ValueError:
+                            print("Formato orario non valido. Usa il formato HH:MM (es. 14:30).")
+                    
                     # Chiamata per l'attuatore passando i parametri kwargs stato e orario 
                     feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, stato=stato_iniziale, orario=orario_attivazione)
                     print(feedback)
-
                 else:
                     print("Errore: Tipo dispositivo non valido. Operazione annullata.")
+
                 dati = self._g_disp.tutte_to_dict()
                 self._g_dati.esegui_backup(str(dati))
                 
 
             elif comando == "rimuovi":
-                
+                id = input("ID dispositivo da rimuovere: ").strip()
                 feedback = self._g_disp.rimuoviDispositivo(id)
                 print(feedback)
                 #esegui backup dopo ogni modifica
                 dati = self._g_disp.tutte_to_dict()
                 self._g_dati.esegui_backup(dati)
-                return feedback
                 
             elif comando == "configura":
-                #RICHIAMO DIRETTO DELLA FUNZIONE DAL G_DISP
-                feedback = self._g_disp.configuraDispositivo(id, sogliaIn, stato_iniziale, orario_attivazione)
+                id_disp = input("Inserisci l'ID del dispositivo da configurare: ").strip()
+                
+                # 1. Raccogliamo i potenziali parametri (inserendo None come default se premono Invio)
+                soglia_input = input("Nuova soglia (float) [Premi Invio per saltare]: ").strip()
+                nuova_soglia = float(soglia_input) if soglia_input else None
+
+                stato_input = input("Nuovo stato (on/off) [Premi Invio per saltare]: ").strip().lower()
+                nuovo_stato = True if stato_input == "on" else (False if stato_input == "off" else None)
+
+                nuovo_orario = None
+                orario_str = input("Nuovo orario (HH:MM) [Premi Invio per saltare]: ").strip()
+                if orario_str:
+                    try:
+                        nuovo_orario = datetime.strptime(orario_str, "%H:%M").time()
+                    except ValueError:
+                        print("Formato orario errato. Verrà ignorato.")
+
+                # 2. RICHIAMO DIRETTO DELLA FUNZIONE DAL G_DISP
+                feedback = self._g_disp.configuraDispositivo(
+                    id=id_disp, 
+                    nuova_soglia=nuova_soglia, 
+                    nuovo_stato=nuovo_stato, 
+                    nuovo_orario=nuovo_orario
+                )
                 print(feedback)
 
-                #Salvataggio e backup
+                # 3. Salvataggio e backup
                 dati = self._g_disp.tutte_to_dict()
                 self._g_dati.esegui_backup(str(dati))
 
+
+
+            elif comando == "indietro":
+                break
             else:
                 print(f"Comando '{comando}' non riconosciuto.")
-
-    def mostraStato(self):
-        return self._g_dati.recupera_contenuto_backup()

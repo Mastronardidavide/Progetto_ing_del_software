@@ -1,6 +1,6 @@
 from datetime import datetime
 import json
-from PyQt6.QtWidgets import (QApplication, QListWidget, QTextEdit, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout)
+from PyQt6.QtWidgets import (QListWidget, QWidget, QVBoxLayout, QLabel, QPushButton)
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from pathlib import Path

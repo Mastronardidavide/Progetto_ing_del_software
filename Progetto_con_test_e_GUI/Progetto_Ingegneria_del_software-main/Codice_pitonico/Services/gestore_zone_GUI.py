@@ -65,6 +65,8 @@ class GestoreZona:
         if attuatore_esistente is None or not isinstance(attuatore_esistente, Attuatore):
             return f"Errore: L'attuatore con ID '{id_attuatore}' non esiste nel sistema."
         
+        if id_attuatore in zona.getIdAttuatori():
+            return f"L'attuatore '{id_attuatore}' è già associato a questa zona"
         # Se esiste, procediamo all'inserimento
         zona.associaAttuatore(id_attuatore)
         self._zona_repo.salva()
@@ -75,6 +77,10 @@ class GestoreZona:
         zona = self._zona_repo.trovaPerId(id_zona)
         if zona is None:
             return "Zona non trovata"
+        
+        attuatore_esistente = self._g_disp._dispositivo_repo.trovaPerId(id_attuatore)
+        if attuatore_esistente is None or not isinstance(attuatore_esistente, Attuatore):
+            return f"Errore: L'attuatore con ID '{id_attuatore}' non esiste nel sistema."
         
         if id_attuatore not in zona.getIdAttuatori():
             return f"L'attuatore '{id_attuatore}' non è associato a questa zona"
@@ -157,3 +163,7 @@ class GestoreZona:
         except Exception as e:
             self._log_repo.scriviErrore(f"GestoreZona.calcola_intenzioni_attuatori() fallito: {str(e)}")
             return {}
+        
+    def tuttiToDict(self):
+        lista_zone_oggetti = self._zona_repo.tutte()
+        return [z.toDict() for z in lista_zone_oggetti]

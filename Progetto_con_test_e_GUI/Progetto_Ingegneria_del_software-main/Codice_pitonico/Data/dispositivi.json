@@ -18,5 +18,25 @@
     "nome": "finestra2",
     "orarioAttivazione": "00:00:00",
     "statoAttuatore": false
+  },
+  {
+    "id": "232",
+    "tipo": "attuatore",
+    "nome": "",
+    "orarioAttivazione": "21:21:00",
+    "statoAttuatore": false
+  },
+  {
+    "id": "44",
+    "tipo": "sensore",
+    "nome": "ciao",
+    "soglia": 21.0
+  },
+  {
+    "id": "attuatore",
+    "tipo": "attuatore",
+    "nome": "io",
+    "orarioAttivazione": "21:21:00",
+    "statoAttuatore": false
   }
 ]

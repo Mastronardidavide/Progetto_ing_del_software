@@ -2,7 +2,7 @@ import unittest
 import os
 from Models.utente import Utente
 from Repos.utente_repository import UtenteRepository
-from Services.gestore_utenti import GestoreUtenti
+from Codice_pitonico.Services.gestore_utenti_GUI import GestoreUtenti
 
 class TestGestoreUtenti(unittest.TestCase):
 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from PyQt6.QtWidgets import (QApplication, QListWidget, QTextEdit, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout)
+from PyQt6.QtWidgets import (QListWidget, QWidget, QLabel, QLineEdit, QPushButton)
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from pathlib import Path
@@ -125,7 +125,23 @@ class domOS_devices(QWidget):
                 self.tipo = self.campo2.text().strip().lower()
                 self.nomeDisp = self.campo3.text().strip()
                 self.comando = "aggiungi"
-
+                check_id = False
+            
+                if not check_id:
+                    try:
+                        id_valore = int(self.id) 
+                        if id_valore <= 0:
+                            raise ValueError
+                        check_id = True
+                    except ValueError:
+                        from PyQt6.QtWidgets import QMessageBox
+                        QMessageBox.warning(
+                            self, 
+                            "Attenzione", 
+                            "L'ID deve essere un numero intero positivo."
+                            )
+                        return
+                    
                 if self.tipo == "sensore":
                     self.usoConferma = 2
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
@@ -226,6 +242,23 @@ class domOS_devices(QWidget):
                 self.comando = "rimuovi"
                 self.tipo = self.nomeDisp = None
                 rimuovidisp = self.campo1.text().strip()
+                check_id = False
+            
+                if not check_id:
+                    try:
+                        id_valore = int(rimuovidisp) 
+                        if id_valore <= 0:
+                            raise ValueError
+                        check_id = True
+                    except ValueError:
+                        from PyQt6.QtWidgets import QMessageBox
+                        QMessageBox.warning(
+                            self, 
+                            "Attenzione", 
+                            "L'ID deve essere un numero intero positivo."
+                            )
+                        return
+                
                 feedback = self.boundary_disp.menu_disp(self.comando, rimuovidisp, self.tipo , self.nomeDisp)
                 print(feedback)
                 if feedback == f"Errore: Dispositivo {rimuovidisp} non trovato":
@@ -248,6 +281,23 @@ class domOS_devices(QWidget):
             elif self.usoConferma == 5:
                 self.id_disp = self.campo1.text().strip()
                 self.usoConferma = 6
+                check_id = False
+            
+                if not check_id:
+                    try:
+                        id_valore = int(self.id_disp) 
+                        if id_valore <= 0:
+                            raise ValueError
+                        check_id = True
+                    except ValueError:
+                        from PyQt6.QtWidgets import QMessageBox
+                        QMessageBox.warning(
+                            self, 
+                            "Attenzione", 
+                            "L'ID deve essere un numero intero positivo."
+                            )
+                        return
+                    
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.campo1.setPlaceholderText("Nuova Soglia")
                 self.campo2.setPlaceholderText("Nuovo Stato Iniziale(On/Off)")
@@ -310,13 +360,8 @@ class domOS_devices(QWidget):
 
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btn1.hide()
-                if self.click1 == 1:
-                    self.click1 = 0
-                if self.click2 == 1:
-                    self.click2 = 0
-                if self.click3 == 1:
-                    self.click3 = 0
                 if self.click0 % 2 == 0:
+                    self.click1 = self.click2 = self.click3 = 0
                     self.listaDisp.clear()
                     righe_dispositivi = self.boundary_disp._g_disp.lista()
                     if not righe_dispositivi:
@@ -338,13 +383,8 @@ class domOS_devices(QWidget):
         def aggiungiDisp(self):
                 
                 if self.click1 % 2 == 0:
+                    self.click0 = self.click2 = self.click3 = 0
                     self.listaDisp.hide()
-                    if self.click0 == 1:
-                        self.click0 = 0
-                    if self.click2 == 1:
-                        self.click2 = 0
-                    if self.click3 == 1:
-                        self.click3 = 0
                     self.campo1.setPlaceholderText("ID Dispositivo")
                     self.campo2.setPlaceholderText("Tipo Dispositivo")
                     self.campo3.setPlaceholderText("Nome Dispositivo")
@@ -367,12 +407,7 @@ class domOS_devices(QWidget):
         def rimuoviDisp(self):
 
                 if self.click2 == 0:
-                    if self.click0 == 1:
-                        self.click0 = 0
-                    if self.click1 == 1:
-                        self.click1 = 0
-                    if self.click3 == 1:
-                        self.click3 = 0
+                    self.click1 = self.click0 = self.click3 = 0
                     self.usoConferma = 4
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.hide() for campo in [self.campo2, self.campo3]]
@@ -395,13 +430,7 @@ class domOS_devices(QWidget):
         def modificaDisp(self):
                 
                 if self.click3 == 0:
-                    self.usoConferma = 5
-                    if self.click0 == 1:
-                        self.click0 = 0
-                    if self.click1 == 1:
-                        self.click1 = 0
-                    if self.click2 == 1:
-                        self.click2 = 0
+                    self.click1 = self.click2 = self.click0 = 0
                     [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                     [campo.hide() for campo in [self.campo2, self.campo3]]
                     self.listaDisp.hide()

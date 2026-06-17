@@ -24,8 +24,7 @@ class GestoreDispositivi:
             nuovo_disp = Sensore(id=id_disp, tipo=tipo, nome=nome, soglia=soglia)
             
         elif tipo == "attuatore":
-            nuovo_disp = Attuatore(id=id_disp, tipo=tipo, nome=nome, 
-                                orarioAttivazione=orario, statoAttuatore=stato)
+            nuovo_disp = Attuatore(id=id_disp, tipo=tipo, nome=nome, statoAttuatore=stato, orarioAttivazione=orario)
         else:
             return "Errore: Tipo dispositivo non valido"
         # Aggiunta alla repository (salva in automatico nel file JSON)
@@ -104,13 +103,17 @@ class GestoreDispositivi:
         print("\nLista dispositivi:")
         if self._dispositivo_repo.tutte() == []:
             print("Nessun dispositivo presente")
+            return []
         else:
+            elenco_formattato = []
             for dispositivo in self._dispositivo_repo.tutte():
                 if isinstance(dispositivo, Sensore):
-                    print(f"- ID: {dispositivo.getId()}, Tipo: {dispositivo._tipo}, Soglia: {dispositivo.getSoglia()}")
+                    riga = (f"- ID: {dispositivo.getId()}, Tipo: {dispositivo._tipo}, Soglia: {dispositivo.getSoglia()}")
+                    elenco_formattato.append(riga)
                 elif isinstance(dispositivo, Attuatore):
-                    print(f"- ID: {dispositivo.getId()}, Tipo: {dispositivo._tipo}, Orario: {dispositivo.getOrario()}, Stato: {dispositivo.getStato()}")
-    
+                    riga = (f"- ID: {dispositivo.getId()}, Tipo: {dispositivo._tipo}, Orario: {dispositivo.getOrario()}, Stato: {dispositivo.getStato()}")
+                    elenco_formattato.append(riga)
+            return elenco_formattato
     def tutte_to_dict(self):
         return [d.toDict() for d in self._dispositivo_repo.tutte()]
  #violazione controllata di OC: non ci aspettiamo che venga inventato un nuovo tipo di dispositivo in futuro, quindi sviluppiamo il sistema

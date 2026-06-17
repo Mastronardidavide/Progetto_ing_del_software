@@ -1,6 +1,4 @@
-from datetime import datetime
-import json
-from PyQt6.QtWidgets import (QApplication, QListWidget, QTextEdit, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QHBoxLayout)
+from PyQt6.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton)
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from pathlib import Path
@@ -70,7 +68,22 @@ class domOS_login(QWidget):
                 id_ut = self.campoID.text().strip()
                 nome = self.campoNome.text().strip()
                 pswd = self.campoPass.text().strip()
-
+                check_id = False
+            
+                if not check_id:
+                    try:
+                        id_valore = int(id_ut) 
+                        if id_valore <= 0:
+                            raise ValueError
+                        check_id = True
+                    except ValueError:
+                        from PyQt6.QtWidgets import QMessageBox
+                        QMessageBox.warning(
+                            self, 
+                            "Attenzione", 
+                            "L'ID deve essere un numero intero positivo."
+                            )
+                        return
     
                 if not id_ut or not nome or not pswd:
     

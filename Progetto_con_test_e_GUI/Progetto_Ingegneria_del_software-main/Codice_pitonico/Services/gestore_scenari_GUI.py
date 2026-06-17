@@ -61,6 +61,9 @@ class GestoreScenario:
         if attuatore_esistente is None or not isinstance(attuatore_esistente, Attuatore):
             return f"Errore: L'attuatore con ID '{id_attuatore}' non esiste nel sistema."
         
+        if id_attuatore in scenario.getIdAttuatori():
+            return f"L'attuatore '{id_attuatore}' è già associato a questa scenario"
+        
         scenario.associaAttuatore(id_attuatore)
         self._scenario_repo.salva()
         return f"Attuatore '{id_attuatore}' associato allo scenario con successo"

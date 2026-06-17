@@ -12,7 +12,6 @@ class GestoreDati:
             print("\n[GestoreDati] Stato di sistema catturato e file JSON sovrascritto.")
         except Exception as e:
             self._log_repo.scriviErrore(f"GestoreDati: Salvataggio automatico fallito. Dettaglio: {str(e)}")
+    
     def recupera_contenuto_backup(self) -> str:
-        backup = self._backup_repo.getBackup()
-        
-        return backup.get("contenuto", "")
+        return self._backup_repo.getBackup()
