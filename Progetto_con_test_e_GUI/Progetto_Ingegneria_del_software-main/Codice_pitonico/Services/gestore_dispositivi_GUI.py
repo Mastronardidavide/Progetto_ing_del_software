@@ -61,7 +61,10 @@ class GestoreDispositivi:
                 disp.setSoglia(nuova_soglia)
             elif isinstance(disp, Attuatore):
                 disp.setStato(nuovo_stato)
-                disp.setOrario(nuovo_orario)
+                if nuovo_orario == None:
+                    pass
+                else:
+                    disp.setOrario(nuovo_orario)
             self._dispositivo_repo.salva() #salvo le modifiche
             return f"dispositivo riconfigurato"
     #andiamo a controllare che gli attuatori siano da accendere o spegnere, tenendo conto che se fanno parte di una zona,
