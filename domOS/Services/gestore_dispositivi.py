@@ -5,11 +5,11 @@ from datetime import datetime
 import random
 
 class GestoreDispositivi:
-    #utilizzo la Dependency Inversion: il control riceve la repository dal main
+    #il control riceve la repository dal main
     def __init__(self, dispositivo_repo):
         self._dispositivo_repo = dispositivo_repo
 
-    # Caso d'uso: aggiungi dispositivo esteso con tutti i parametri necessari (kwargs) in modo da poter gestire sensori e attuatori con un unico metodo, evitando duplicazioni di codice
+    # utilizziamo i kwargs per poter gestire sia attuatore che sensore
     def aggiungiDispositivo(self, id_disp: str, tipo: str, nome: str, 
                         soglia: float = None, 
                         stato: bool = False, 
@@ -19,7 +19,7 @@ class GestoreDispositivi:
         if disp is not None:
             return f"Errore: Dispositivo {id_disp} già presente"
         
-        # Creazione dell'Entity specifica in base al tipo richiesto
+        # Creiamo il dispositivo specifico
         if tipo == "sensore":
             nuovo_disp = Sensore(id=id_disp, tipo=tipo, nome=nome, soglia=soglia)
             
@@ -28,13 +28,13 @@ class GestoreDispositivi:
                                 orarioAttivazione=orario, statoAttuatore=stato)
         else:
             return "Errore: Tipo dispositivo non valido"
-        # Aggiunta alla repository (salva in automatico nel file JSON)
+        # lo salviamo
         self._dispositivo_repo.aggiungi(nuovo_disp)
         
         return f"{tipo} {id_disp} ({nome}) aggiunto con successo"
 
         
-    #Caso d'uso rimuovi dispositivo
+   
     def rimuoviDispositivo(self, id_disp: str) -> str:
         #recupero l'oggetto prima di rimuoverlo
         disp = self._dispositivo_repo.trovaPerId(id_disp)
@@ -46,7 +46,6 @@ class GestoreDispositivi:
             self._dispositivo_repo.elimina(id_disp)
             return f"Dispositivo {id_disp} rimosso con successo"
     
-    #Caso d'uso: visualizza dati dispositivo
     def visualizzaDispositivo(self,id_disp: str):
         disp = self._dispositivo_repo.trovaPerId(id_disp)
         if disp is None:
@@ -71,22 +70,23 @@ class GestoreDispositivi:
         orario_corrente = datetime.now().time().replace(second=0, microsecond=0)
         
         # Raccogliamo tutti gli ID degli attuatori che appartengono a una zona
-        id_occupati = set()
+        id_occupati_zona = set() #NB usiamo set perché esso conterrà solo elementi unici, quindi
+        #non andiamo ad inserire un attuatore due volte se esso è presente in due zone diverse
         for zona in zona_repo.tutte():
             for id_att in zona.getIdAttuatori():
-                id_occupati.add(id_att)
+                id_occupati_zona.add(id_att)
 
         # Cicliamo su tutti i dispositivi del sistema
         for dispositivo in self._dispositivo_repo.tutte():
             # Controlliamo che sia un attuatore e che non sia in una zona
-            if isinstance(dispositivo, Attuatore) and dispositivo.getId() not in id_occupati:
+            if isinstance(dispositivo, Attuatore) and dispositivo.getId() not in id_occupati_zona:
                 
                 # Applichiamo il controllo orario per i dispositivi isolati
                 if dispositivo.getOrario() is not None:
                     orario_attuatore = dispositivo.getOrario().replace(second=0, microsecond=0)
                     
                     if orario_corrente == orario_attuatore:
-                        # Usiamo lo stesso controllo sicuro che hai ideato tu (evita toggle infiniti)
+                        #controlliamo che il dispositivo sia effettivamente spento prima di cambiarne lo stato
                         if dispositivo.getStato() == False:
                             dispositivo.cambiaStato()
                             print(f"[Automazione Singola] Attuatore non presente in una zona o scenario '{dispositivo.getId()}' acceso.")
@@ -115,4 +115,3 @@ class GestoreDispositivi:
         return [d.toDict() for d in self._dispositivo_repo.tutte()]
  #violazione controllata di OC: non ci aspettiamo che venga inventato un nuovo tipo di dispositivo in futuro, quindi sviluppiamo il sistema
  #sulla base di sensore e attuatore
- #LINE49

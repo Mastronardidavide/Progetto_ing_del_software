@@ -1,0 +1,13 @@
+@startuml eseguiscenario
+title Esegui scenario
+
+start
+if (Scenario esiste) then (si)
+    :Seleziona uno scenario da eseguire;
+    :Attiva eventuali attuatori;
+    :Gli attuatori sono attivati;
+else (no)
+    :Mostra messaggio di errore;
+endif
+stop
+@enduml

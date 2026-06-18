@@ -60,7 +60,7 @@ class GestoreZona:
         if zona is None:
             return "Zona non trovata"
         
-        #Chiediamo al repository dei dispositivi se l'ID esiste
+        #Chiediamo alla repository dei dispositivi se l'ID esiste
         attuatore_esistente = self._g_disp._dispositivo_repo.trovaPerId(id_attuatore)
         if attuatore_esistente is None or not isinstance(attuatore_esistente, Attuatore):
             return f"Errore: L'attuatore con ID '{id_attuatore}' non esiste nel sistema."
@@ -83,7 +83,7 @@ class GestoreZona:
         self._zona_repo.salva()
         return f"Attuatore '{id_attuatore}' rimosso dalla zona con successo"
 
-    # aggiorna il nome e/o l'orario di una zona
+    # aggiorna il nome
     def modificaZona(self, id: int, nuovo_nome: str = None) -> str:
         zona = self._zona_repo.trovaPerId(id)
         if zona is None:

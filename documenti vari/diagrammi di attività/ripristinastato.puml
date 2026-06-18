@@ -1,4 +1,4 @@
-@startuml ripristinastato
+@startuml recuperaContenutoBackup
 title Ripristina il sistema dall'ultimo backup
 
 start
@@ -7,7 +7,6 @@ if (Esiste un backup?) then (si)
     :Ripristina il backup recuperato;
     :Il backup è stato ripristinato;
 else (no)
-    :Mostra messaggio di errore;
 endif
 stop
 

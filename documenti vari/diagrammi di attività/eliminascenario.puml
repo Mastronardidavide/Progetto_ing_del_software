@@ -2,11 +2,7 @@
 title Elimina scenario
 
 start
-if (Admin autenticato?) then (no)
-    :Mostra messaggio di errore;
-    :Richiedi autenticazione;  
-    
-else (si)
+
     if (Scenario esiste) then (si)
         :Seleziona "Elimina scenario";
         :Seleziona scenario da eliminare;
@@ -14,6 +10,5 @@ else (si)
     else (no)
         :Mostra messaggio di errore;
     endif
-endif
 stop
 @enduml
