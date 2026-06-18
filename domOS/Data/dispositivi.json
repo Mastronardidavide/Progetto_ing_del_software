@@ -4,14 +4,14 @@
     "tipo": "attuatore",
     "nome": "a",
     "orarioAttivazione": "11:11:00",
-    "statoAttuatore": false
+    "statoAttuatore": true
   },
   {
     "id": "24",
     "tipo": "attuatore",
     "nome": "finestra2",
     "orarioAttivazione": "00:00:00",
-    "statoAttuatore": false
+    "statoAttuatore": true
   },
   {
     "id": "232",
