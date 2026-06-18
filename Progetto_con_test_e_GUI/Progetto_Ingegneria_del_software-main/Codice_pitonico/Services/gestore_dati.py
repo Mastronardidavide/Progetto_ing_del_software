@@ -7,7 +7,6 @@ class GestoreDati:
     def esegui_backup(self, stringa_dati: str) -> None:
 
         try:
-            # Sfrutta il metodo 'sovrascrivi' della tua BackupRepository
             self._backup_repo.sovrascrivi(stringa_dati)
             print("\n[GestoreDati] Stato di sistema catturato e file JSON sovrascritto.")
         except Exception as e:

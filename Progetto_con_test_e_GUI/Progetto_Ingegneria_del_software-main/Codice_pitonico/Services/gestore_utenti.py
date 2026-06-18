@@ -22,7 +22,7 @@ class GestoreUtenti:
         else:
             self._utenti_repo.elimina(id)
             return f"L'utente è stato eliminato"
-        #da qui in poi
+
     def login(self, id: str, nome: str, pswd: str):
         utente = self._utenti_repo.trovaPerId(id) # cerco l'utente tramite l'ID
         if utente is None:

@@ -7,7 +7,7 @@ package "Organizzazioni" {
         - id: str
         - nome: str
         - sogliaZona: float
-        - orarioZona: time
+        - orarioZona: time 
         - orarioDisattivazione: time
         - idAttuatori: list
         - idSensore: str
