@@ -1,4 +1,0 @@
-{
-  "orario": "2026-06-17T11:33:50.054421",
-  "contenuto": "[\n    {\n        \"id\": \"23\",\n        \"tipo\": \"attuatore\",\n        \"nome\": \"a\",\n        \"orarioAttivazione\": \"11:11:00\",\n        \"statoAttuatore\": false\n    },\n    {\n        \"id\": \"24\",\n        \"tipo\": \"attuatore\",\n        \"nome\": \"finestra2\",\n        \"orarioAttivazione\": \"00:00:00\",\n        \"statoAttuatore\": false\n    },\n    {\n        \"id\": \"232\",\n        \"tipo\": \"attuatore\",\n        \"nome\": \"\",\n        \"orarioAttivazione\": \"21:21:00\",\n        \"statoAttuatore\": false\n    },\n    {\n        \"id\": \"44\",\n        \"tipo\": \"sensore\",\n        \"nome\": \"ciao\",\n        \"soglia\": 21.0\n    },\n    {\n        \"id\": \"attuatore\",\n        \"tipo\": \"attuatore\",\n        \"nome\": \"io\",\n        \"orarioAttivazione\": \"21:21:00\",\n        \"statoAttuatore\": false\n    }\n]"
-}
