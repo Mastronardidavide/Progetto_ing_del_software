@@ -1,0 +1,10 @@
+@startuml visualizzaStato
+title Visualizza stato
+
+start
+
+    :Seleziona "stato";
+    :Mostra stato;
+
+stop
+@enduml
