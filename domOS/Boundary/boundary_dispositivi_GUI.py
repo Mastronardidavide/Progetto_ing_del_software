@@ -47,8 +47,5 @@ class BoundaryDispositivo():
                 self._g_dati.esegui_backup(str(dati))
                 return feedback
 
-            else:
-                print(f"Comando '{comando}' non riconosciuto.")
-
     def mostraStato(self):
         return self._g_dati.recupera_contenuto_backup()

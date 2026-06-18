@@ -29,11 +29,11 @@ class BackupRepository:
             # Salva il dizionario, ossia il backup
             json.dump(self._backup_corrente, f, indent=2, ensure_ascii=False)
 
-    def sovrascrivi(self, contenuto_da_salvare: str) -> None:
+    def sovrascrivi(self, contenuto_da_salvare: list | dict) -> None:
         # sovrascrive il vecchio backup
         self._backup_corrente = {
             "orario": datetime.now().isoformat(),
-            "contenuto": contenuto_da_salvare
+            "contenuto": json.dumps(contenuto_da_salvare, ensure_ascii=False)
         }
         self.salva()
 

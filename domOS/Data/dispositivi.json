@@ -32,5 +32,12 @@
     "nome": "io",
     "orarioAttivazione": "21:21:00",
     "statoAttuatore": false
+  },
+  {
+    "id": "48",
+    "tipo": "attuatore",
+    "nome": "attuato",
+    "orarioAttivazione": "22:22:00",
+    "statoAttuatore": false
   }
 ]
