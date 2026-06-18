@@ -225,7 +225,8 @@ class domOS_devices(QWidget):
                         return
                 
                 #passo tutto a menu_disp dentro boundary dispositivi
-                self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, self.soglia)
+                feedback = self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, self.soglia)
+                self.centroNote(1, feedback) #invio il risultato al centro notifiche
                 #resetto il menù e mostro un info che notifica del successo dell'operazione
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
@@ -277,8 +278,8 @@ class domOS_devices(QWidget):
                 #siccome stiamo aggiungendo un attuatore, imposto soglia a None, poi passo tutto a 
                 #menu_disp dentro boundary dispositivi
                 soglia = None
-                self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, soglia, stato_iniziale, orario_attivazione)
-                
+                feedback = self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, soglia, stato_iniziale, orario_attivazione)
+                self.centroNote(1, feedback) #invio il risultato al centro notifiche
                 #resetto il menù e mostro un info che notifica del successo dell'operazione
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
@@ -320,7 +321,8 @@ class domOS_devices(QWidget):
                 
                 #passo tutto alla boundary
                 feedback = self.boundary_disp.menu_disp(self.comando, rimuovidisp, self.tipo , self.nomeDisp)
-                print(feedback) #prendo il feedback per eseguire controlli
+                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+
                 if feedback == f"Errore: Dispositivo {rimuovidisp} non trovato":
                     #se l'id non è associato a nesun dispositivo, mostro un error
                     from PyQt6.QtWidgets import QMessageBox
@@ -423,6 +425,7 @@ class domOS_devices(QWidget):
                 self.comando = "configura"
                 self.tipo = self.nomeDisp = None
                 feedback = self.boundary_disp.menu_disp(self.comando, self.id_disp, self.tipo, self.nomeDisp, nuova_soglia, nuovo_stato, nuovo_orario)
+                self.centroNote(1, feedback) #invio il risultato al centro notifiche
                 if feedback == f"dispositivo non trovato":
                     #se l'id del dispositivo non è registrato nel sistema, mostro un error
                     from PyQt6.QtWidgets import QMessageBox

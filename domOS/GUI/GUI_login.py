@@ -127,7 +127,7 @@ class domOS_login(QWidget):
                 #passo id, nome e password al boundary utenti per il login e controllo il feedback dalla gui
                 login = self.boundary_utenti.form_login(id_ut, nome, pswd)
                 #se le credenziali sono valide passo alla finestra del menù principale e poi chiudo la finestra di login
-                self.centroNote(1, login)
+                self.centroNote(1, login) #invio il risultato del login al centro notifiche
                 if login:
                     from GUI.GUI_mainMenu import domOS_mainmenu
                     self.finestra_menu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
@@ -174,7 +174,7 @@ class domOS_login(QWidget):
             #passo tutto alla boundary
             esito = self.boundary_utenti.form_registrazione(id_ut, nome, pswd)
             #controllo cosa mi ritorna la boundary
-            self.centroNote(1, esito)
+            self.centroNote(1, esito) #invio il risultato al centro notifiche
             if esito == "Utente creato":
                 #se tutto va a buon fine, mostro un message box di informazione
                 from PyQt6.QtWidgets import QMessageBox

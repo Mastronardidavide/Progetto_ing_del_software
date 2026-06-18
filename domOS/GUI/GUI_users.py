@@ -261,7 +261,8 @@ class domOS_users(QWidget):
                     return
                 #passo id, nome e password al form registrazione dentro boundary utenti
                 esito = self.boundary_utenti.form_registrazione(id_ut, nome, pswd)
-    
+                self.centroNote(1, esito) #invio il risultato al centro notifiche
+
                 if esito == "Utente creato":
                     #se riesco a creare un account, mostro un info
                     QMessageBox.information(
@@ -321,6 +322,8 @@ class domOS_users(QWidget):
 
                 #passo a menu_utente dentro boundary utenti sia comando sia id
                 feedback = self.boundary_utenti.menu_utente(comando, id_ut)
+                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                
                 if feedback == f"L'utente è stato eliminato":
                     #se l'eliminazione va a buon fine, mostro un info
                     QMessageBox.information(

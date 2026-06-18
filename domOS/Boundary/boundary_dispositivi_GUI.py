@@ -1,6 +1,6 @@
 from PyQt6.QtCore import QObject, pyqtSignal #import di librerie per lo scambio di messaggi nel codice
 class BoundaryDispositivo(QObject):
-    
+
     #parte cruciale: datochè il timer lavora in un thread diverso dalla GUI, è impossibile
     #farli comunicare direttamente per permettere lo scambio di notifiche (ad esempio tramite return).
     #Per questo motivo si utilizza pyqtSignal, che permette la creazione di 
@@ -10,6 +10,7 @@ class BoundaryDispositivo(QObject):
     notificaAtt = pyqtSignal(str)   #genero i canali di trasmissione
     notificaSens = pyqtSignal(str)
     notificaAuto = pyqtSignal(str)
+
     def __init__(self, g_dati, g_disp, g_zona, g_scenario):
         super().__init__()
         self._g_dati = g_dati 
@@ -66,7 +67,7 @@ class BoundaryDispositivo(QObject):
             repo_zone = self._g_zona.getRepo()
             feedback = self._g_disp.check_attuatori(repo_zone)
             if feedback is not None:
-                self.notificaAtt.emit(feedback) #se ci sono notifiche, le invio sui canali
+                self.notificaAtt.emit(feedback) #ogni volta che il timer esegue un check, invio il risultato sui canali.
         elif tipo == "sensore":
             feedback = self._g_disp.check_sensori()
             if feedback is not None:
