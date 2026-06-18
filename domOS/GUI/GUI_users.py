@@ -46,7 +46,7 @@ class domOS_users(QWidget):
             self.centroNotifiche.raise_()
             self.inizializzazione = 0
             self.notifiche = notificheOld
-            self.centroNote(None, 0)
+            self.centroNote(0, None)
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
             self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
