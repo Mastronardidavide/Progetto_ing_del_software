@@ -167,7 +167,7 @@ class domOS_users(QWidget):
             #al primo click del pulsante lista utenti:
             if self.click0 == 0:
                 self.click1 = self.click2 = 0 #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
-                self.click0 = 0
+                self.click0 = 1
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]] #nascondo i campi
                 self.btn1.hide()    #nascondo il pulsante conferma
 
@@ -191,7 +191,7 @@ class domOS_users(QWidget):
 
             #al secondo click:
             else:
-                self.click0 = 1
+                self.click0 = 0
                 self.listaUsers.clear() #svuoto la lista
                 self.listaUsers.hide()  #nascondo la lista
 

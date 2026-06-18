@@ -45,6 +45,7 @@ class BoundaryDispositivo():
                 #Salvataggio e backup
                 dati = self._g_disp.tutte_to_dict()
                 self._g_dati.esegui_backup(str(dati))
+                return feedback
 
             else:
                 print(f"Comando '{comando}' non riconosciuto.")
