@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import QWidget, QLabel
 
 #genero la finestra per il menù zone
 class domOS_scenarios(QWidget): 
-        def __init__(self, boundary_disp, boundary_utenti, boundary_scenari, boundary_zone):
+        def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
             super().__init__()
             
             self.boundary_disp = boundary_disp
@@ -610,11 +610,12 @@ class domOS_scenarios(QWidget):
                 self.listaScen.clear()  #pulisco la lista
                 self.listaScen.addItem("Lista Zone presenti nel sistema") #"intitolo" la lista
                 self.listaScen.addItem("_" * 40)
-                lista_zone = self.boundary_scenari.menu_scenari("lista") #raccolgo la lista effettiva degli scenari da boundary
-                if not lista_zone:
+                lista_scenari = self.boundary_scenari.menu_scenari("lista") #raccolgo la lista effettiva degli scenari da boundary
+                if not lista_scenari:
                     self.listaScen.addItem("Nessuna zona registrata nel sistema.") #se non ci sono scenari scrivo questo
                 #se invece sono presenti scenari nel sistema, "spacchetto" la lista e aggiungo tutto alla lista GUI.
-                for scenario in lista_zone:
+                for scenario_oggetto in lista_scenari:
+                    scenario = scenario_oggetto.toDict()
                     id_scen = scenario.get("id", "N/D")
                     nome_scen = scenario.get("nome", "Sconosciuto")
                     orarioattivazione = scenario.get("orarioScenario", "N/D")

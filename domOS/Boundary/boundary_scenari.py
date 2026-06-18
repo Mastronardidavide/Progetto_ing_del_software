@@ -15,6 +15,7 @@ class BoundaryScenario:
             comando = input("Inserisci comando scenario> ").strip().lower()
             
             if comando == "lista":
+                
                 scenari = self._g_scenario._scenario_repo.tutte()
                 if not scenari:
                     print("Nessuno scenario presente nel sistema.")

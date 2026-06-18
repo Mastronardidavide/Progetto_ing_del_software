@@ -1,26 +1,14 @@
 [
   {
-    "id": "112",
-    "nome": "giorno",
-    "orarioScenario": "11:11:00",
-    "orarioDisattivazione": "11:11:00",
-    "sogliaScenario": 1.0,
-    "id_attuatori": [
-      "23",
-      "24"
-    ],
-    "id_sensore": "1"
-  },
-  {
     "id": "113",
     "nome": "notte",
-    "orarioScenario": "12:12:00",
-    "orarioDisattivazione": "13:13:00",
-    "sogliaScenario": 55.0,
+    "orarioScenario": "22:00:00",
+    "orarioDisattivazione": "06:00:00",
+    "sogliaScenario": 12.0,
     "id_attuatori": [
       "23",
       "24"
     ],
-    "id_sensore": "1"
+    "id_sensore": "44"
   }
 ]
