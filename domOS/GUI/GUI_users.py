@@ -274,7 +274,7 @@ class domOS_users(QWidget):
                 #azzero la variabile click1
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
-                self.listaUsers.hde()
+                self.listaUsers.hide()
                 self.btn1.hide()
                 self.click1 = 0
 
