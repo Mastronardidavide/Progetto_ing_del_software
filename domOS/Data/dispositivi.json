@@ -31,5 +31,11 @@
     "nome": "ciao",
     "orarioAttivazione": "11:11:00",
     "statoAttuatore": false
+  },
+  {
+    "id": "6",
+    "tipo": "sensore",
+    "nome": "ciao",
+    "soglia": 12.0
   }
 ]

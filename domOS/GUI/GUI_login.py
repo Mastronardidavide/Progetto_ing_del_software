@@ -209,6 +209,7 @@ class domOS_login(QWidget):
                 self.centroNotifiche.clear()
                 for n in self.notifiche:
                     self.centroNotifiche.addItem(str(n))
+                    self.centroNotifiche.scrollToBottom()
             elif notifica is not None:
                 stringa_notifica = notifica
                 self.centroNotifiche.addItem(str(stringa_notifica))

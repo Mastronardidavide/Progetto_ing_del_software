@@ -227,6 +227,7 @@ class domOS_mainmenu(QWidget):
                 self.centroNotifiche.clear()
                 for n in self.notifiche:
                     self.centroNotifiche.addItem(str(n))
+                    self.centroNotifiche.scrollToBottom()
             elif notifica is not None:
                 stringa_notifica = str(notifica)
                 self.centroNotifiche.addItem(stringa_notifica)
