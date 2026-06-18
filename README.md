@@ -5,3 +5,5 @@ La visualizzazione tramite lista permette di identificare uno specifico disposit
 
 I dati riguardanti i dispositivi verranno salvati periodicamente tramite backup, mentre il log degli errori verrà aggiornato ogni qual volta il sistema presenti un errore.
 Il log non è accessibile direttamente dalla schermata o dal terminale, in quanto nel caso un ipotetico cliente riscontri problemi con il sistema, un tecnico dedicato potrà accedere al codice del sistema, emettere una diagnosi ed agire di conseguenza.
+
+Per evitare conflitti nella gestione dispositivi, il software utilizza un sistema di priorità che predilige l'autorità dello scenario sopra quella della zona: se un attuatore è presente sia in scenario che in zona, ed è impostato a due orario di attivazione diversi, in caso questi si dovessero sovrappore, il sistema applica quello dello scenario
