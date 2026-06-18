@@ -7,7 +7,6 @@ class BoundaryUtente:
     def form_registrazione(self, id_ut, nome, pswd):
        
         feedback = self._g_utenti.creaAccount(id=id_ut, nome=nome, pswd=pswd)
-        print(feedback)
         return feedback
 
     def form_login(self, id_ut, nome, pswd):
@@ -20,7 +19,6 @@ class BoundaryUtente:
             if comando == "elimina":
                 
                 feedback = self._g_utenti.eliminaAccount(id=id_ut)
-                print(feedback)
                 # Esecuzione del backup dopo l'eliminazione
                 dati = self._g_utenti.tuttiToDict()
                 self._g_dati.esegui_backup(str(dati))
@@ -28,5 +26,3 @@ class BoundaryUtente:
 
             elif comando == "lista":
                  return self._g_utenti.tuttiToDict()
-            else:
-                print(f"Comando '{comando}' non riconosciuto.")

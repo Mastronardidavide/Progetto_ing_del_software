@@ -24,4 +24,4 @@ class Timer:
                 try:
                     self._azione() # Lancia il compito assegnato
                 except Exception as e:
-                    print(f"[Timer Errore] Operazione fallita: {e}")
+                    return e

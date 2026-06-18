@@ -221,7 +221,7 @@ class domOS_mainmenu(QWidget):
         
         #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
-        def centroNote(self, notifica=None, inizializzazione=None):
+        def centroNote(self, inizializzazione=None, notifica=None):
             #inizializzazione serve per aggiornare il centro ogni volta che viene aperta una nuova finestra GUI
             if inizializzazione == 0:
                 self.centroNotifiche.clear()

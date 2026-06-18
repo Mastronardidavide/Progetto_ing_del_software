@@ -29,12 +29,10 @@ class BoundaryDispositivo(QObject):
                 if tipo == "sensore":
                     # Chiamata per il sensore passando il parametro soglia
                     feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, soglia=sogliaIn)
-                    print(feedback)
                     
                 elif tipo == "attuatore":
                     # Chiamata per l'attuatore passando i parametri kwargs stato e orario 
                     feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, stato=stato_iniziale, orario=orario_attivazione)
-                    print(feedback)
 
                 dati = self._g_disp.tutte_to_dict()
                 self._g_dati.esegui_backup(str(dati))
@@ -43,7 +41,6 @@ class BoundaryDispositivo(QObject):
             elif comando == "rimuovi":
                 
                 feedback = self._g_disp.rimuoviDispositivo(id)
-                print(feedback)
                 #esegui backup dopo ogni modifica
                 dati = self._g_disp.tutte_to_dict()
                 self._g_dati.esegui_backup(dati)
@@ -52,7 +49,6 @@ class BoundaryDispositivo(QObject):
             elif comando == "configura":
                 #RICHIAMO DIRETTO DELLA FUNZIONE DAL G_DISP
                 feedback = self._g_disp.configuraDispositivo(id, sogliaIn, stato_iniziale, orario_attivazione)
-                print(feedback)
 
                 #Salvataggio e backup
                 dati = self._g_disp.tutte_to_dict()
@@ -72,11 +68,9 @@ class BoundaryDispositivo(QObject):
             feedback = self._g_disp.check_sensori()
             if feedback is not None:
                 self.notificaSens.emit(feedback)
-                print(feedback)
         elif tipo == "automazioni":
             feedback = self._g_scenario.check_automazioni_prioritarie(self._g_zona)
             if feedback is not None:
                 self.notificaAuto.emit(feedback)
-                print(feedback)
     def backup(self, data):
         self._g_dati.esegui_backup(data)
