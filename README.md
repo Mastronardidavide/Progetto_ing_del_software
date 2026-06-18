@@ -6,7 +6,8 @@ come scaricare:
 - sul terminale di VsCode: basta digitare py -m pip install PyQt6
 ___________________________________________________________________________________________________________________________________________________
 COME ESEGUIRE IL PROGRAMMA:
-all'interno di: Progetto_con_test_e_GUI/Progetto_Ingegneria_del_software-main/Codice_pitonico si trova il file main.py. per eseguire il programma basta eseguire quel file main.
+- GUI: all'interno della cartella domOS si trova il file main.py. per eseguire il programma basta eseguire quel file main.
+- Terminale: all'interno della cartella domOS si trova il file term_main.py. per eseguire il programma basta eseguire quel file main.
 ___________________________________________________________________________________________________________________________________________________
 COME UTILIZZARE IL PROGRAMMA:
 Il sistema appena eseguito il run presenterà una schermata di login, con pulsante di registrazione.
