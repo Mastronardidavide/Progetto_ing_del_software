@@ -88,10 +88,10 @@ class GestoreDispositivi:
                     orario_attuatore = dispositivo.getOrario().replace(second=0, microsecond=0)
                     
                     if orario_corrente == orario_attuatore:
-                        # Usiamo lo stesso controllo sicuro che hai ideato tu (evita toggle infiniti)
+                        
                         if dispositivo.getStato() == False:
                             dispositivo.cambiaStato()
-                            print(f"[Automazione Singola] Attuatore non presente in una zona o scenario '{dispositivo.getId()}' acceso.")
+                            return (f"[Automazione Singola] Attuatore non presente in una zona o scenario '{dispositivo.getId()}' acceso.")
 
 
     def check_sensori(self):
@@ -101,7 +101,7 @@ class GestoreDispositivi:
                 if soglia is not None:
                     lettura_corrente = round(random.uniform(10.0, 30.0), 1) # Simulazione di una lettura casuale tra 10 e 30 in float
                     if lettura_corrente > soglia:
-                        print(f"Il sensore ID 'f{dispositivo.getId()}' ({dispositivo._nome}) ha superato la soglia")
+                        return (f"Il sensore ID 'f{dispositivo.getId()}' ({dispositivo._nome}) ha superato la soglia")
     def lista(self):
         if self._dispositivo_repo.tutte() == []:
             return []

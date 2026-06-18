@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import QWidget, QLabel
 
 #genero la finestra per il menù principale
 class domOS_mainmenu(QWidget): 
-        def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
+        def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari, notificheOld):
             super().__init__()
             
             self.boundary_disp = boundary_disp
@@ -21,16 +21,32 @@ class domOS_mainmenu(QWidget):
             self.setMinimumSize(600, 400)   #dimensione minima
 
             self.sfondo = QLabel(self)
-            cartella_corrente = Path(__file__).resolve().parent                     #]---|questa parte qui si occupa di fetchare il percorso
+            cartella_corrente = Path(__file__).resolve().parent                            #]---|questa parte qui si occupa di fetchare il percorso
             percorso_immagine = cartella_corrente / "schermatamultipurpose_prot.png"       #    |dell'immagine che si vuole utilizzare come sfondo,
-            percorso_str = str(percorso_immagine)                                   #    |(per motivi di compatibilità)
-            self.pixmap_per_sfondo = QPixmap(percorso_str)                          #]---|
+            percorso_str = str(percorso_immagine)                                          #    |(per motivi di compatibilità)
+            self.pixmap_per_sfondo = QPixmap(percorso_str)                                 #]---|
 
 #---------------------------------------------------------------------------
 #----------- GENERAZIONE PULSANTI, LISTE E CAMPI VARI PER LA GUI -----------
 #---------------------------------------------------------------------------           
 #le variabili click servono a contare quante volte un determinato pulsante
 #viene premuto, per eseguire determinate azioni (es: mostrare e nascondere parti della gui)
+
+            self.centroNotifiche = QListWidget(self)
+            self.centroNotifiche.setStyleSheet("""
+                background-color: #0045b5;
+                border: 2px solid #7a91b9;
+                border-radius: 2px;
+                color: white;
+            """)
+            self.centroNotifiche.show()
+            self.centroNotifiche.raise_()
+            self.inizializzazione = 0
+            self.notifiche = notificheOld
+            self.centroNote(None, 0)
+            self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
+            self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
+            self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
 
             self.listaStato = QListWidget(self)
             self.listaStato.setStyleSheet("""
@@ -108,40 +124,58 @@ class domOS_mainmenu(QWidget):
                     
                     self.listaStato.clear() #pulisco la lista
                     backup_completo = self.boundary_disp.mostraStato()
-
-                    #se non esiste un backup
                     if not backup_completo:
-                        self.listaStato.addItem("Nessun dato di backup disponibile.") # nella lista scrivo solo questo
+                        self.listaStato.addItem("Nessun dato di backup disponibile.")
                         return
 
-                    #recupero la data del backup (stringa)
+                    #recupero ed adattamento stringa data e orario
                     orario_grezzo = backup_completo.get("orario", "")
                     try:
-                        dt = datetime.fromisoformat(orario_grezzo)  #provo a trasformare la stringa in oggetto data/ora
-                        data_formattata = dt.strftime("%d/%m/%Y alle ore %H:%M:%S") # se ci riesco, "decoro" l'oggetto
+                        dt = datetime.fromisoformat(orario_grezzo)
+                        data_formattata = dt.strftime("%d/%m/%Y alle ore %H:%M:%S")
                     except ValueError:
-                        data_formattata = orario_grezzo #se non riesco, lascio la stringa originale
-                    self.listaStato.addItem(f"Backup del: {data_formattata}") 
-                    self.listaStato.addItem("─" * 40) 
+                        data_formattata = orario_grezzo
 
-                    #estraggo il contenuto del backup
+                    self.listaStato.addItem(f"Backup del: {data_formattata}")
+                    self.listaStato.addItem("─" * 40)
+
+                    #"spacchetto" il contenuto
                     stringa_grezza = backup_completo.get("contenuto", "[]")
-                    stringa_json_valida = stringa_grezza.replace("'", '"').replace("False", "false").replace("True", "true")
-                    lista_dispositivi = json.loads(stringa_json_valida)
 
-                    #questa parte "spacchetta" il backup per caricare tutto nella lista
+                    try:
+                    #se la stringa esterna contiene una stringa interna JSON
+                        primo_livello = json.loads(stringa_grezza)
+    
+                    #se il risultato è ancora una stringa
+                        if isinstance(primo_livello, str):
+                            stringa_valida = primo_livello.replace("'", '"').replace("False", "false").replace("True", "true")
+                            lista_dispositivi = json.loads(stringa_valida)
+                        else:
+                            lista_dispositivi = primo_livello
+                    except (json.JSONDecodeError, AttributeError):
+                    #se la stringa è malformata all'origine
+                        stringa_valida = str(stringa_grezza).replace('"', '').replace("'", '"').replace("False", "false").replace("True", "true")
+                        try:
+                            lista_dispositivi = json.loads(stringa_valida)
+                        except Exception:
+                            lista_dispositivi = []
+                            self.listaStato.addItem("Errore critico nella decodifica dei dispositivi.")
+
+                    #carico tutto nella lista
                     for disp in lista_dispositivi:
                         id_disp = disp.get("id", "N/D")
                         nome_disp = disp.get("nome", "Sconosciuto")
-                        tipo_disp = disp.get("tipo", "sconosciuto")
+                        tipo_disp = str(disp.get("tipo", "sconosciuto")).strip().lower()
     
                         if tipo_disp == "attuatore":
                             orario_att = disp.get("orarioAttivazione", "Non specificato")
                             stato_att = disp.get("statoAttuatore", "N/D")
-                            testo_riga = f"Attuatore: ID: [{id_disp}], Nome: {nome_disp} - Orario: {orario_att} - Stato: {stato_att}"
-                        else:
+                            testo_riga = f"A: ID: [{id_disp}], Nome: {nome_disp} - Orario: {orario_att} - Stato: {stato_att}"
+                        elif tipo_disp == "sensore":
                             soglia_sens = disp.get("soglia", "N/D")
-                            testo_riga = f"Sensore: ID: [{id_disp}], Nome: {nome_disp} - Soglia: {soglia_sens}"
+                            testo_riga = f"S: ID: [{id_disp}], Nome: {nome_disp} - Soglia: {soglia_sens}"
+                        else:
+                            testo_riga = f"DATO NON RICONOSCIUTO: ID: [{id_disp}], Nome: {nome_disp} (Tipo: {tipo_disp})"
                         self.listaStato.addItem(testo_riga)
 
                     self.listaStato.show()      #mostro la lista
@@ -155,25 +189,25 @@ class domOS_mainmenu(QWidget):
 
         def mostraDisp(self):   #funzione che apre il menù dispositivi al click del pulsante dispositivi
             from GUI.GUI_devices import domOS_devices
-            self.finestra_devices = domOS_devices(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
+            self.finestra_devices = domOS_devices(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_devices.show()
             self.close()
 
         def mostraUsers(self):  #funzione che apre il menù utenti al click del pulsante utenti
             from GUI.GUI_users import domOS_users
-            self.finestra_users = domOS_users(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
+            self.finestra_users = domOS_users(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_users.show()
             self.close()
             
         def mostraZone(self):   #funzione che apre il menù zone al click del pulsante zone
             from GUI.GUI_zones import domOS_zones
-            self.finestra_zones = domOS_zones(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
+            self.finestra_zones = domOS_zones(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_zones.show()
             self.close()
 
         def mostraScenari(self):    #funzione che apre il menù scenari al click del pulsante scenari
             from GUI.GUI_scenarios import domOS_scenarios
-            self.finestra_scenarios = domOS_scenarios(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
+            self.finestra_scenarios = domOS_scenarios(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_scenarios.show()
             self.close()
 
@@ -181,9 +215,23 @@ class domOS_mainmenu(QWidget):
 
             self.utente_autenticato = None
             from GUI.GUI_login import domOS_login
-            self.finestra_login = domOS_login(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
+            self.finestra_login = domOS_login(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_login.show()
             self.close()
+        
+        #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
+        #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
+        def centroNote(self, notifica=None, inizializzazione=None):
+            #inizializzazione serve per aggiornare il centro ogni volta che viene aperta una nuova finestra GUI
+            if inizializzazione == 0:
+                self.centroNotifiche.clear()
+                for n in self.notifiche:
+                    self.centroNotifiche.addItem(str(n))
+            elif notifica is not None:
+                stringa_notifica = str(notifica)
+                self.centroNotifiche.addItem(stringa_notifica)
+                self.notifiche.append(stringa_notifica)
+                self.centroNotifiche.scrollToBottom()
 
 #---------------------------------------------------------------------------------------------------------------
 #----------- FFUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI -----------
@@ -225,6 +273,13 @@ class domOS_mainmenu(QWidget):
             listaGenPurpl = int((larghezza * 50) // 100)
             listaGenPurpa = int((altezza * 50) // 100)
 
+            centroNx = int((larghezza * 7.5) // 100)
+            centroNy = int((altezza * 1.5) // 100)
+            centroNl = int((larghezza * 84) // 100)
+            centroNa = int((altezza * 10) // 100)
+            
+            self.centroNotifiche.setGeometry(centroNx, centroNy, centroNl, centroNa)
+            
             self.btnStato.setGeometry(pulsantexMenu, pulsantey1Menu, pulsantelMenu, pulsanteaMenu)
             self.btnDisp.setGeometry(pulsantexMenu, pulsantey2Menu, pulsantelMenu, pulsanteaMenu)
             self.btnUtenti.setGeometry(pulsantexMenu, pulsantey3Menu, pulsantelMenu, pulsanteaMenu)

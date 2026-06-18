@@ -2,11 +2,11 @@ from PyQt6.QtWidgets import (QWidget, QLabel, QLineEdit, QPushButton)
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from pathlib import Path
-from PyQt6.QtWidgets import QWidget, QLabel
+from PyQt6.QtWidgets import QWidget, QLabel, QListWidget
 
 #genero la finestra per la parte di login
 class domOS_login(QWidget): 
-        def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
+        def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari, notificheOld):
             super().__init__()
             
             self.boundary_disp = boundary_disp
@@ -29,6 +29,22 @@ class domOS_login(QWidget):
 #----------- GENERAZIONE PULSANTI, LISTE E CAMPI VARI PER LA GUI -----------
 #---------------------------------------------------------------------------           
             
+            self.centroNotifiche = QListWidget(self)
+            self.centroNotifiche.setStyleSheet("""
+                background-color: #0045b5;
+                border: 2px solid #7a91b9;
+                border-radius: 2px;
+                color: white;
+            """)
+            self.centroNotifiche.show()
+            self.centroNotifiche.raise_()
+            self.inizializzazione = 0
+            self.notifiche = notificheOld
+            self.centroNote(None, 0)
+            self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
+            self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
+            self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
+
             self.campoID = QLineEdit(self)
             self.campoID.setPlaceholderText("Inserisci il tuo ID")
             self.campoID.setStyleSheet("""
@@ -111,9 +127,10 @@ class domOS_login(QWidget):
                 #passo id, nome e password al boundary utenti per il login e controllo il feedback dalla gui
                 login = self.boundary_utenti.form_login(id_ut, nome, pswd)
                 #se le credenziali sono valide passo alla finestra del menù principale e poi chiudo la finestra di login
+                self.centroNote(1, login)
                 if login:
                     from GUI.GUI_mainMenu import domOS_mainmenu
-                    self.finestra_menu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
+                    self.finestra_menu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
                     self.finestra_menu.show()
                     self.close()
                 #altrimenti, mostro un message box di errore
@@ -157,6 +174,7 @@ class domOS_login(QWidget):
             #passo tutto alla boundary
             esito = self.boundary_utenti.form_registrazione(id_ut, nome, pswd)
             #controllo cosa mi ritorna la boundary
+            self.centroNote(1, esito)
             if esito == "Utente creato":
                 #se tutto va a buon fine, mostro un message box di informazione
                 from PyQt6.QtWidgets import QMessageBox
@@ -183,8 +201,22 @@ class domOS_login(QWidget):
                     f"Impossibile completare l'operazione: {esito}"
                 )
 
+        #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
+        #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
+        def centroNote(self, notifica=None, inizializzazione=None):
+            #inizializzazione serve per aggiornare il centro ogni volta che viene aperta una nuova finestra GUI
+            if inizializzazione == 0:
+                self.centroNotifiche.clear()
+                for n in self.notifiche:
+                    self.centroNotifiche.addItem(str(n))
+            elif notifica is not None:
+                stringa_notifica = str(notifica)
+                self.centroNotifiche.addItem(stringa_notifica)
+                self.notifiche.append(stringa_notifica)
+                self.centroNotifiche.scrollToBottom()
+
 #---------------------------------------------------------------------------------------------------------------
-#----------- FFUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI -----------
+#----------- FUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI -----------
 #---------------------------------------------------------------------------------------------------------------         
 #ridimensionare dinamicamente nel senso che le dimensioni di tutti i componenti grafici sono proporzionali alla dimensione
 #della finestra, perciò se la dimensione della finestra cambia, cambiano anche le dimensioni dei componenti grafici.
@@ -220,6 +252,13 @@ class domOS_login(QWidget):
             pulsantexLog = int(((larghezza * 62) // 100) - 0.28*pulsantelLog)
             pulsantey1Log = int(((altezza * 35) // 100) + 4.9*pulsanteaLog)
             pulsantey2Log = int(((altezza * 35) // 100) + 8.5*pulsanteaLog)
+            
+            centroNx = int((larghezza * 7.5) // 100)
+            centroNy = int((altezza * 1.5) // 100)
+            centroNl = int((larghezza * 84) // 100)
+            centroNa = int((altezza * 10) // 100)
+            
+            self.centroNotifiche.setGeometry(centroNx, centroNy, centroNl, centroNa)
 
             self.campoID.setGeometry(campox, campoy1, campol, campoa)
             self.campoNome.setGeometry(campox, campoy2, campol, campoa)

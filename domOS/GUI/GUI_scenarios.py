@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import QWidget, QLabel
 
 #genero la finestra per il menù zone
 class domOS_scenarios(QWidget): 
-        def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
+        def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari, notificheOld):
             super().__init__()
             
             self.boundary_disp = boundary_disp
@@ -34,6 +34,22 @@ class domOS_scenarios(QWidget):
 #siccome questo pulsante viene "riciclato", ovvero viene utilizzato lo stesso pulsante 
 #associato alla stessa funzione in parti diverse di codice, usoConferma seleziona
 #la funzione che il pulsante conferma dovrà svolgere.
+
+            self.centroNotifiche = QListWidget(self)
+            self.centroNotifiche.setStyleSheet("""
+                background-color: #0045b5;
+                border: 2px solid #7a91b9;
+                border-radius: 2px;
+                color: white;
+            """)
+            self.centroNotifiche.show()
+            self.centroNotifiche.raise_()
+            self.inizializzazione = 0
+            self.notifiche = notificheOld
+            self.centroNote(None, 0)
+            self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
+            self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
+            self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
 
             self.listaScen = QListWidget(self)
             self.listaScen.setStyleSheet("""
@@ -811,9 +827,23 @@ class domOS_scenarios(QWidget):
         def indietro(self):
         
             from GUI.GUI_mainMenu import domOS_mainmenu
-            self.finestra_mainmenu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_scenari, self.boundary_scenari)
+            self.finestra_mainmenu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_scenari, self.boundary_scenari, self.notifiche)
             self.finestra_mainmenu.show()
             self.close()
+
+        #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
+        #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
+        def centroNote(self, notifica=None, inizializzazione=None):
+            #inizializzazione serve per aggiornare il centro ogni volta che viene aperta una nuova finestra GUI
+            if inizializzazione == 0:
+                self.centroNotifiche.clear()
+                for n in self.notifiche:
+                    self.centroNotifiche.addItem(str(n))
+            elif notifica is not None:
+                stringa_notifica = str(notifica)
+                self.centroNotifiche.addItem(stringa_notifica)
+                self.notifiche.append(stringa_notifica)
+                self.centroNotifiche.scrollToBottom()
 
 #---------------------------------------------------------------------------------------------------------------
 #----------- FUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI ------------
@@ -865,6 +895,13 @@ class domOS_scenarios(QWidget):
             pulsantey7Menu = int(((altezza * 20) // 100) + 9.3*pulsanteaMenu)
             pulsantey8Menu = int(((altezza * 20) // 100) + 10.6*pulsanteaMenu)
             pulsantey9Menu = int(((altezza * 20) // 100) + 11.9*pulsanteaMenu)
+
+            centroNx = int((larghezza * 7.5) // 100)
+            centroNy = int((altezza * 1.5) // 100)
+            centroNl = int((larghezza * 84) // 100)
+            centroNa = int((altezza * 10) // 100)
+            
+            self.centroNotifiche.setGeometry(centroNx, centroNy, centroNl, centroNa)
 
             listaGenPurpx = int((larghezza * 40.5) // 100)
             listaGenPurpy = int((altezza * 14.7) // 100)

@@ -144,12 +144,12 @@ class GestoreScenario:
                     if stato_desiderato and attuatore.getStato() == False:
                         attuatore.cambiaStato()
                         cambiamento_effettuato = True
-                        print(f"[Automazione Coordinata] Attuatore '{id_attuatore}' ACCESO.")
+                        return (f"[Automazione Coordinata] Attuatore '{id_attuatore}' ACCESO.")
                     #se lo stato desiderato è off e l'attuatore è acceso, lo spengo
                     elif not stato_desiderato and attuatore.getStato() == True:
                         attuatore.cambiaStato()
                         cambiamento_effettuato = True
-                        print(f"[Automazione Coordinata] Attuatore '{id_attuatore}' SPENTO.")
+                        return (f"[Automazione Coordinata] Attuatore '{id_attuatore}' SPENTO.")
 
             if cambiamento_effettuato: #salvo le modifiche
                 self._g_disp._dispositivo_repo.salva()

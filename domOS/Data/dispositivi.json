@@ -1,43 +1,28 @@
 [
   {
-    "id": "23",
-    "tipo": "attuatore",
-    "nome": "a",
-    "orarioAttivazione": "11:11:00",
-    "statoAttuatore": false
-  },
-  {
-    "id": "24",
-    "tipo": "attuatore",
-    "nome": "finestra2",
-    "orarioAttivazione": "00:00:00",
-    "statoAttuatore": false
-  },
-  {
-    "id": "232",
-    "tipo": "attuatore",
-    "nome": "",
-    "orarioAttivazione": "21:21:00",
-    "statoAttuatore": false
-  },
-  {
-    "id": "44",
+    "id": "1",
     "tipo": "sensore",
-    "nome": "ciao",
-    "soglia": 21.0
+    "nome": "luce1",
+    "soglia": 12.0
   },
   {
-    "id": "attuatore",
+    "id": "2",
     "tipo": "attuatore",
-    "nome": "io",
-    "orarioAttivazione": "21:21:00",
+    "nome": "Finestra1",
+    "orarioAttivazione": "20:00:00",
     "statoAttuatore": false
   },
   {
-    "id": "48",
+    "id": "3",
     "tipo": "attuatore",
-    "nome": "attuato",
-    "orarioAttivazione": "22:22:00",
+    "nome": "Riscaldamento1",
+    "orarioAttivazione": "10:00:00",
     "statoAttuatore": false
+  },
+  {
+    "id": "4",
+    "tipo": "sensore",
+    "nome": "Temperatura1",
+    "soglia": 30.0
   }
 ]

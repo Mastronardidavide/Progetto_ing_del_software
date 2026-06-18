@@ -167,3 +167,6 @@ class GestoreZona:
     def tuttiToDict(self):
         lista_zone_oggetti = self._zona_repo.tutte()
         return [z.toDict() for z in lista_zone_oggetti]
+    
+    def getRepo(self):
+        return self._zona_repo
