@@ -24,5 +24,12 @@
     "tipo": "sensore",
     "nome": "Temperatura1",
     "soglia": 30.0
+  },
+  {
+    "id": "5",
+    "tipo": "attuatore",
+    "nome": "ciao",
+    "orarioAttivazione": "11:11:00",
+    "statoAttuatore": false
   }
 ]

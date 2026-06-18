@@ -1,4 +1,4 @@
 {
-  "orario": "2026-06-18T17:41:56.303900",
-  "contenuto": "\"[{'id': '1', 'tipo': 'sensore', 'nome': 'luce1', 'soglia': 12.0}, {'id': '2', 'tipo': 'attuatore', 'nome': 'Finestra1', 'orarioAttivazione': '20:00:00', 'statoAttuatore': False}, {'id': '3', 'tipo': 'attuatore', 'nome': 'Riscaldamento1', 'orarioAttivazione': '10:00:00', 'statoAttuatore': False}, {'id': '4', 'tipo': 'sensore', 'nome': 'Temperatura1', 'soglia': 30.0}]\""
+  "orario": "2026-06-18T23:13:42.588607",
+  "contenuto": "\"[{'id': '1', 'tipo': 'sensore', 'nome': 'luce1', 'soglia': 12.0}, {'id': '2', 'tipo': 'attuatore', 'nome': 'Finestra1', 'orarioAttivazione': '20:00:00', 'statoAttuatore': False}, {'id': '3', 'tipo': 'attuatore', 'nome': 'Riscaldamento1', 'orarioAttivazione': '10:00:00', 'statoAttuatore': False}, {'id': '4', 'tipo': 'sensore', 'nome': 'Temperatura1', 'soglia': 30.0}, {'id': '5', 'tipo': 'attuatore', 'nome': 'ciao', 'orarioAttivazione': '11:11:00', 'statoAttuatore': False}]\""
 }

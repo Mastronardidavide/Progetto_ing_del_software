@@ -29,10 +29,12 @@ class BoundaryDispositivo(QObject):
                 if tipo == "sensore":
                     # Chiamata per il sensore passando il parametro soglia
                     feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, soglia=sogliaIn)
+                    return feedback
                     
                 elif tipo == "attuatore":
                     # Chiamata per l'attuatore passando i parametri kwargs stato e orario 
                     feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, stato=stato_iniziale, orario=orario_attivazione)
+                    return feedback
 
                 dati = self._g_disp.tutte_to_dict()
                 self._g_dati.esegui_backup(str(dati))
