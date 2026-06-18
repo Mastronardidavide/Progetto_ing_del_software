@@ -403,21 +403,28 @@ class domOS_devices(QWidget):
                             "Attenzione", 
                             "Formato orario non valido o vuoto. L'orario non verrà modificato."
                         )
-                #passo tutto a menu_disp dentro boundary dispositivi, dopodichè mostro un'info di avvenuta configurazione
-                #configurazione e pulisco il menu
+                #passo tutto a menu_disp dentro boundary dispositivi e prendo feedback
                 self.comando = "configura"
                 self.tipo = self.nomeDisp = None
-                self.boundary_disp.menu_disp(self.comando, self.id_disp, self.tipo, self.nomeDisp, nuova_soglia, nuovo_stato, nuovo_orario)
-                from PyQt6.QtWidgets import QMessageBox
-                QMessageBox.information(
-                    self, 
-                    "Successo", 
-                    "Dispositivo configurato con successo."
-                )
-                [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
-                [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
-                self.btn1.hide()
-                self.click3 = 0
+                feedback = self.boundary_disp.menu_disp(self.comando, self.id_disp, self.tipo, self.nomeDisp, nuova_soglia, nuovo_stato, nuovo_orario)
+                if feedback == f"dispositivo non trovato":
+                    #se l'id del dispositivo non è registrato nel sistema, mostro un error
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.critical(self, "Errore", "Dispositivo non trovato")
+                    self.campo1.clear()
+                    return
+                else:
+                    #altrimenti mostro un info e resetto il menù
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.information(
+                        self, 
+                        "Successo", 
+                        "Dispositivo configurato con successo."
+                    )
+                    [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
+                    [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
+                    self.btn1.hide()
+                    self.click3 = 0
 
         #funzione associata al pulsante "lista dispositivi": si occupa di 
         #mostrare e nascondere la lista dei dispositivi presenti nel sistema
