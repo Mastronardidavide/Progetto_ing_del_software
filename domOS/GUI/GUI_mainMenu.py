@@ -108,32 +108,42 @@ class domOS_mainmenu(QWidget):
                     
                     self.listaStato.clear() #pulisco la lista
                     backup_completo = self.boundary_disp.mostraStato()
-                    
+
                     #se non esiste un backup
                     if not backup_completo:
-                        self.listaStato.addItem("Nessun dato di backup disponibile.") #nella lista scrivo solo questo
+                        self.listaStato.addItem("Nessun dato di backup disponibile.") # nella lista scrivo solo questo
                         return
-                    #parsing sicuro di una stringa temporale
+
+                    #recupero la data del backup (stringa)
                     orario_grezzo = backup_completo.get("orario", "")
                     try:
-                        dt = datetime.fromisoformat(orario_grezzo)  #provo a trasformarela stringa che contiene data e orario in oggetto data/ora
-                        data_formattata = dt.strftime("%d/%m/%Y alle ore %H:%M:%S") #se ci riesco, "decoro" l'oggetto
+                        dt = datetime.fromisoformat(orario_grezzo)  #provo a trasformare la stringa in oggetto data/ora
+                        data_formattata = dt.strftime("%d/%m/%Y alle ore %H:%M:%S") # se ci riesco, "decoro" l'oggetto
                     except ValueError:
-                        data_formattata = orario_grezzo #se non riesco a traformare la stringa aggiungerò alla lista semplicemente la stringa che contiene data e ora
-                    self.listaStato.addItem(f"Backup del: {data_formattata}") #aggiungo l'oggetto 
+                        data_formattata = orario_grezzo #se non riesco, lascio la stringa originale
+                    self.listaStato.addItem(f"Backup del: {data_formattata}") 
                     self.listaStato.addItem("─" * 40) 
-                    stringa_grezza = backup_completo["contenuto"]
+
+                    #estraggo il contenuto del backup
+                    stringa_grezza = backup_completo.get("contenuto", "[]")
                     stringa_json_valida = stringa_grezza.replace("'", '"').replace("False", "false").replace("True", "true")
                     lista_dispositivi = json.loads(stringa_json_valida)
-                    
+
                     #questa parte "spacchetta" il backup per caricare tutto nella lista
                     for disp in lista_dispositivi:
-                        if disp["tipo"] == "attuatore":
+                        id_disp = disp.get("id", "N/D")
+                        nome_disp = disp.get("nome", "Sconosciuto")
+                        tipo_disp = disp.get("tipo", "sconosciuto")
+    
+                        if tipo_disp == "attuatore":
                             orario_att = disp.get("orarioAttivazione", "Non specificato")
-                            testo_riga = f"A: ID: [{disp['id']}], Nome: {disp['nome']} - Orario: {orario_att } - Stato: {disp['statoAttuatore']}"
+                            stato_att = disp.get("statoAttuatore", "N/D")
+                            testo_riga = f"Attuatore: ID: [{id_disp}], Nome: {nome_disp} - Orario: {orario_att} - Stato: {stato_att}"
                         else:
-                            testo_riga = f"S: ID: [{disp['id']}], Nome: {disp['nome']} - Soglia: {disp['soglia']}"
+                            soglia_sens = disp.get("soglia", "N/D")
+                            testo_riga = f"Sensore: ID: [{id_disp}], Nome: {nome_disp} - Soglia: {soglia_sens}"
                         self.listaStato.addItem(testo_riga)
+
                     self.listaStato.show()      #mostro la lista
                     self.listaStato.raise_()    #la porto in cima
                     self.click = 1             #aumento il conteggio click

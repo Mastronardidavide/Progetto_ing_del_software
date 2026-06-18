@@ -16,5 +16,11 @@
         "nome": "ricccccccc",
         "password": "ciao",
         "tipo": "Ospite"
+    },
+    {
+        "id": "111111111111111111111",
+        "nome": "aa",
+        "password": "aa",
+        "tipo": "Ospite"
     }
 ]

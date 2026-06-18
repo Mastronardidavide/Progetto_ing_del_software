@@ -103,9 +103,7 @@ class GestoreDispositivi:
                     if lettura_corrente > soglia:
                         print(f"Il sensore ID 'f{dispositivo.getId()}' ({dispositivo._nome}) ha superato la soglia")
     def lista(self):
-        print("\nLista dispositivi:")
         if self._dispositivo_repo.tutte() == []:
-            print("Nessun dispositivo presente")
             return []
         else:
             elenco_formattato = []
