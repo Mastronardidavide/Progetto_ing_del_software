@@ -1,3 +1,14 @@
+___________________________________________________________________________________________________________________________________________________
+COMPONENTI AGGIUNTIVI DA SCARICARE: 
+pyQt6
+come scaricare: 
+- sul terminale di windows: basta digitare py -m pip install PyQt6 in una posizione qualsiasi
+- sul terminale di VsCode: basta digitare py -m pip install PyQt6
+___________________________________________________________________________________________________________________________________________________
+COME ESEGUIRE IL PROGRAMMA:
+all'interno di: Progetto_con_test_e_GUI/Progetto_Ingegneria_del_software-main/Codice_pitonico si trova il file main.py. per eseguire il programma basta eseguire quel file main.
+___________________________________________________________________________________________________________________________________________________
+COME UTILIZZARE IL PROGRAMMA:
 Il sistema appena eseguito il run presenterà una schermata di login, con pulsante di registrazione.
 
 una volta effettuata la registrazione ed il login, c'è la possibilità di aggiungere, rimuovere e configurare dispositivi, zone, scenari ed account, oltre a visualizzare tramite lista i primi tre di questi.
