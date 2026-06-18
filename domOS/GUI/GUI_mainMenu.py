@@ -138,10 +138,10 @@ class domOS_mainmenu(QWidget):
                         if tipo_disp == "attuatore":
                             orario_att = disp.get("orarioAttivazione", "Non specificato")
                             stato_att = disp.get("statoAttuatore", "N/D")
-                            testo_riga = f"A: ID: [{id_disp}], Nome: {nome_disp} - Orario: {orario_att} - Stato: {stato_att}"
+                            testo_riga = f"Attuatore: ID: [{id_disp}], Nome: {nome_disp} - Orario: {orario_att} - Stato: {stato_att}"
                         else:
                             soglia_sens = disp.get("soglia", "N/D")
-                            testo_riga = f"S: ID: [{id_disp}], Nome: {nome_disp} - Soglia: {soglia_sens}"
+                            testo_riga = f"Sensore: ID: [{id_disp}], Nome: {nome_disp} - Soglia: {soglia_sens}"
                         self.listaStato.addItem(testo_riga)
 
                     self.listaStato.show()      #mostro la lista
