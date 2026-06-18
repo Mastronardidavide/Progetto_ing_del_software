@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 from pathlib import Path
 from PyQt6.QtWidgets import QWidget, QLabel
 
+#genero la finestra per il menù zone
 class domOS_zones(QWidget): 
         def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari):
             super().__init__()
@@ -14,9 +15,25 @@ class domOS_zones(QWidget):
             self.boundary_zone = boundary_zone
             self.boundary_scenari = boundary_scenari
 
-            self.setWindowTitle("domOS")
-            self.resize(800, 600)
-            self.setMinimumSize(600, 400)
+            self.setWindowTitle("domOS")    #titolo
+            self.resize(800, 600)           #dimensione
+            self.setMinimumSize(600, 400)   #dimensione minima
+
+            self.sfondo = QLabel(self)
+            cartella_corrente = Path(__file__).resolve().parent                             #]---|questa parte qui si occupa di fetchare il percorso
+            percorso_immagine = cartella_corrente / "schermatamultipurpose_prot.png"        #    |dell'immagine che si vuole utilizzare come sfondo,
+            percorso_str = str(percorso_immagine)                                           #    |(per motivi di compatibilità)
+            self.pixmap_per_sfondo = QPixmap(percorso_str)                                  #]---|
+
+#---------------------------------------------------------------------------
+#----------- GENERAZIONE PULSANTI, LISTE E CAMPI VARI PER LA GUI -----------
+#---------------------------------------------------------------------------           
+#le variabili click servono a contare quante volte un determinato pulsante
+#viene premuto, per eseguire determinate azioni (es: mostrare e nascondere parti della gui)
+#la variabile usoConferma serve a selezionare l'azione del pulsante conferma:
+#siccome questo pulsante viene "riciclato", ovvero viene utilizzato lo stesso pulsante 
+#associato alla stessa funzione in parti diverse di codice, usoConferma seleziona
+#la funzione che il pulsante conferma dovrà svolgere.
 
             self.listaZone = QListWidget(self)
             self.listaZone.setStyleSheet("""
@@ -27,12 +44,6 @@ class domOS_zones(QWidget):
             """)
             self.listaZone.hide()
             self.click0 = 0
-
-            self.sfondo = QLabel(self)
-            cartella_corrente = Path(__file__).resolve().parent
-            percorso_immagine = cartella_corrente / "schermatamultipurpose_prot.png"
-            percorso_str = str(percorso_immagine)
-            self.pixmap_per_sfondo = QPixmap(percorso_str)
 
             self.campo1 = QLineEdit(self)
             self.campo1.setPlaceholderText("")
@@ -149,13 +160,19 @@ class domOS_zones(QWidget):
             """)
             self.btnIndietro.clicked.connect(self.indietro)
 
+        #"conferma" è la funzione associata al tasto omonimo e può svolgere più azioni,
+        #le quali dipendono dalla variabile usoConferma:
         def conferma(self):
-
+            
+            #se usoConferma è 0, il pulsante conferma si occupa della generazione delle zone
             if self.usoConferma == 0:
-
+                
+                #prendo i dati dai campi e imposto comando su "aggiungi" (da passare a boundary)
                 id_zona = self.campo1.text().strip()
                 nome_zona = self.campo2.text().strip()
                 comando = "aggiungi"
+
+                #check id: deve essere intero positivo
                 check_id = False
             
                 if not check_id:
@@ -173,22 +190,38 @@ class domOS_zones(QWidget):
                             )
                         return
                 
-                self.boundary_zone.menu_zone(comando, id_zona, nome_zona)
+                #passo tutti i dati alla boundary e prendo il feedback che mi restituisce
+                feedback = self.boundary_zone.menu_zone(comando, id_zona, nome_zona)
                 from PyQt6.QtWidgets import QMessageBox
-                QMessageBox.information(
+                #controllo il feedback
+                if feedback == f"La zona è già presente":
+                    #se la zona è già presente, mostro un warning
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.warning(
+                        self, 
+                        "Attenzione", 
+                        "La zona è già presente"
+                    )
+                    return
+                else:
+                    #se tutto va a buon fine, mostro un info e resetto il menù
+                    QMessageBox.information(
                     self, 
                     "Successo", 
                     "Zona aggiunta con successo!"
-                )
-                [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
-                [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
-                self.btnConferma.hide()
-                self.click1 = 0
+                    )
+                    [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
+                    [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
+                    self.btnConferma.hide()
+                    self.click1 = 0
 
+            #se usoConferma è 1, il pulsante conferma si occupa della rimozione delle zone
             elif self.usoConferma == 1:
 
+                #prendo i dati dai campi
                 id_zona = self.campo1.text().strip()
                 comando = "rimuovi"
+                #controllo id: deve essere intero positivo
                 check_id = False
             
                 if not check_id:
@@ -205,10 +238,12 @@ class domOS_zones(QWidget):
                             "L'ID deve essere un numero intero positivo."
                             )
                         return
-                    
+                
+                #passo tutto a boundary e prendo il feedback
                 feedback = self.boundary_zone.menu_zone(comando, id_zona)
 
                 if feedback == f"Zona eliminata":
+                    #se l'eliminazione va a buon fine, mostro un info e resetto il menù
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.information(
                         self, 
@@ -221,16 +256,20 @@ class domOS_zones(QWidget):
                     self.click2 = 0
 
                 elif feedback == f"Zona non trovata":
+                    #altrimenti, mostro un warning
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.critical(self, "Errore", "Zona non trovata")
                     return
             
+            #se usoConferma è 2, il pulsante conferma si occupa di modificare il nome delle zone
             elif self.usoConferma == 2:
-
+                
+                #prendo tutti i dati dai campi
                 id_edit = self.campo1.text().strip()
                 nome_edit = self.campo2.text().strip()
                 comando = "rinomina"
 
+                #controllo id: deve essere intero positivo
                 check_id = False
                 if not check_id:
                     try:
@@ -246,26 +285,37 @@ class domOS_zones(QWidget):
                             "L'ID deve essere un numero intero positivo."
                             )
                         return
-                
-                self.boundary_zone.menu_zone(comando, id_edit, nome_edit)
-                from PyQt6.QtWidgets import QMessageBox
-                QMessageBox.information(
+                #passo tutto a boundary e prendo il feedback
+                feedback = self.boundary_zone.menu_zone(comando, id_edit, nome_edit)
+                if feedback == f"Zona non trovata":
+                    #se la zona è già presente, mostro un warning
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.critical(self, "Errore", "Zona non trovata")
+                    return
+                else: 
+                    #se invece non ci sono errori, mostro un info e resetto il menù
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.information(
                     self, 
                     "Successo", 
                     "Nome Zona modificato con successo!"
-                )
-                [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
-                [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
-                self.btnConferma.hide()
-                self.click3 = 0
+                    )
+                    [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
+                    [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
+                    self.btnConferma.hide()
+                    self.click3 = 0
 
+            #se usoConferma è 3, il pulsante conferma si occupa di aggiungere orario di accensione e
+            #spegnimento alla zona
             elif self.usoConferma == 3:
-
+                
+                #prendo tutti i dati dai campi
                 id_zona = self.campo1.text().strip()
                 orario1 = self.campo2.text().strip()
                 orario2 = self.campo3.text().strip()
                 comando = "orario"
-
+                
+                #controllo id: deve essere intero positivo
                 check_id = False
                 if not check_id:
                     try:
@@ -281,6 +331,8 @@ class domOS_zones(QWidget):
                             "L'ID deve essere un numero intero positivo."
                             )
                         return
+
+                #controllo il formato dell'orario di accensione, che deve essere HH:MM
                 self.check_orario = False
                 if not self.check_orario:
                     try:
@@ -294,7 +346,8 @@ class domOS_zones(QWidget):
                             "Formato orario attivazione non valido o non inserito. Usa il formato HH:MM (es. 14:30)."
                         )
                         return
-                
+                    
+                #controllo il formato dell'orario di spegnimento, che deve essere HH:MM
                 self.check_orario = False
                 if not self.check_orario:
                     try:
@@ -308,27 +361,39 @@ class domOS_zones(QWidget):
                             "Formato orario disattivazione non valido o non inserito. Usa il formato HH:MM (es. 14:30)."
                         )
                         return
+                
+                #passo tutto a boundary e prendo il feedback che mi restituisce, per il controllo
                 nome = None
-                self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off)
-
-                from PyQt6.QtWidgets import QMessageBox
-                QMessageBox.information(
+                feedback = self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off)
+                if feedback == f"Zona non trovata":
+                    #se l'id non è associato a nessuna zona, mostro un warning
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.critical(self, "Errore", "Zona non trovata")
+                    return
+                
+                else:
+                    #se invece non ci sono errori, mostro un info e resetto il menù
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.information(
                     self, 
                     "Successo", 
                     "Pianificazione zona completata!"
-                )
-                [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
-                [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
-                self.btnConferma.hide()
-                self.click4 = 0
+                    )
+                    [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
+                    [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
+                    self.btnConferma.hide()
+                    self.click4 = 0
 
+            #se usoConferma è 4, il pulsante conferma si occupa di aggiungere sensori alla zona
             elif self.usoConferma == 4:
-
+                
+                #raccolgo tutti i dati dai campi
                 id_zona = self.campo1.text().strip()
                 id_sens = self.campo2.text().strip()
                 soglia = self.campo3.text().strip()
                 comando = "automazione"
 
+                #controllo id zona: deve essere intero positivo
                 check_id = False
                 if not check_id:
                     try:
@@ -345,6 +410,7 @@ class domOS_zones(QWidget):
                             )
                         return
                 
+                #controllo id sensore: deve essere intero positivo
                 check_id = False
                 if not check_id:
                     try:
@@ -361,6 +427,7 @@ class domOS_zones(QWidget):
                             )
                         return
                 
+                #controllo soglia: deve essere float
                 check_soglia = False
                 if not check_soglia:
                     try:
@@ -375,18 +442,22 @@ class domOS_zones(QWidget):
                             "Formato soglia non valido"
                         )
                         return
-                    
+                
+                #passo tutto a boundary e controllo il feedback che mi restituisce
                 nome = orario_on = orario_off = None
                 feedback = self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off, id_sens, soglia_sens)
                 if feedback == f"Zona non trovata":
+                    #se l'id zona non è valido, mostro un errore
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.critical(self, "Errore", "Zona non trovata")
                     return
                 elif feedback == f"Errore: Il sensore con ID '{id_sens}' non esiste nella domotica. Automazione annullata.":
+                    #se l'id sensore non è valido, mostro un errore
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.critical(self, "Errore", "Sensore non trovato")
                     return
                 elif feedback == f"Errore: Sensore e Soglia devono essere inseriti insieme.":
+                    #se manca uno dei due id, mostro un warning
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.warning(
                         self, 
@@ -396,6 +467,7 @@ class domOS_zones(QWidget):
                     return
                 
                 else:
+                    #se invece non ci sono errrori, mostro un info e resetto il menù
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.information(
                         self, 
@@ -407,12 +479,15 @@ class domOS_zones(QWidget):
                     self.btnConferma.hide()
                     self.click5 = 0
 
+            #se usoConferma è 5, il pulsante conferma si occupa di aggiungere e rimuovere attuatori alla zona
             elif self.usoConferma == 5:
                 
+                #prendo tutti i dati dai campi
                 id_zona = self.campo1.text().strip()
                 id_att = self.campo2.text().strip()
                 comando = "associa"
-
+                
+                #controllo id zona: deve essere intero positivo
                 check_id = False
                 if not check_id:
                     try:
@@ -429,6 +504,7 @@ class domOS_zones(QWidget):
                             )
                         return
                 
+                #controllo id attuatore: deve essere intero positivo
                 check_id = False
                 if not check_id:
                     try:
@@ -444,11 +520,18 @@ class domOS_zones(QWidget):
                             "L'ID Sensore deve essere un numero intero positivo."
                             )
                         return
-                    
+                
+                #passo tutto a boundary e controllo il feedback che mi restituisce
                 nome = orario_on = orario_off = id_sens = soglia_sens = None
                 feedback = self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off, id_sens, soglia_sens, id_att)
+                #se l'attuatore è già associato alla zona, una volta cliccato "conferma" il codice proseguirà all'interno di questo if
                 if feedback == f"L'attuatore '{id_att}' è già associato a questa zona":
+
                     if self.click7 == 0:
+                        #al primo click, siccome l'attuatore è già associato, mostro un warning, 
+                        #il quale avverte l'utente dell'errore e lo informa che, premendo una seconda
+                        #volta il tasto "conferma", l'attuatore verrà rimosso a meno che non venga
+                        #modificato il suo id
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
                             self, 
@@ -459,17 +542,24 @@ class domOS_zones(QWidget):
                         return
                     
                     if self.click7 == 1:
+
+                        #al secondo click, se l'id non è stato modificato, l'utente vuole dissociare il 
+                        #dispositivo dalla zona. Modifico il comando che da "associa" diventa "dissocia",
+                        #dopodichè passo i dati a boundary e prendo il feedback che mi restituisce
                         comando = "dissocia"
                         feedback = self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off, id_sens, soglia_sens, id_att)
                         if feedback == f"Zona non trovata":
+                            #se l'id zona non è valido, mostro un errore
                             from PyQt6.QtWidgets import QMessageBox
                             QMessageBox.critical(self, "Errore", "Zona non trovata")
                             return
                         elif feedback == f"Errore: L'attuatore con ID '{id_att}' non esiste nel sistema.":
+                            #se l'id attuatore non è valido, mostro un errore
                             from PyQt6.QtWidgets import QMessageBox
                             QMessageBox.critical(self, "Errore", "Attuatore non trovato")
                             return
                         elif feedback == f"Attuatore '{id_att}' rimosso dalla zona con successo":
+                            #se non ci sono errori, mostro un info e resetto il menù
                             from PyQt6.QtWidgets import QMessageBox
                             QMessageBox.information(
                                 self, 
@@ -482,6 +572,9 @@ class domOS_zones(QWidget):
                             [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                             self.btnConferma.hide()
 
+                #stessi controlli eseguiti sopra: sono scritti anche qui perchè, mentre sopra
+                #i controlli vengono eseguiti per la rimozione di un attuatore, qui vengono
+                #eseguiti per l'aggiunta di un attuatore.
                 elif feedback == f"Zona non trovata":
                     from PyQt6.QtWidgets import QMessageBox
                     QMessageBox.critical(self, "Errore", "Zona non trovata")
@@ -503,18 +596,24 @@ class domOS_zones(QWidget):
                     [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                     self.btnConferma.hide()
 
+        #funzione associata al pulsante "lista zone": si occupa di 
+        #mostrare e nascondere la lista delle zone presenti nel sistema
         def lista(self):
-
+            
+            #al primo click:
             if self.click0 == 0:
+                #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                 self.click1 = self.click4 = self.click2 = self.click3 = self.click5 = self.click6 = self.click7 = 0
+                #setup vari, sempre per evitare sovrapposizioni
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
-                self.listaZone.clear()
-                self.listaZone.addItem("Lista Zone presenti nel sistema")
+                self.listaZone.clear()  #pulisco la lista
+                self.listaZone.addItem("Lista Zone presenti nel sistema") #"intitolo" la lista
                 self.listaZone.addItem("_" * 40)
-                lista_zone = self.boundary_zone.menu_zone("lista")
+                lista_zone = self.boundary_zone.menu_zone("lista") #raccolgo la lista effettiva dei dispositivi da boundary
                 if not lista_zone:
-                    self.listaZone.addItem("Nessuna zona registrata nel sistema.")
+                    self.listaZone.addItem("Nessuna zona registrata nel sistema.") #se non ci sono zone, scrivo questo
+                #se invece sono presenti zone nel sistema, "spacchetto" la lista e aggiungo tutto alla lista GUI.
                 for zona in lista_zone:
                     id_zona = zona.get("id", "N/D")
                     nome_zona = zona.get("nome", "Sconosciuto")
@@ -532,25 +631,31 @@ class domOS_zones(QWidget):
                                   f"Sensore [ID]: {id_sens} - Attuatori [ID]: {attuatori_str}"  
                     )
                     self.listaZone.addItem(riga_testo)
-                    self.listaZone.addItem("_" * 40)
+                    self.listaZone.addItem("_" * 40)    #separo ogni zona con _
+                #alla fine mostro e metto in cima la lista
                 self.listaZone.show()
                 self.listaZone.raise_()
-                self.click0 += 1
+                self.click0 = 1
 
+            #al secondo click, pulisco e nascondo la lista
             else:
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
                 self.listaZone.clear()
                 self.listaZone.hide()
-                self.click0 += 1
-            if self.click0 >=2:
-                 self.click0 = 0
-                 
+                self.click0 = 0
+        
+        #"aggiungi" si occupa di impostare il menù principale per l'aggiunta di zone
+        #è una funzione puramente grafica
         def aggiungi(self):
 
+            #al primo click:
             if self.click1 == 0:
+                #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                 self.click0 = self.click4 = self.click2 = self.click3 = self.click5 = self.click6 = self.click7 = 0
-                self.usoConferma = 0
+                self.usoConferma = 0 #imposto usoConferma a 0 per modificare il funzionamento dl pulsante "conferma"
+                #preparo il menù: pulisco i campi che mi servono e ne modifico il nome, nascondo la lista
+                #per evitare sovrapposizioni e mostro pulsante conferma e campi
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.campo3.hide()
                 self.listaZone.hide()
@@ -558,21 +663,26 @@ class domOS_zones(QWidget):
                 self.campo2.setPlaceholderText("Nome Nuova Zona")
                 [campo.show() for campo in [self.campo1, self.campo2]]
                 self.btnConferma.show()
-                self.click1 += 1
+                self.click1 = 1
+            
+            #al secondo click, pulisco e nascondo i campi e nascondo anche il pulsante conferma
             else:
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
-                self.click1 += 1
-
-            if self.click1 >= 2:
                 self.click1 = 0
-
+        
+        #"rimuovi" si occupa di impostare il menù principale per la rimozione di zone
+        #è una funzione puramente grafica
         def rimuovi(self):
             
+            #al primo click:
             if self.click2 == 0:
+                #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                 self.click0 = self.click1 = self.click4 = self.click3 = self.click5 = self.click6 = self.click7 = 0
-                self.usoConferma = 1
+                self.usoConferma = 1 #imposto usoConferma a 1 per modificare il funzionamento dl pulsante "conferma"
+                #preparo il menù: pulisco i campi che mi servono e ne modifico il nome, nascondo la lista
+                #per evitare sovrapposizioni e mostro pulsante conferma e campi
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo2, self.campo3]]
                 self.campo3.hide()
@@ -580,21 +690,26 @@ class domOS_zones(QWidget):
                 self.campo1.setPlaceholderText("ID Zona da eliminare")
                 self.campo1.show()
                 self.btnConferma.show()
-                self.click2 += 1
+                self.click2 = 1
+
+            #al secondo click, pulisco e nascondo i campi e nascondo anche il pulsante conferma
             else:
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
-                self.click2 += 1
-
-            if self.click2 >= 2:
                 self.click2 = 0
 
+        #"rinomina" si occupa di impostare il menù principale per la modifica del nome di zone
+        #è una funzione puramente grafica
         def rinomina(self):
 
+            #al primo click:
             if self.click3 == 0:
+                #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                 self.click0 = self.click1 = self.click2 = self.click4 = self.click5 = self.click6 = self.click7 = 0
-                self.usoConferma = 2
+                self.usoConferma = 2 #imposto usoConferma a 2 per modificare il funzionamento dl pulsante "conferma"
+                #preparo il menù: pulisco i campi che mi servono e ne modifico il nome, nascondo la lista
+                #per evitare sovrapposizioni e mostro pulsante conferma e campi
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.campo3.hide()
                 self.listaZone.hide()
@@ -603,6 +718,7 @@ class domOS_zones(QWidget):
                 [campo.show() for campo in [self.campo1, self.campo2]]
                 self.btnConferma.show()
                 self.click3 += 1
+            #al secondo click, pulisco e nascondo i campi e nascondo anche il pulsante conferma
             else:
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
@@ -612,11 +728,17 @@ class domOS_zones(QWidget):
             if self.click3 >= 2:
                 self.click3 = 0
 
+        #"orario" si occupa di impostare il menù principale per l'aggiunta di orari per l'automazione
+        #è una funzione puramente grafica
         def orario(self):
-
+            
+            #al primo click:
             if self.click4 == 0:
+                #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                 self.click0 = self.click1 = self.click2 = self.click3 = self.click5 = self.click6 = self.click7 = 0
-                self.usoConferma = 3
+                self.usoConferma = 3 #imposto usoConferma a 2 per modificare il funzionamento dl pulsante "conferma"
+                #preparo il menù: pulisco i campi che mi servono e ne modifico il nome, nascondo la lista
+                #per evitare sovrapposizioni e mostro pulsante conferma e campi
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.listaZone.hide()
                 self.campo1.setPlaceholderText("ID Zona")
@@ -624,21 +746,25 @@ class domOS_zones(QWidget):
                 self.campo3.setPlaceholderText("Orario disattivazione (HH:MM)")
                 [campo.show() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.show()
-                self.click4 += 1
+                self.click4 = 1
+            #al secondo click, pulisco e nascondo i campi e nascondo anche il pulsante conferma
             else:
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
-                self.click4 += 1
-
-            if self.click4 >= 2:
                 self.click4 = 0
 
+        #"associa_sens" si occupa di impostare il menù principale per l'aggiunta di sensori per l'automazione
+        #è una funzione puramente grafica 
         def associa_sens(self):
 
+            #al primo click:
             if self.click5 == 0:
+                #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                 self.click0 = self.click1 = self.click2 = self.click4 = self.click3 = self.click6 = self.click7 = 0
-                self.usoConferma = 4
+                self.usoConferma = 4 #imposto usoConferma a 2 per modificare il funzionamento dl pulsante "conferma"
+                #preparo il menù: pulisco i campi che mi servono e ne modifico il nome, nascondo la lista
+                #per evitare sovrapposizioni e mostro pulsante conferma e campi
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.listaZone.hide()
                 self.campo1.setPlaceholderText("ID Zona")
@@ -646,21 +772,25 @@ class domOS_zones(QWidget):
                 self.campo3.setPlaceholderText("Valore soglia sensore")
                 [campo.show() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.show()
-                self.click5 += 1
+                self.click5 = 1
+            #al secondo click, pulisco e nascondo i campi e nascondo anche il pulsante conferma
             else:
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
-                self.click5 += 1
-
-            if self.click5 >= 2:
                 self.click5 = 0
 
+        #"diss_associa_att" si occupa di impostare il menù principale per l'aggiunta o la rimozione di attuatori per l'automazione
+        #è una funzione puramente grafica 
         def diss_associa_att(self):
             
+            #al primo click:
             if self.click6 == 0:
+                #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                 self.click0 = self.click1 = self.click2 = self.click4 = self.click3 = self.click5 = self.click7 = 0
-                self.usoConferma = 5
+                self.usoConferma = 5 #imposto usoConferma a 2 per modificare il funzionamento dl pulsante "conferma"
+                #preparo il menù: pulisco i campi che mi servono e ne modifico il nome, nascondo la lista
+                #per evitare sovrapposizioni e mostro pulsante conferma e campi
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.campo3.hide()
                 self.listaZone.hide()
@@ -668,25 +798,33 @@ class domOS_zones(QWidget):
                 self.campo2.setPlaceholderText("ID Attuatore da +/-")
                 [campo.show() for campo in [self.campo1, self.campo2]]
                 self.btnConferma.show()
-                self.click6 += 1
+                self.click6 = 1
+            #al secondo click, pulisco e nascondo i campi e nascondo anche il pulsante conferma
             else:
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
-                self.click6 += 1
-
-            if self.click6 >= 2:
                 self.click6 = 0
 
+        #"indietro" riporta l'utente al menù principale della gui
         def indietro(self):
-
+        
             from GUI.GUI_mainMenu import domOS_mainmenu
             self.finestra_mainmenu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari)
             self.finestra_mainmenu.show()
             self.close()
 
+#---------------------------------------------------------------------------------------------------------------
+#----------- FUNZIONE CHE SI OCCUPA DI RIDIMENSIONARE DINAMICAMENTE SFONDO, PULSANTI, LISTE E CAMPI ------------
+#---------------------------------------------------------------------------------------------------------------         
+#ridimensionare dinamicamente nel senso che le dimensioni di tutti i componenti grafici sono proporzionali alla dimensione
+#della finestra, perciò se la dimensione della finestra cambia, cambiano anche le dimensioni dei componenti grafici.
+#Questo permette alla GUI di mantenere la sua organizzazione di default per qualsiasi dimensione scelta dall'utente
+
         def resizeEvent(self, event):
             
+            #le 7 righe seguenti servono a scalare l'immagine di sfondo cercando di
+            #mantenere la qualità originale, per poi assegnarla come sfondo.
             self.sfondo.resize(self.size())
             pixmap_scalata = self.pixmap_per_sfondo.scaled(
                 self.size(),
@@ -695,9 +833,12 @@ class domOS_zones(QWidget):
             )
             self.sfondo.setPixmap(pixmap_scalata)
             
+            #prendo le dimensini della finestra
             larghezza = self.width()
             altezza = self.height()
-        
+
+            #di seguito ogni componente grafico viene ridimensionato porporzionalmente
+            #ad altezza e larghezza correnti della finestra
             campol = (larghezza * 20) // 100
             campoa = (altezza * 5) // 100
             campox = int(((larghezza * 62) // 100) - 0.35*campol)

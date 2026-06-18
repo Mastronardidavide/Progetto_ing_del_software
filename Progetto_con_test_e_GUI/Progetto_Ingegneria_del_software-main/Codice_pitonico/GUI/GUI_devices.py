@@ -20,10 +20,10 @@ class domOS_devices(QWidget):
             self.setMinimumSize(600, 400)   #dimensione minima
 
             self.sfondo = QLabel(self)
-            cartella_corrente = Path(__file__).resolve().parent                     #]---|questa parte qui si occupa di fetchare il percorso
-            percorso_immagine = cartella_corrente / "schermatamultipurpose_prot.png"     #    |dell'immagine che si vuole utilizzare come sfondo,
-            percorso_str = str(percorso_immagine)                                   #    |(per motivi di compatibilità)
-            self.pixmap_per_sfondo = QPixmap(percorso_str)                          #]---|
+            cartella_corrente = Path(__file__).resolve().parent                             #]---|questa parte qui si occupa di fetchare il percorso
+            percorso_immagine = cartella_corrente / "schermatamultipurpose_prot.png"        #    |dell'immagine che si vuole utilizzare come sfondo,
+            percorso_str = str(percorso_immagine)                                           #    |(per motivi di compatibilità)
+            self.pixmap_per_sfondo = QPixmap(percorso_str)                                  #]---|
 
 #---------------------------------------------------------------------------
 #----------- GENERAZIONE PULSANTI, LISTE E CAMPI VARI PER LA GUI -----------
@@ -419,14 +419,15 @@ class domOS_devices(QWidget):
                 self.btn1.hide()
                 self.click3 = 0
 
-        #funzione associata al pulsante "lista dispositivi"
+        #funzione associata al pulsante "lista dispositivi": si occupa di 
+        #mostrare e nascondere la lista dei dispositivi presenti nel sistema
         def lista(self):
 
                 #al primo click del pulsante:
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btn1.hide()
                 if self.click0 == 0:
-                    self.click1 = self.click2 = self.click3 = 0 #stessa cosa con le variabili click
+                    self.click1 = self.click2 = self.click3 = 0 #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                     self.listaDisp.clear()  #pulisco la lista
 
                     #prendo la lista dispositivi da boundary, la "spacchetto" e la carico sulal lista GUI
