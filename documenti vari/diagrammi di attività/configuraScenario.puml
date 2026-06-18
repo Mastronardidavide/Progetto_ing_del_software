@@ -1,0 +1,12 @@
+@startuml configuraScenario
+title Configura scenario
+
+start
+
+    :Inserisci id scenario;
+    :Seleziona dispositivi e orari da includere o da modificare;
+    :Applica cambiamenti;
+    :scenario riconfigurato;
+
+stop
+@enduml

@@ -1,0 +1,12 @@
+@startuml configurazona
+title Configura zona
+
+start
+
+    :Inserisci id zona;
+    :Seleziona dispositivi e orari da includere o da modificare;
+    :Applica cambiamenti;
+    :Zona riconfigurata;
+
+stop
+@enduml
