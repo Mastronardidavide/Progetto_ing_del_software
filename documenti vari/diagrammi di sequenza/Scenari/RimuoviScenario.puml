@@ -1,0 +1,15 @@
+@startuml
+actor Utente
+participant Sistema
+participant Scenario
+
+Utente -> Sistema : seleziona "Rimuovi scenario"
+activate Sistema
+
+Utente -> Sistema : inserisce l'ID dello scenario da eliminare
+Sistema -> Scenario !! : <<distruggi>>
+destroy Scenario
+
+Sistema --> Utente : scenario eliminato
+deactivate Sistema
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "Lista Scenari"
+activate Sistema
+
+Sistema --> Utente : visualizza la lista degli scenari esistenti
+deactivate Sistema
+@enduml

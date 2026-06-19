@@ -1,0 +1,10 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "Lista Utenti"
+activate Sistema
+
+Sistema --> Utente : visualizza elenco degli utenti
+deactivate Sistema
+@enduml

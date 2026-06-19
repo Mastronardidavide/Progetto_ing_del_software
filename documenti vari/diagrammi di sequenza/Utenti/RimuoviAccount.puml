@@ -1,0 +1,15 @@
+@startuml
+actor Utente
+participant Sistema
+participant Account
+
+Utente -> Sistema : seleziona "Rimuovi Account"
+activate Sistema
+
+Utente -> Sistema : inserisce ID dell'account da eliminare
+Sistema -> Account !! : <<distruggi>>
+destroy Account
+
+Sistema --> Utente : account eliminato con successo
+deactivate Sistema
+@enduml

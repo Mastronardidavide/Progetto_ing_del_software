@@ -1,3 +1,4 @@
 {
- 
+  "orario": "2026-06-19T22:34:01.914004",
+  "contenuto": "\"[\\n    {\\n        \\\"id\\\": \\\"1\\\",\\n        \\\"tipo\\\": \\\"attuatore\\\",\\n        \\\"nome\\\": \\\"sesso\\\",\\n        \\\"orarioAttivazione\\\": \\\"18:37:00\\\",\\n        \\\"statoAttuatore\\\": false\\n    }\\n]\""
 }

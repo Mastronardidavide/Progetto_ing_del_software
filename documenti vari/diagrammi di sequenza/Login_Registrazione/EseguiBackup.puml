@@ -1,0 +1,13 @@
+@startuml
+actor Tempo
+participant Sistema
+
+Tempo -> Sistema : innesca backup periodico
+activate Sistema
+
+Sistema -> Sistema : recupera i dati dei dispositivi
+Sistema -> Sistema : salva i dati raccolti
+
+Sistema --> Tempo : dati dei dispositivi raccolti
+deactivate Sistema
+@enduml

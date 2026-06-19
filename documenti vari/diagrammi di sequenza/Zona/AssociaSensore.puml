@@ -1,0 +1,14 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "Associa Sensore"
+activate Sistema
+
+Utente -> Sistema : inserisce l'ID della zona da configurare
+Utente -> Sistema : inserisce l'ID del sensore da associare
+Utente -> Sistema : inserisce il valore di soglia del sensore
+
+Sistema --> Utente : sensore associato con successo
+deactivate Sistema
+@enduml

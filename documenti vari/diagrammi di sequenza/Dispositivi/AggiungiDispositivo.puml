@@ -1,0 +1,18 @@
+@startuml
+actor Utente
+participant Sistema
+participant Dispositivo
+
+Utente -> Sistema : inserisce ID dispositivo
+activate Sistema
+
+Utente -> Sistema : inserisce tipo (sensore o attuatore)
+Utente -> Sistema : inserisce nome
+Utente -> Sistema : inserisce orario di attivazione
+Utente -> Sistema : inserisce stato
+
+Sistema -> Dispositivo ** : <<crea>>
+
+Sistema --> Utente : dispositivo aggiunto con successo
+deactivate Sistema
+@enduml

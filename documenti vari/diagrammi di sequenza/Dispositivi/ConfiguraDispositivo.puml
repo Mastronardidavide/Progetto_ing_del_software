@@ -1,0 +1,14 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : inserisce ID dispositivo
+activate Sistema
+
+Utente -> Sistema : inserisce soglia
+Utente -> Sistema : inserisce stato
+Utente -> Sistema : inserisce orario di attivazione
+
+Sistema --> Utente : dispositivo configurato con successo
+deactivate Sistema
+@enduml

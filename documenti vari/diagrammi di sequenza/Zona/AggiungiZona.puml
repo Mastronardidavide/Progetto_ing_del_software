@@ -1,0 +1,16 @@
+@startuml
+actor Utente
+participant Sistema
+participant Zona
+
+Utente -> Sistema : seleziona "Aggiungi Zona"
+activate Sistema
+
+Utente -> Sistema : inserisce ID della zona
+Utente -> Sistema : inserisce il nome per la zona
+
+Sistema -> Zona ** : <<crea>>
+
+Sistema --> Utente : zona creata con successo
+deactivate Sistema
+@enduml

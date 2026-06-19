@@ -1,0 +1,13 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "Rinomina scenario"
+activate Sistema
+
+Utente -> Sistema : inserisce l'ID dello scenario esistente
+Utente -> Sistema : inserisce il nuovo nome per lo scenario
+
+Sistema --> Utente : scenario modificato
+deactivate Sistema
+@enduml

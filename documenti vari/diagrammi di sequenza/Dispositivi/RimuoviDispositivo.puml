@@ -1,0 +1,14 @@
+@startuml
+actor Utente
+participant Sistema
+participant Dispositivo
+
+Utente -> Sistema : inserisce ID dispositivo da eliminare
+activate Sistema
+
+Sistema -> Dispositivo !! : <<distruggi>>
+destroy Dispositivo
+
+Sistema --> Utente : dispositivo rimosso con successo
+deactivate Sistema
+@enduml

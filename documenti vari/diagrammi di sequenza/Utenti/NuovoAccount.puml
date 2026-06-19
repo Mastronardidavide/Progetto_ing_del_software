@@ -1,0 +1,16 @@
+@startuml
+actor Utente
+participant Sistema
+participant Account
+
+Utente -> Sistema : seleziona "Nuovo Account"
+activate Sistema
+
+Utente -> Sistema : inserisce ID nuovo account
+Utente -> Sistema : inserisce nome e password
+
+Sistema -> Account ** : <<crea>>
+
+Sistema --> Utente : nuovo account creato con successo
+deactivate Sistema
+@enduml

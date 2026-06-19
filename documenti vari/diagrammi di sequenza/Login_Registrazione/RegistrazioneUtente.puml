@@ -1,0 +1,13 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : inserisce ID (non esistente)
+activate Sistema
+
+Utente -> Sistema : inserisce nome
+Utente -> Sistema : inserisce password
+
+Sistema --> Utente : registrazione completata con successo
+deactivate Sistema
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "Lista Zone"
+activate Sistema
+
+Sistema --> Utente : visualizza le zone registrate nel sistema
+deactivate Sistema
+@enduml

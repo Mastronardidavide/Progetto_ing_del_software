@@ -1,0 +1,16 @@
+@startuml
+actor Utente
+participant Sistema
+participant Scenario
+
+Utente -> Sistema : seleziona "Aggiungi Scenario"
+activate Sistema
+
+Utente -> Sistema : inserisce l'ID dello scenario
+Utente -> Sistema : inserisce il nome dello scenario
+
+Sistema -> Scenario ** : <<crea>>
+
+Sistema --> Utente : scenario creato con successo
+deactivate Sistema
+@enduml

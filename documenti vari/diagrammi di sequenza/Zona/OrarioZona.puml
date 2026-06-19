@@ -1,0 +1,14 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "Orario"
+activate Sistema
+
+Utente -> Sistema : inserisce l'ID della zona da configurare
+Utente -> Sistema : inserisce l'orario di attivazione
+Utente -> Sistema : inserisce l'orario di disattivazione
+
+Sistema --> Utente : pianificazione zona completata
+deactivate Sistema
+@enduml

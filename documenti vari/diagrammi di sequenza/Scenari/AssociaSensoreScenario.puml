@@ -1,0 +1,13 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : inserisce l'ID dello scenario desiderato
+activate Sistema
+
+Utente -> Sistema : inserisce l'ID del sensore da associare
+Utente -> Sistema : inserisce la soglia desiderata del sensore
+
+Sistema --> Utente : associazione avvenuta con successo
+deactivate Sistema
+@enduml

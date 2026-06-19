@@ -1,0 +1,10 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "stato"
+activate Sistema
+
+Sistema --> Utente : mostra ID, stato, orario attivazione e ultimo backup
+deactivate Sistema
+@enduml

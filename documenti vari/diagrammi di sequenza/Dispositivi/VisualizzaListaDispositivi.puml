@@ -1,0 +1,10 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "Lista Dispositivi"
+activate Sistema
+
+Sistema --> Utente : visualizza i dispositivi esistenti
+deactivate Sistema
+@enduml

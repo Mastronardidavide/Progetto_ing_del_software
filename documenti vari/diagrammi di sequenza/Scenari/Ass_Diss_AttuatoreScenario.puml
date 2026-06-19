@@ -1,0 +1,17 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona l'ID dello scenario esistente
+activate Sistema
+
+Utente -> Sistema : seleziona l'ID dell'attuatore da inserire
+
+alt attuatore già associato allo scenario
+    Sistema --> Utente : attuatore dissociato con successo
+else attuatore non associato allo scenario
+    Sistema --> Utente : attuatore associato con successo
+end
+
+deactivate Sistema
+@enduml

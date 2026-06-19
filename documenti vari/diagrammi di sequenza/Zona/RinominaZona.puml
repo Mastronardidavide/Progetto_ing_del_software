@@ -1,0 +1,13 @@
+@startuml
+actor Utente
+participant Sistema
+
+Utente -> Sistema : seleziona "Rinomina Zona"
+activate Sistema
+
+Utente -> Sistema : inserisce l'ID della zona da rinominare
+Utente -> Sistema : inserisce il nuovo nome della zona
+
+Sistema --> Utente : zona rinominata con successo
+deactivate Sistema
+@enduml
