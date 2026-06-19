@@ -4,5 +4,31 @@
     "tipo": "sensore",
     "nome": "",
     "soglia": 1.0
+  },
+  {
+    "id": "2",
+    "tipo": "attuatore",
+    "nome": "a",
+    "orarioAttivazione": "13:25:00",
+    "statoAttuatore": true
+  },
+  {
+    "id": "3",
+    "tipo": "attuatore",
+    "nome": "luce",
+    "orarioAttivazione": "13:30:00",
+    "statoAttuatore": false
+  },
+  {
+    "id": "4",
+    "tipo": "sensore",
+    "nome": "a",
+    "soglia": 1.0
+  },
+  {
+    "id": "5",
+    "tipo": "sensore",
+    "nome": "a",
+    "soglia": 1.0
   }
 ]

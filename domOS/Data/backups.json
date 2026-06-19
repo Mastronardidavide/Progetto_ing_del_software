@@ -1,4 +1,4 @@
 {
-  "orario": "2026-06-19T12:17:41.679654",
-  "contenuto": "[]"
+  "orario": "2026-06-19T13:37:29.575329",
+  "contenuto": "[{\"id\": \"1\", \"tipo\": \"sensore\", \"nome\": \"\", \"soglia\": 1.0}, {\"id\": \"2\", \"tipo\": \"attuatore\", \"nome\": \"a\", \"orarioAttivazione\": \"13:25:00\", \"statoAttuatore\": true}, {\"id\": \"3\", \"tipo\": \"attuatore\", \"nome\": \"luce\", \"orarioAttivazione\": \"13:30:00\", \"statoAttuatore\": false}, {\"id\": \"4\", \"tipo\": \"sensore\", \"nome\": \"a\", \"soglia\": 1.0}, {\"id\": \"5\", \"tipo\": \"sensore\", \"nome\": \"a\", \"soglia\": 1.0}]"
 }
