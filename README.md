@@ -5,7 +5,7 @@ come scaricare:
 - sul terminale di windows: basta digitare py -m pip install PyQt6 in una posizione qualsiasi
 - sul terminale di VsCode: basta digitare py -m pip install PyQt6
 ___________________________________________________________________________________________________________________________________________________
-COME ESEGUIRE IL PROGRAMMA:
+COME AVVIARE IL PROGRAMMA:
 - GUI: all'interno della cartella domOS si trova il file main.py. per eseguire il programma basta eseguire quel file main.
 - Terminale: all'interno della cartella domOS si trova il file term_main.py. per eseguire il programma basta eseguire quel file main.
 ___________________________________________________________________________________________________________________________________________________
