@@ -52,10 +52,9 @@ def main():
     # Spazio definizione funzioni da eseguire periodicamente, e che prendano argomenti, come dati per backup o repo per check attuatori
     #se non definissimo queste funzioni ausiliarie, non potremmo passare argomenti ai metodi da eseguire periodicamente
     def backup(): 
-        dati = dispositivo_repo.tutte()
-        dati_convertiti = [d.toDict() for d in dati] #list comprehension trasforma i btnDisp in dizionari
+        dati = boundary_disp.listaDisp()
         #in questo caso usiamo dumps invece di dump perché convertiamo in stringa, infatti esegui backup prende proprio una stringa come argomento
-        stringa_dispositivi_backup = json.dumps(dati_convertiti, indent=4) #convertiamo in json così da poterli caricare nel file backup, l'indent me lo rende facilmente leggibile
+        stringa_dispositivi_backup = json.dumps(dati, indent=4) #convertiamo in json così da poterli caricare nel file backup, l'indent me lo rende facilmente leggibile
         boundary_disp.backup(stringa_dispositivi_backup)   #li carichiamo nel file backup
 
     def esegui_check_attuatori():
@@ -67,7 +66,7 @@ def main():
     def esegui_automazioni():
         boundary_disp.check("automazioni")
     # Avvio timer
-    timer_backup = Timer(azione_da_eseguire=backup, intervallo_secondi=360) #qui posso senza problemi passare backup, perché è una funzione che non richiede argomenti
+    timer_backup = Timer(azione_da_eseguire=backup, intervallo_secondi=20) #qui posso senza problemi passare backup, perché è una funzione che non richiede argomenti
     timer_backup.avvia()
     notificheOld.append(str("Controllo backup avviato con successo."))
 

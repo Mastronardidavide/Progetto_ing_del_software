@@ -1,26 +1,3 @@
 [
-    {
-        "id": "5",
-        "nome": "dav",
-        "password": "mas",
-        "tipo": "Ospite"
-    },
-    {
-        "id": "1",
-        "nome": "1",
-        "password": "1",
-        "tipo": "Ospite"
-    },
-    {
-        "id": "111111111111111111111",
-        "nome": "aa",
-        "password": "aa",
-        "tipo": "Ospite"
-    },
-    {
-        "id": "48",
-        "nome": "ric",
-        "password": "ciao",
-        "tipo": "Ospite"
-    }
+
 ]

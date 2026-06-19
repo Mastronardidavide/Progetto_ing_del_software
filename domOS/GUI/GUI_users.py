@@ -44,9 +44,10 @@ class domOS_users(QWidget):
             """)
             self.centroNotifiche.show()
             self.centroNotifiche.raise_()
-            self.inizializzazione = 0
+            self.centroNotifiche.clear()
             self.notifiche = notificheOld
-            self.centroNote(0, None)
+            for n in self.notifiche:
+                self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
             self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
@@ -261,7 +262,7 @@ class domOS_users(QWidget):
                     return
                 #passo id, nome e password al form registrazione dentro boundary utenti
                 esito = self.boundary_utenti.form_registrazione(id_ut, nome, pswd)
-                self.centroNote(1, esito) #invio il risultato al centro notifiche
+                self.centroNote(esito) #invio il risultato al centro notifiche
 
                 if esito == "Utente creato":
                     #se riesco a creare un account, mostro un info
@@ -322,7 +323,7 @@ class domOS_users(QWidget):
 
                 #passo a menu_utente dentro boundary utenti sia comando sia id
                 feedback = self.boundary_utenti.menu_utente(comando, id_ut)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 
                 if feedback == f"L'utente è stato eliminato":
                     #se l'eliminazione va a buon fine, mostro un info
@@ -350,17 +351,17 @@ class domOS_users(QWidget):
             
         #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
-        def centroNote(self, inizializzazione=None, notifica=None):
-            #inizializzazione serve per aggiornare il centro ogni volta che viene aperta una nuova finestra GUI
-            if inizializzazione == 0:
-                self.centroNotifiche.clear()
-                for n in self.notifiche:
-                    self.centroNotifiche.addItem(str(n))
-                    self.centroNotifiche.scrollToBottom()
-            elif notifica is not None:
-                stringa_notifica = str(notifica)
-                self.centroNotifiche.addItem(stringa_notifica)
+        def centroNote(self, notifica=None):
+            if notifica is not None:
+                stringa_notifica = notifica
+                self.centroNotifiche.addItem(str(stringa_notifica))
                 self.notifiche.append(stringa_notifica)
+                self.centroNotifiche.scrollToBottom()
+        #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti
+        #il centro notifiche
+        def showEvent(self, event):
+            super().showEvent(event)
+            if self.centroNotifiche.count() > 0:
                 self.centroNotifiche.scrollToBottom()
 
 #---------------------------------------------------------------------------------------------------------------

@@ -29,15 +29,14 @@ class BoundaryDispositivo(QObject):
                 if tipo == "sensore":
                     # Chiamata per il sensore passando il parametro soglia
                     feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, soglia=sogliaIn)
-                    return feedback
                     
                 elif tipo == "attuatore":
                     # Chiamata per l'attuatore passando i parametri kwargs stato e orario 
                     feedback = self._g_disp.aggiungiDispositivo(id_disp=id, tipo=tipo, nome=nome, stato=stato_iniziale, orario=orario_attivazione)
-                    return feedback
 
                 dati = self._g_disp.tutte_to_dict()
-                self._g_dati.esegui_backup(str(dati))
+                self._g_dati.esegui_backup(dati)
+                return feedback
                 
 
             elif comando == "rimuovi":
@@ -51,10 +50,9 @@ class BoundaryDispositivo(QObject):
             elif comando == "configura":
                 #RICHIAMO DIRETTO DELLA FUNZIONE DAL G_DISP
                 feedback = self._g_disp.configuraDispositivo(id, sogliaIn, stato_iniziale, orario_attivazione)
-
                 #Salvataggio e backup
                 dati = self._g_disp.tutte_to_dict()
-                self._g_dati.esegui_backup(str(dati))
+                self._g_dati.esegui_backup(dati)
                 return feedback
 
     def mostraStato(self):
@@ -74,5 +72,9 @@ class BoundaryDispositivo(QObject):
             feedback = self._g_scenario.check_automazioni_prioritarie(self._g_zona)
             if feedback is not None:
                 self.notificaAuto.emit(feedback)
+
     def backup(self, data):
         self._g_dati.esegui_backup(data)
+
+    def listaDisp(self): 
+        return self._g_disp.tutte_to_dict()

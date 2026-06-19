@@ -44,9 +44,10 @@ class domOS_zones(QWidget):
             """)
             self.centroNotifiche.show()
             self.centroNotifiche.raise_()
-            self.inizializzazione = 0
+            self.centroNotifiche.clear()
             self.notifiche = notificheOld
-            self.centroNote(0, None)
+            for n in self.notifiche:
+                self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
             self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
@@ -208,7 +209,7 @@ class domOS_zones(QWidget):
                 
                 #passo tutti i dati alla boundary e prendo il feedback che mi restituisce
                 feedback = self.boundary_zone.menu_zone(comando, id_zona, nome_zona)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 from PyQt6.QtWidgets import QMessageBox
                 #controllo il feedback
                 if feedback == f"La zona è già presente":
@@ -258,7 +259,7 @@ class domOS_zones(QWidget):
                 
                 #passo tutto a boundary e prendo il feedback
                 feedback = self.boundary_zone.menu_zone(comando, id_zona)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 if feedback == f"Zona eliminata":
                     #se l'eliminazione va a buon fine, mostro un info e resetto il menù
                     from PyQt6.QtWidgets import QMessageBox
@@ -304,7 +305,7 @@ class domOS_zones(QWidget):
                         return
                 #passo tutto a boundary e prendo il feedback
                 feedback = self.boundary_zone.menu_zone(comando, id_edit, nome_edit)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 if feedback == f"Zona non trovata":
                     #se la zona è già presente, mostro un warning
                     from PyQt6.QtWidgets import QMessageBox
@@ -383,7 +384,7 @@ class domOS_zones(QWidget):
                 #passo tutto a boundary e prendo il feedback che mi restituisce, per il controllo
                 nome = None
                 feedback = self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 if feedback == f"Zona non trovata":
                     #se l'id non è associato a nessuna zona, mostro un warning
                     from PyQt6.QtWidgets import QMessageBox
@@ -451,8 +452,12 @@ class domOS_zones(QWidget):
                 if not check_soglia:
                     try:
                         soglia_sens = float(soglia)
-                        check_soglia = True
 
+                        if not (0.0 <= soglia_sens <= 100.0):
+                            raise ValueError("Range non valido")
+                        
+                        check_soglia = True
+                        
                     except ValueError:
                         from PyQt6.QtWidgets import QMessageBox
                         QMessageBox.warning(
@@ -465,7 +470,7 @@ class domOS_zones(QWidget):
                 #passo tutto a boundary e controllo il feedback che mi restituisce
                 nome = orario_on = orario_off = None
                 feedback = self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off, id_sens, soglia_sens)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 if feedback == f"Zona non trovata":
                     #se l'id zona non è valido, mostro un errore
                     from PyQt6.QtWidgets import QMessageBox
@@ -544,7 +549,7 @@ class domOS_zones(QWidget):
                 #passo tutto a boundary e controllo il feedback che mi restituisce
                 nome = orario_on = orario_off = id_sens = soglia_sens = None
                 feedback = self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off, id_sens, soglia_sens, id_att)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 #se l'attuatore è già associato alla zona, una volta cliccato "conferma" il codice proseguirà all'interno di questo if
                 if feedback == f"L'attuatore '{id_att}' è già associato a questa zona":
 
@@ -569,7 +574,7 @@ class domOS_zones(QWidget):
                         #dopodichè passo i dati a boundary e prendo il feedback che mi restituisce
                         comando = "dissocia"
                         feedback = self.boundary_zone.menu_zone(comando, id_zona, nome, orario_on, orario_off, id_sens, soglia_sens, id_att)
-                        self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                        self.centroNote(feedback) #invio il risultato al centro notifiche
                         if feedback == f"Zona non trovata":
                             #se l'id zona non è valido, mostro un errore
                             from PyQt6.QtWidgets import QMessageBox
@@ -838,17 +843,17 @@ class domOS_zones(QWidget):
 
         #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
-        def centroNote(self, inizializzazione=None, notifica=None):
-            #inizializzazione serve per aggiornare il centro ogni volta che viene aperta una nuova finestra GUI
-            if inizializzazione == 0:
-                self.centroNotifiche.clear()
-                for n in self.notifiche:
-                    self.centroNotifiche.addItem(str(n))
-                    self.centroNotifiche.scrollToBottom()
-            elif notifica is not None:
-                stringa_notifica = str(notifica)
-                self.centroNotifiche.addItem(stringa_notifica)
+        def centroNote(self, notifica=None):
+            if notifica is not None:
+                stringa_notifica = notifica
+                self.centroNotifiche.addItem(str(stringa_notifica))
                 self.notifiche.append(stringa_notifica)
+                self.centroNotifiche.scrollToBottom()
+        #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti
+        #il centro notifiche
+        def showEvent(self, event):
+            super().showEvent(event)
+            if self.centroNotifiche.count() > 0:
                 self.centroNotifiche.scrollToBottom()
 
 #---------------------------------------------------------------------------------------------------------------
