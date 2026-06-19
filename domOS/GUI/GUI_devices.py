@@ -398,11 +398,12 @@ class domOS_devices(QWidget):
                         try:
                             nuova_soglia = self.campo1.text().strip()
                             self.soglia = float(nuova_soglia)
-                            self.soglia_valida = True
 
                             if not (0.0 <= self.soglia <= 100.0):
                                 raise ValueError("Range non valido")
-                        
+
+                            self.soglia_valida = True
+                            
                         except ValueError:
                             #se non lo è mostro un warning
                             from PyQt6.QtWidgets import QMessageBox
