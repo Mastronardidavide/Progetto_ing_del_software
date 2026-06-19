@@ -127,7 +127,6 @@ class domOS_mainmenu(QWidget):
                     backup_completo = self.boundary_disp.mostraStato()
                     if not backup_completo:
                         self.listaStato.addItem("Nessun dato di backup disponibile.")
-                        return
 
                     #recupero ed adattamento stringa data e orario
                     orario_grezzo = backup_completo.get("orario", "")
