@@ -3,8 +3,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from pathlib import Path
 from PyQt6.QtWidgets import QWidget, QLabel, QListWidget
-from PyQt6.QtWidgets import QApplication
-
+from datetime import datetime
 #genero la finestra per la parte di login
 class domOS_login(QWidget): 
         def __init__(self, boundary_disp, boundary_utenti, boundary_zone, boundary_scenari, notificheOld):
@@ -213,11 +212,14 @@ class domOS_login(QWidget):
 
         #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
+        #Inoltre aggiunge alle notifiche data e ora correnti.
         def centroNote(self, notifica=None):
+            adesso = datetime.now()
+            orario_stringa = adesso.strftime("%d/%m/%Y %H:%M:%S")
             if notifica is not None:
                 stringa_notifica = str(notifica)
-                self.centroNotifiche.addItem(stringa_notifica)
-                self.notifiche.append(stringa_notifica)
+                self.centroNotifiche.addItem(f"{stringa_notifica} - {orario_stringa}")
+                self.notifiche.append(f"{stringa_notifica} - {orario_stringa}")
                 self.centroNotifiche.scrollToBottom()
         #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti
         #il centro notifiche
