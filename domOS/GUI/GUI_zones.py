@@ -452,10 +452,11 @@ class domOS_zones(QWidget):
                 if not check_soglia:
                     try:
                         soglia_sens = float(soglia)
-                        check_soglia = True
 
                         if not (0.0 <= soglia_sens <= 100.0):
                             raise ValueError("Range non valido")
+                        
+                        check_soglia = True
                         
                     except ValueError:
                         from PyQt6.QtWidgets import QMessageBox
