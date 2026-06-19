@@ -1,12 +1,11 @@
-@startuml configuraScenario
-title configura Scenario
+@startuml configuraDispositivo
+title configura Dispositivo
 
 start
 
-:Seleziona aggiungi Scenario;
-:Inserisci dati;
+:Inserisci ID dispositivo;
 
-if (Scenario esiste) then (si)
+if (Dispositivo esiste) then (si)
     :Imposta configurazione;
     :La configurazione viene applicata;
 else (no)

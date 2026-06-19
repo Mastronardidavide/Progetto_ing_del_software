@@ -1,13 +1,16 @@
-@startuml account
+@startuml creaAccount
 title Crea account
 
 start
 
-:Seleziona "Crea nuovo account";
-:Inserisci dati e permessi;
+:Seleziona registrazione;
+:Inserisci dati;
 
-:Crea account;
-:Account creato;
+if (Account esiste) then (si)
+    :Mostra messaggio di errore;
+else (no)
+    :Crea account;
+endif
 
 stop
 @enduml

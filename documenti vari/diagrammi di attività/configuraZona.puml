@@ -1,12 +1,15 @@
-@startuml configurazona
-title Configura zona
+@startuml configuraZona
+title configura zona
 
 start
 
-    :Inserisci id zona;
-    :Seleziona dispositivi e orari da includere o da modificare;
-    :Applica cambiamenti;
-    :Zona riconfigurata;
+:Seleziona aggiungi zona;
+:Inserisci dati;
 
+if (Zona esiste) then (si)
+    :Imposta configurazione;
+    :La configurazione viene applicata;
+else (no)
+    :Mostra messaggio di errore;
 stop
 @enduml

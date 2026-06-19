@@ -1,10 +1,16 @@
-@startuml creascenario
+@startuml creaScenario
 title Crea scenario
 
+start
 
-    :Seleziona "Crea scenario";
-    :Configura lo stato di eventuali attuatori;
-    :Lo scenario viene creato;
+:Seleziona aggiungi Scenario;
+:Inserisci dati;
+
+if (Scenario esiste) then (si)
+    :Mostra messaggio di errore;
+else (no)
+    :Crea Scenario;
+endif
 
 stop
 @enduml

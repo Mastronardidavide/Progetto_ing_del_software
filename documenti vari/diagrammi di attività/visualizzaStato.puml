@@ -1,10 +1,12 @@
 @startuml visualizzaStato
-title Visualizza stato
+title Visualizza dati dispositivo
 
 start
 
-    :Seleziona "stato";
-    :Mostra stato;
+:Seleziona stato;
+:Recupera dati dispositivi;
+:Visualizza lo stato;
+:I dati sono rivelati;
 
 stop
 @enduml

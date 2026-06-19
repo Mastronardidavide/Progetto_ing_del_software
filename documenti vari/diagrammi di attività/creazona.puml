@@ -1,13 +1,16 @@
-@startuml creazona
+@startuml creaZona
 title Crea zona
 
 start
 
-    :Seleziona "Crea nuova zona";
-    :Inserisci nome zona;
-    :Seleziona dispositivi da includere;
+:Seleziona aggiungi zona;
+:Inserisci dati;
+
+if (Zona esiste) then (si)
+    :Mostra messaggio di errore;
+else (no)
     :Crea zona;
-    :Zona creata;
+endif
 
 stop
 @enduml

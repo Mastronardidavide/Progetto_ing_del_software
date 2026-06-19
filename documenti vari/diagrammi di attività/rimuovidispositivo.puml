@@ -1,11 +1,15 @@
-@startuml riuovidispositivo
-title Rimuovi dispositivo
+@startuml rimuoviDispositivo
+title rimuovi Dispositivo
 
 start
 
-    :Seleziona il dispositivo da rimuovere;
-    :Rimuovi dispositivo dal sistema;
-    :Dispositivo rimosso;
+:Seleziona rimuovi dispositivo;
+
+if (Dispositivo esiste) then (si)
+    :Elimina dispositivo;
+else (no)
+    :Mostra messaggio di errore;
+endif
 
 stop
 @enduml

@@ -19,5 +19,16 @@
     "sogliaZona": null,
     "id_attuatori": [],
     "id_sensore": null
+  },
+  {
+    "id": "1",
+    "nome": "zona1",
+    "orarioZona": "09:49:00",
+    "orarioDisattivazione": "09:50:00",
+    "sogliaZona": 10.0,
+    "id_attuatori": [
+      "2"
+    ],
+    "id_sensore": "1"
   }
 ]

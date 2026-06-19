@@ -1,0 +1,13 @@
+@startuml account
+title Crea account
+
+start
+
+:Seleziona "Crea nuovo account";
+:Inserisci dati e permessi;
+
+:Crea account;
+:Account creato;
+
+stop
+@enduml
