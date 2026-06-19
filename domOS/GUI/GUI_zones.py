@@ -50,7 +50,8 @@ class domOS_zones(QWidget):
                 self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
-            self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
+            self.boundary_disp.notificaAuto.connect(self.centroNote)    #  |passo alla funzione che si occupa del
+            self.boundary_disp.notificaBack.connect(self.centroNote)    #--|centro notifiche
 
             self.listaZone = QListWidget(self)
             self.listaZone.setStyleSheet("""
@@ -635,7 +636,7 @@ class domOS_zones(QWidget):
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
                 self.listaZone.clear()  #pulisco la lista
-                self.listaZone.addItem("Lista Zone presenti nel sistema") #"intitolo" la lista
+                self.listaZone.addItem("Lista zone presenti nel sistema") #"intitolo" la lista
                 self.listaZone.addItem("_" * 40)
                 lista_zone = self.boundary_zone.menu_zone("lista") #raccolgo la lista effettiva dei dispositivi da boundary
                 if not lista_zone:
@@ -835,7 +836,13 @@ class domOS_zones(QWidget):
 
         #"indietro" riporta l'utente al menù principale della gui
         def indietro(self):
-        
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             from GUI.GUI_mainMenu import domOS_mainmenu
             self.finestra_mainmenu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_mainmenu.show()
@@ -845,8 +852,8 @@ class domOS_zones(QWidget):
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
         def centroNote(self, notifica=None):
             if notifica is not None:
-                stringa_notifica = notifica
-                self.centroNotifiche.addItem(str(stringa_notifica))
+                stringa_notifica = str(notifica)
+                self.centroNotifiche.addItem(stringa_notifica)
                 self.notifiche.append(stringa_notifica)
                 self.centroNotifiche.scrollToBottom()
         #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti

@@ -50,7 +50,8 @@ class domOS_devices(QWidget):
                 self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
-            self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
+            self.boundary_disp.notificaAuto.connect(self.centroNote)    #  |passo alla funzione che si occupa del
+            self.boundary_disp.notificaBack.connect(self.centroNote)    #--|centro notifiche
 
             self.listaDisp = QListWidget(self)
             self.listaDisp.setStyleSheet("""
@@ -397,9 +398,9 @@ class domOS_devices(QWidget):
                     if not self.soglia_valida:
                         try:
                             nuova_soglia = self.campo1.text().strip()
-                            self.soglia = float(nuova_soglia)
+                            soglia = float(nuova_soglia)
 
-                            if not (0.0 <= self.soglia <= 100.0):
+                            if not (0.0 <= soglia <= 100.0):
                                 raise ValueError("Range non valido")
 
                             self.soglia_valida = True
@@ -449,7 +450,7 @@ class domOS_devices(QWidget):
                 #passo tutto a menu_disp dentro boundary dispositivi e prendo feedback
                 self.comando = "configura"
                 self.tipo = self.nomeDisp = None
-                feedback = self.boundary_disp.menu_disp(self.comando, self.id_disp, self.tipo, self.nomeDisp, nuova_soglia, nuovo_stato, nuovo_orario)
+                feedback = self.boundary_disp.menu_disp(self.comando, self.id_disp, self.tipo, self.nomeDisp, soglia, nuovo_stato, nuovo_orario)
                 self.centroNote(feedback) #invio il risultato al centro notifiche
                 if feedback == f"dispositivo non trovato":
                     #se l'id del dispositivo non è registrato nel sistema, mostro un error
@@ -480,7 +481,8 @@ class domOS_devices(QWidget):
                 if self.click0 == 0:
                     self.click1 = self.click2 = self.click3 = 0 #azzero gli altri contatori click per evitare di far sovrapporre i componenti gui
                     self.listaDisp.clear()  #pulisco la lista
-
+                    self.listaDisp.addItem("LISTA DISPOSITIVI")
+                    self.listaDisp.addItem("_" * 40)
                     #prendo la lista dispositivi da boundary, la "spacchetto" e la carico sulal lista GUI
                     righe_dispositivi = self.boundary_disp._g_disp.lista()
                     if not righe_dispositivi:
@@ -582,7 +584,13 @@ class domOS_devices(QWidget):
 
         #"indietro" riporta l'utente al menù principale della gui
         def indietro(self):
-
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             from GUI.GUI_mainMenu import domOS_mainmenu
             self.finestra_mainmenu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_mainmenu.show()
@@ -592,8 +600,8 @@ class domOS_devices(QWidget):
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
         def centroNote(self, notifica=None):
             if notifica is not None:
-                stringa_notifica = notifica
-                self.centroNotifiche.addItem(str(stringa_notifica))
+                stringa_notifica = str(notifica)
+                self.centroNotifiche.addItem(stringa_notifica)
                 self.notifiche.append(stringa_notifica)
                 self.centroNotifiche.scrollToBottom()
         #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti

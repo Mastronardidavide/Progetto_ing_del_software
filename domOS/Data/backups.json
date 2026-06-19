@@ -1,3 +1,4 @@
 {
- 
+  "orario": "2026-06-19T15:44:19.472255",
+  "contenuto": "\"[\\n    {\\n        \\\"id\\\": \\\"1\\\",\\n        \\\"tipo\\\": \\\"sensore\\\",\\n        \\\"nome\\\": \\\"Luce1\\\",\\n        \\\"soglia\\\": 1.0\\n    },\\n    {\\n        \\\"id\\\": \\\"48\\\",\\n        \\\"tipo\\\": \\\"attuatore\\\",\\n        \\\"nome\\\": \\\"luceSwag\\\",\\n        \\\"orarioAttivazione\\\": \\\"15:08:00\\\",\\n        \\\"statoAttuatore\\\": false\\n    }\\n]\""
 }

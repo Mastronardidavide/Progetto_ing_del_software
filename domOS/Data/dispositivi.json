@@ -1,3 +1,15 @@
 [
- 
+  {
+    "id": "1",
+    "tipo": "sensore",
+    "nome": "Luce1",
+    "soglia": 1.0
+  },
+  {
+    "id": "48",
+    "tipo": "attuatore",
+    "nome": "luceSwag",
+    "orarioAttivazione": "15:08:00",
+    "statoAttuatore": false
+  }
 ]

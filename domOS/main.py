@@ -66,7 +66,7 @@ def main():
     def esegui_automazioni():
         boundary_disp.check("automazioni")
     # Avvio timer
-    timer_backup = Timer(azione_da_eseguire=backup, intervallo_secondi=20) #qui posso senza problemi passare backup, perché è una funzione che non richiede argomenti
+    timer_backup = Timer(azione_da_eseguire=backup, intervallo_secondi=360) #qui posso senza problemi passare backup, perché è una funzione che non richiede argomenti
     timer_backup.avvia()
     notificheOld.append(str("Controllo backup avviato con successo."))
 

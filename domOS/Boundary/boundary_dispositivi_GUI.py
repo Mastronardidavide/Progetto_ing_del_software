@@ -10,6 +10,7 @@ class BoundaryDispositivo(QObject):
     notificaAtt = pyqtSignal(str)   #genero i canali di trasmissione
     notificaSens = pyqtSignal(str)
     notificaAuto = pyqtSignal(str)
+    notificaBack = pyqtSignal(str)
 
     def __init__(self, g_dati, g_disp, g_zona, g_scenario):
         super().__init__()
@@ -74,7 +75,10 @@ class BoundaryDispositivo(QObject):
                 self.notificaAuto.emit(feedback)
 
     def backup(self, data):
-        self._g_dati.esegui_backup(data)
-
+        feedback = self._g_dati.esegui_backup(data)
+        if feedback == "ok":
+            self.notificaBack.emit("Backup automatico eseguito con successo")
+        else:
+            self.notificaBack.emit(f"Backup automatico fallito. Errore {str(feedback)}")
     def listaDisp(self): 
         return self._g_disp.tutte_to_dict()

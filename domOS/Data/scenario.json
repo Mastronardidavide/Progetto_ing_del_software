@@ -1,3 +1,13 @@
 [
-
+  {
+    "id": "1",
+    "nome": "ciao",
+    "orarioScenario": "15:09:00",
+    "orarioDisattivazione": "15:10:00",
+    "sogliaScenario": null,
+    "id_attuatori": [
+      "48"
+    ],
+    "id_sensore": null
+  }
 ]

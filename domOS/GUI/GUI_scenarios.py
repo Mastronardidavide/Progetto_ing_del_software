@@ -50,7 +50,8 @@ class domOS_scenarios(QWidget):
                 self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
-            self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
+            self.boundary_disp.notificaAuto.connect(self.centroNote)    #  |passo alla funzione che si occupa del
+            self.boundary_disp.notificaBack.connect(self.centroNote)    #--|centro notifiche
 
             self.listaScen = QListWidget(self)
             self.listaScen.setStyleSheet("""
@@ -636,11 +637,11 @@ class domOS_scenarios(QWidget):
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
                 self.btnConferma.hide()
                 self.listaScen.clear()  #pulisco la lista
-                self.listaScen.addItem("Lista Zone presenti nel sistema") #"intitolo" la lista
+                self.listaScen.addItem("Lista scenari presenti nel sistema") #"intitolo" la lista
                 self.listaScen.addItem("_" * 40)
                 lista_scenari = self.boundary_scenari.menu_scenari("lista") #raccolgo la lista effettiva degli scenari da boundary
                 if not lista_scenari:
-                    self.listaScen.addItem("Nessuna zona registrata nel sistema.") #se non ci sono scenari scrivo questo
+                    self.listaScen.addItem("Nessuno scenario registrato nel sistema.") #se non ci sono scenari scrivo questo
                 #se invece sono presenti scenari nel sistema, "spacchetto" la lista e aggiungo tutto alla lista GUI.
                 for scenario_oggetto in lista_scenari:
                     scenario = scenario_oggetto.toDict()
@@ -837,7 +838,13 @@ class domOS_scenarios(QWidget):
 
         #"indietro" riporta l'utente al menù principale della gui
         def indietro(self):
-        
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             from GUI.GUI_mainMenu import domOS_mainmenu
             self.finestra_mainmenu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_scenari, self.boundary_scenari, self.notifiche)
             self.finestra_mainmenu.show()
@@ -847,8 +854,8 @@ class domOS_scenarios(QWidget):
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
         def centroNote(self, notifica=None):
             if notifica is not None:
-                stringa_notifica = notifica
-                self.centroNotifiche.addItem(str(stringa_notifica))
+                stringa_notifica = str(notifica)
+                self.centroNotifiche.addItem(stringa_notifica)
                 self.notifiche.append(stringa_notifica)
                 self.centroNotifiche.scrollToBottom()
         #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti
