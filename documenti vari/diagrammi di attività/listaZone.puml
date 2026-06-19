@@ -1,0 +1,8 @@
+@startuml listaZone
+title Visualizza le zone presenti
+
+start
+:Seleziona "lista";
+:La lista delle zone è visualizzata;
+stop
+@enduml

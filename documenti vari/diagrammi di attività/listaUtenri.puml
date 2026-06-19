@@ -1,0 +1,8 @@
+@startuml listaUtenti
+title Visualizza gli Utenti presenti
+
+start
+:Seleziona "lista";
+:La lista degli Utenti è visualizzata;
+stop
+@enduml

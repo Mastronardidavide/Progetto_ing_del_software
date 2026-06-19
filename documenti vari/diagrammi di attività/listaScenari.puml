@@ -1,0 +1,8 @@
+@startuml listaScenari
+title Visualizza gli Scenari presenti
+
+start
+:Seleziona "lista";
+:La lista degli Scenari è visualizzata;
+stop
+@enduml
