@@ -214,7 +214,7 @@ class domOS_devices(QWidget):
                         self.soglia = float(soglia_input)
                         self.soglia_valida = True
 
-                        if not (0.0 <= soglia_input <= 100.0):
+                        if not (0.0 <= self.soglia <= 100.0):
                             raise ValueError("Range non valido")
                         
                     except ValueError:
@@ -391,7 +391,7 @@ class domOS_devices(QWidget):
                         self.soglia = float(nuova_soglia)
                         self.soglia_valida = True
 
-                        if not (0.0 <= nuova_soglia <= 100.0):
+                        if not (0.0 <= self.soglia <= 100.0):
                             raise ValueError("Range non valido")
                         
                     except ValueError:

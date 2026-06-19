@@ -456,7 +456,7 @@ class domOS_scenarios(QWidget):
                         soglia_sens = float(soglia)
                         check_soglia = True
 
-                        if not (0.0 <= soglia <= 100.0):
+                        if not (0.0 <= soglia_sens <= 100.0):
                             raise ValueError("Range non valido")
                         
                     except ValueError:
