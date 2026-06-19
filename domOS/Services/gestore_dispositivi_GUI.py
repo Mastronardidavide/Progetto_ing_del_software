@@ -77,7 +77,7 @@ class GestoreDispositivi:
         for zona in zona_repo.tutte():
             for id_att in zona.getIdAttuatori():
                 id_occupati.add(id_att)
-
+        
         # Cicliamo su tutti i dispositivi del sistema
         for dispositivo in self._dispositivo_repo.tutte():
             # Controlliamo che sia un attuatore e che non sia in una zona
@@ -91,7 +91,9 @@ class GestoreDispositivi:
                         
                         if dispositivo.getStato() == False:
                             dispositivo.cambiaStato()
+                            
                             return (f"[Automazione Singola] Attuatore non presente in una zona o scenario '{dispositivo.getId()}' acceso.")
+                        
 
 
     def check_sensori(self):
@@ -99,8 +101,8 @@ class GestoreDispositivi:
             if isinstance(dispositivo, Sensore):
                 soglia = dispositivo.getSoglia()
                 if soglia is not None:
-                    lettura_corrente = round(random.uniform(10.0, 30.0), 1) # Simulazione di una lettura casuale tra 10 e 30 in float
-                    if lettura_corrente > soglia:
+                    lettura_corrente = round(random.uniform(0, 100), 1) # Simulazione di una lettura casuale tra 0 e 100 in float
+                    if lettura_corrente >= soglia:
                         return (f"Il sensore ID 'f{dispositivo.getId()}' ({dispositivo._nome}) ha superato la soglia")
     def lista(self):
         if self._dispositivo_repo.tutte() == []:

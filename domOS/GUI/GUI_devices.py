@@ -44,9 +44,10 @@ class domOS_devices(QWidget):
             """)
             self.centroNotifiche.show()
             self.centroNotifiche.raise_()
-            self.inizializzazione = 0
+            self.centroNotifiche.clear()
             self.notifiche = notificheOld
-            self.centroNote(0, None)
+            for n in self.notifiche:
+                self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
             self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
@@ -213,6 +214,9 @@ class domOS_devices(QWidget):
                         self.soglia = float(soglia_input)
                         self.soglia_valida = True
 
+                        if not (0.0 <= soglia_input <= 100.0):
+                            raise ValueError("Range non valido")
+                        
                     except ValueError:
                         #se non lo è mostro un warning
                         from PyQt6.QtWidgets import QMessageBox
@@ -226,7 +230,7 @@ class domOS_devices(QWidget):
                 
                 #passo tutto a menu_disp dentro boundary dispositivi
                 feedback = self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, self.soglia)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 #resetto il menù e mostro un info che notifica del successo dell'operazione
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
@@ -279,7 +283,7 @@ class domOS_devices(QWidget):
                 #menu_disp dentro boundary dispositivi
                 soglia = None
                 feedback = self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, soglia, stato_iniziale, orario_attivazione)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 #resetto il menù e mostro un info che notifica del successo dell'operazione
                 [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
                 [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
@@ -321,7 +325,7 @@ class domOS_devices(QWidget):
                 
                 #passo tutto alla boundary
                 feedback = self.boundary_disp.menu_disp(self.comando, rimuovidisp, self.tipo , self.nomeDisp)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
 
                 if feedback == f"Errore: Dispositivo {rimuovidisp} non trovato":
                     #se l'id non è associato a nesun dispositivo, mostro un error
@@ -378,17 +382,28 @@ class domOS_devices(QWidget):
             elif self.usoConferma == 5:
                 
                 #prendo soglia da campo1
-                soglia_input = self.campo1.text().strip()
+                nuova_soglia = self.campo1.text().strip()
                 #controllo: soglia deve essere float
-                nuova_soglia = float(soglia_input) if soglia_input else None
-                if nuova_soglia == None:
-                    #se non lo è, mostro un warning
-                    from PyQt6.QtWidgets import QMessageBox
-                    QMessageBox.warning(
-                        self, 
-                        "Attenzione", 
-                        "Formato soglia non valido o vuota. La soglia non verrà modificata."
-                    )
+                self.soglia_valida= False
+                if not self.soglia_valida:
+                    try:
+                        nuova_soglia = self.campo1.text().strip()
+                        self.soglia = float(nuova_soglia)
+                        self.soglia_valida = True
+
+                        if not (0.0 <= nuova_soglia <= 100.0):
+                            raise ValueError("Range non valido")
+                        
+                    except ValueError:
+                        #se non lo è mostro un warning
+                        from PyQt6.QtWidgets import QMessageBox
+                        QMessageBox.warning(
+                            self, 
+                            "Attenzione", 
+                            "Formato soglia non valido"
+                        )
+                        self.campo1.clear()
+                        return
                 #prendo stato da campo 2 e controllo che abbia una forma valida. Se si, assegno
                 #il valore gusto di stato
                 nuovo_stato = False
@@ -425,7 +440,7 @@ class domOS_devices(QWidget):
                 self.comando = "configura"
                 self.tipo = self.nomeDisp = None
                 feedback = self.boundary_disp.menu_disp(self.comando, self.id_disp, self.tipo, self.nomeDisp, nuova_soglia, nuovo_stato, nuovo_orario)
-                self.centroNote(1, feedback) #invio il risultato al centro notifiche
+                self.centroNote(feedback) #invio il risultato al centro notifiche
                 if feedback == f"dispositivo non trovato":
                     #se l'id del dispositivo non è registrato nel sistema, mostro un error
                     from PyQt6.QtWidgets import QMessageBox
@@ -565,17 +580,17 @@ class domOS_devices(QWidget):
 
         #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
-        def centroNote(self, inizializzazione=None, notifica=None):
-            #inizializzazione serve per aggiornare il centro ogni volta che viene aperta una nuova finestra GUI
-            if inizializzazione == 0:
-                self.centroNotifiche.clear()
-                for n in self.notifiche:
-                    self.centroNotifiche.addItem(str(n))
-                    self.centroNotifiche.scrollToBottom()
-            elif notifica is not None:
-                stringa_notifica = str(notifica)
-                self.centroNotifiche.addItem(stringa_notifica)
+        def centroNote(self, notifica=None):
+            if notifica is not None:
+                stringa_notifica = notifica
+                self.centroNotifiche.addItem(str(stringa_notifica))
                 self.notifiche.append(stringa_notifica)
+                self.centroNotifiche.scrollToBottom()
+        #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti
+        #il centro notifiche
+        def showEvent(self, event):
+            super().showEvent(event)
+            if self.centroNotifiche.count() > 0:
                 self.centroNotifiche.scrollToBottom()
 
 #---------------------------------------------------------------------------------------------------------------

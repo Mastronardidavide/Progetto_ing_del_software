@@ -3,6 +3,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from pathlib import Path
 from PyQt6.QtWidgets import QWidget, QLabel, QListWidget
+from PyQt6.QtWidgets import QApplication
 
 #genero la finestra per la parte di login
 class domOS_login(QWidget): 
@@ -38,9 +39,10 @@ class domOS_login(QWidget):
             """)
             self.centroNotifiche.show()
             self.centroNotifiche.raise_()
-            self.inizializzazione = 0
+            self.centroNotifiche.clear()
             self.notifiche = notificheOld
-            self.centroNote(0, None)
+            for n in self.notifiche:
+                self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
             self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
@@ -127,7 +129,7 @@ class domOS_login(QWidget):
                 #passo id, nome e password al boundary utenti per il login e controllo il feedback dalla gui
                 login = self.boundary_utenti.form_login(id_ut, nome, pswd)
                 #se le credenziali sono valide passo alla finestra del menù principale e poi chiudo la finestra di login
-                self.centroNote(1, login) #invio il risultato del login al centro notifiche
+                self.centroNote(login) #invio il risultato del login al centro notifiche
                 if login:
                     from GUI.GUI_mainMenu import domOS_mainmenu
                     self.finestra_menu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
@@ -174,7 +176,7 @@ class domOS_login(QWidget):
             #passo tutto alla boundary
             esito = self.boundary_utenti.form_registrazione(id_ut, nome, pswd)
             #controllo cosa mi ritorna la boundary
-            self.centroNote(1, esito) #invio il risultato al centro notifiche
+            self.centroNote(esito) #invio il risultato al centro notifiche
             if esito == "Utente creato":
                 #se tutto va a buon fine, mostro un message box di informazione
                 from PyQt6.QtWidgets import QMessageBox
@@ -203,17 +205,17 @@ class domOS_login(QWidget):
 
         #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
-        def centroNote(self, inizializzazione=None, notifica=None):
-            #inizializzazione serve per aggiornare il centro ogni volta che viene aperta una nuova finestra GUI
-            if inizializzazione == 0:
-                self.centroNotifiche.clear()
-                for n in self.notifiche:
-                    self.centroNotifiche.addItem(str(n))
-                    self.centroNotifiche.scrollToBottom()
-            elif notifica is not None:
+        def centroNote(self, notifica=None):
+            if notifica is not None:
                 stringa_notifica = notifica
                 self.centroNotifiche.addItem(str(stringa_notifica))
                 self.notifiche.append(stringa_notifica)
+                self.centroNotifiche.scrollToBottom()
+        #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti
+        #il centro notifiche
+        def showEvent(self, event):
+            super().showEvent(event)
+            if self.centroNotifiche.count() > 0:
                 self.centroNotifiche.scrollToBottom()
 
 #---------------------------------------------------------------------------------------------------------------
