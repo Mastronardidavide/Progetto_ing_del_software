@@ -58,9 +58,15 @@ class GestoreDispositivi:
             return f"dispositivo non trovato"
         else:
             if isinstance(disp, Sensore):
-                disp.setSoglia(nuova_soglia)
+                if nuova_soglia == None: 
+                    pass
+                else:
+                    disp.setSoglia(nuova_soglia)
             elif isinstance(disp, Attuatore):
-                disp.setStato(nuovo_stato)
+                if nuovo_stato == None: 
+                    pass
+                else:
+                    disp.setStato(nuovo_stato)
                 if nuovo_orario == None:
                     pass
                 else:

@@ -1,3 +1,11 @@
 [
-
+  {
+    "id": "1",
+    "nome": "sala",
+    "orarioZona": null,
+    "orarioDisattivazione": null,
+    "sogliaZona": 1.0,
+    "id_attuatori": [],
+    "id_sensore": "1"
+  }
 ]

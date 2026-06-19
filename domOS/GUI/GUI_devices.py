@@ -206,17 +206,18 @@ class domOS_devices(QWidget):
 
             #in questo caso stiamo aggiungendo un dispostivo di tipo "sensore"
             elif self.usoConferma == 1:
-                
+
+                soglia_input = self.campo1.text().strip()
                 #controllo:la soglia deve essere float
                 if not self.soglia_valida:
                     try:
-                        soglia_input = self.campo1.text().strip()
                         self.soglia = float(soglia_input)
-                        self.soglia_valida = True
 
                         if not (0.0 <= self.soglia <= 100.0):
                             raise ValueError("Range non valido")
                         
+                        self.soglia_valida = True
+
                     except ValueError:
                         #se non lo è mostro un warning
                         from PyQt6.QtWidgets import QMessageBox
@@ -225,7 +226,6 @@ class domOS_devices(QWidget):
                             "Attenzione", 
                             "Formato soglia non valido"
                         )
-                        self.campo1.clear()
                         return
                 
                 #passo tutto a menu_disp dentro boundary dispositivi
@@ -384,29 +384,38 @@ class domOS_devices(QWidget):
                 #prendo soglia da campo1
                 nuova_soglia = self.campo1.text().strip()
                 #controllo: soglia deve essere float
-                self.soglia_valida= False
-                if not self.soglia_valida:
-                    try:
-                        nuova_soglia = self.campo1.text().strip()
-                        self.soglia = float(nuova_soglia)
-                        self.soglia_valida = True
+                self.soglia_valida = False
+                if nuova_soglia == "":
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.warning(
+                        self, 
+                        "Attenzione", 
+                        "Formato soglia non valido o vuoto. La soglia non verrà modificata."
+                    )
+                    nuova_soglia = None
+                else:
+                    if not self.soglia_valida:
+                        try:
+                            nuova_soglia = self.campo1.text().strip()
+                            self.soglia = float(nuova_soglia)
+                            self.soglia_valida = True
 
-                        if not (0.0 <= self.soglia <= 100.0):
-                            raise ValueError("Range non valido")
+                            if not (0.0 <= self.soglia <= 100.0):
+                                raise ValueError("Range non valido")
                         
-                    except ValueError:
-                        #se non lo è mostro un warning
-                        from PyQt6.QtWidgets import QMessageBox
-                        QMessageBox.warning(
-                            self, 
-                            "Attenzione", 
-                            "Formato soglia non valido"
-                        )
-                        self.campo1.clear()
-                        return
+                        except ValueError:
+                            #se non lo è mostro un warning
+                            from PyQt6.QtWidgets import QMessageBox
+                            QMessageBox.warning(
+                                self, 
+                                "Attenzione", 
+                                "Formato soglia non valido"
+                            )
+                            self.campo1.clear()
+                            return
                 #prendo stato da campo 2 e controllo che abbia una forma valida. Se si, assegno
                 #il valore gusto di stato
-                nuovo_stato = False
+                nuovo_stato = None
                 stato_input = self.campo2.text().strip().lower()
                 if stato_input == "on":
                     nuovo_stato = True
