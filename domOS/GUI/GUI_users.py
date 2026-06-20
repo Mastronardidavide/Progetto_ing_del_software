@@ -3,6 +3,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from pathlib import Path
 from PyQt6.QtWidgets import QWidget, QLabel
+from datetime import datetime
 
 #genero la finestra per il menù utenti
 class domOS_users(QWidget): 
@@ -50,7 +51,8 @@ class domOS_users(QWidget):
                 self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
-            self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
+            self.boundary_disp.notificaAuto.connect(self.centroNote)    #  |passo alla funzione che si occupa del
+            self.boundary_disp.notificaBack.connect(self.centroNote)    #--|centro notifiche
 
             self.listaUsers = QListWidget(self)
             self.listaUsers.setStyleSheet("""
@@ -214,7 +216,13 @@ class domOS_users(QWidget):
 
         #"indietro" riporta l'utente al menù principale della gui
         def indietro(self):
-
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             from GUI.GUI_mainMenu import domOS_mainmenu
             self.finestra_menu = domOS_mainmenu(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_menu.show()
@@ -351,11 +359,16 @@ class domOS_users(QWidget):
             
         #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
+        #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
+        #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
+        #Inoltre aggiunge alle notifiche data e ora correnti.
         def centroNote(self, notifica=None):
+            adesso = datetime.now()
+            orario_stringa = adesso.strftime("%d/%m/%Y %H:%M:%S")
             if notifica is not None:
-                stringa_notifica = notifica
-                self.centroNotifiche.addItem(str(stringa_notifica))
-                self.notifiche.append(stringa_notifica)
+                stringa_notifica = str(notifica)
+                self.centroNotifiche.addItem(f"{stringa_notifica} - {orario_stringa}")
+                self.notifiche.append(f"{stringa_notifica} - {orario_stringa}")
                 self.centroNotifiche.scrollToBottom()
         #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti
         #il centro notifiche

@@ -47,7 +47,8 @@ class domOS_mainmenu(QWidget):
                 self.centroNotifiche.addItem(str(n))
             self.boundary_disp.notificaAtt.connect(self.centroNote)     #--|collego le notifiche da boundary disp,
             self.boundary_disp.notificaSens.connect(self.centroNote)    #  |prendo ciò che è stato inviato e lo
-            self.boundary_disp.notificaAuto.connect(self.centroNote)    #--|passo alla funzione che si occupa dell centro notifiche
+            self.boundary_disp.notificaAuto.connect(self.centroNote)    #  |passo alla funzione che si occupa del
+            self.boundary_disp.notificaBack.connect(self.centroNote)    #--|centro notifiche
 
             self.listaStato = QListWidget(self)
             self.listaStato.setStyleSheet("""
@@ -188,31 +189,66 @@ class domOS_mainmenu(QWidget):
                 self.click = 0
 
         def mostraDisp(self):   #funzione che apre il menù dispositivi al click del pulsante dispositivi
+            
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             from GUI.GUI_devices import domOS_devices
             self.finestra_devices = domOS_devices(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_devices.show()
             self.close()
 
         def mostraUsers(self):  #funzione che apre il menù utenti al click del pulsante utenti
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             from GUI.GUI_users import domOS_users
             self.finestra_users = domOS_users(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_users.show()
             self.close()
             
         def mostraZone(self):   #funzione che apre il menù zone al click del pulsante zone
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             from GUI.GUI_zones import domOS_zones
             self.finestra_zones = domOS_zones(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_zones.show()
             self.close()
 
         def mostraScenari(self):    #funzione che apre il menù scenari al click del pulsante scenari
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             from GUI.GUI_scenarios import domOS_scenarios
             self.finestra_scenarios = domOS_scenarios(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
             self.finestra_scenarios.show()
             self.close()
 
         def esci(self): #funzione che esegue il logout al click del pulsante logout
-
+            #scollego i canali: è un passaggio necessario poichè altrimenti, rimanendo collegati alla classe,
+            #la prossima volta che viene aperta questa finestra i canali si ricollegheranno e quindi si avranno 
+            #più connessioni a singoli canali. Questo porterebbe ad ottenere più volte lo stesso messaggio da un canale.
+            self.boundary_disp.notificaAtt.disconnect(self.centroNote)
+            self.boundary_disp.notificaSens.disconnect(self.centroNote)
+            self.boundary_disp.notificaAuto.disconnect(self.centroNote)
+            self.boundary_disp.notificaBack.disconnect(self.centroNote)
             self.utente_autenticato = None
             from GUI.GUI_login import domOS_login
             self.finestra_login = domOS_login(self.boundary_disp, self.boundary_utenti, self.boundary_zone, self.boundary_scenari, self.notifiche)
@@ -221,11 +257,14 @@ class domOS_mainmenu(QWidget):
         
         #funzione che si occupa del centro notifiche: se ci sono notifiche, le aggiungo sia al centro notifiche
         #sia alla lista "notifiche", che poi passo ad ogni finestra della GUI, per mantenere le notifiche sullo schermo.
+        #Inoltre aggiunge alle notifiche data e ora correnti.
         def centroNote(self, notifica=None):
+            adesso = datetime.now()
+            orario_stringa = adesso.strftime("%d/%m/%Y %H:%M:%S")
             if notifica is not None:
-                stringa_notifica = notifica
-                self.centroNotifiche.addItem(str(stringa_notifica))
-                self.notifiche.append(stringa_notifica)
+                stringa_notifica = str(notifica)
+                self.centroNotifiche.addItem(f"{stringa_notifica} - {orario_stringa}")
+                self.notifiche.append(f"{stringa_notifica} - {orario_stringa}")
                 self.centroNotifiche.scrollToBottom()
         #funzione che scrolla in automatico verso il basso appena viene caricato con le notifiche meno recenti
         #il centro notifiche

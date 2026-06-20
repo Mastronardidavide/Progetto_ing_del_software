@@ -4,22 +4,15 @@ title "Gestione Dispositivi"
 left to right direction
 
 actor Utente
-actor Admin
 
 usecase "Aggiungi Dispositivo" as Aggiungi
 usecase "Rimuovi Dispositivo" as Rimuovi
-usecase "Visualizza Dati Dispositivo" as Visualizza
-usecase "Imposta Stato Attuatore" as Imposta
-usecase "Effettua Login" as Login
+usecase "configura Dispositivo" as Configura
+usecase "Visualizza Lista dispositivi" as Visualizza
 
-Admin -- Aggiungi
-Admin -- Rimuovi
-Utente -- Imposta
+Utente -- Aggiungi
+Utente -- Rimuovi
+Utente -- Configura
 Utente -- Visualizza
-
-Aggiungi ..> Login: <<include>>
-Rimuovi ..> Login: <<include>>
-Visualizza ..> Login: <<include>>
-Imposta ..> Login: <<include>>
 
 @enduml

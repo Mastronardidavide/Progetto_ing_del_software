@@ -4,21 +4,19 @@ title "Gestione Account"
 left to right direction
 
 actor Utente
-actor Admin
 
 usecase "Effettua Login" as Login
-usecase "Crea Account" as Crea
-usecase "Cancella Account" as Cancella
-usecase "Modifica Permessi" as Modifica
+usecase "Lista Utenti" as Lista
+usecase "Registra Utente" as Registra
+usecase "Nuovo Account" as Nuovo
+usecase "Rimuovi Account" as Cancella
 
 Utente -- Login
-Admin -- Login
-Admin -- Crea
-Admin -- Cancella
-Admin -- Modifica
+Utente -- Lista
+Utente -- Registra
+Utente -- Nuovo
+Utente -- Cancella
 
-Crea ..> Login: <<include>>
-Cancella ..> Login: <<include>>
-Modifica ..> Login: <<include>>
+Registra ..> Login: <<include>>
 
 @enduml

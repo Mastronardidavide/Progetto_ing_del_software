@@ -1,0 +1,24 @@
+@startuml gestionez
+
+title "Gestione Zone"
+left to right direction
+
+actor Utente
+
+usecase "Lista Zone" as Lista
+usecase "Aggiungi Zona" as Aggiungi
+usecase "Rimuovi Zona" as Rimuovi
+usecase "Rinomina Zona" as Rinomina
+usecase "Orario Zona" as Orario
+usecase "Associa Sensore" as AssociaS
+usecase "Associa/Dissocia Attuatore" as AssociaA
+
+Utente -- Lista
+Utente -- Aggiungi
+Utente -- Rimuovi
+Utente -- Rinomina
+Utente -- Orario
+Utente -- AssociaS
+Utente -- AssociaA
+
+@enduml

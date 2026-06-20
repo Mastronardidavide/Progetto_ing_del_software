@@ -1,0 +1,24 @@
+@startuml gestiones
+
+title "Gestione Scenari"
+left to right direction
+
+actor Utente
+
+usecase "Lista Scenari" as Lista
+usecase "Aggiungi Scenario" as Aggiungi
+usecase "Rimuovi Scenario" as Rimuovi
+usecase "Rinomina Scenario" as Rinomina
+usecase "Orario Scenario" as Orario
+usecase "Associa Sensore" as AssociaS
+usecase "Associa/Dissocia Attuatore" as AssociaA
+
+Utente -- Lista
+Utente -- Aggiungi
+Utente -- Rimuovi
+Utente -- Rinomina
+Utente -- Orario
+Utente -- AssociaS
+Utente -- AssociaA
+
+@enduml
