@@ -16,5 +16,11 @@
         "nome": "dav",
         "password": "mas",
         "tipo": "Ospite"
+    },
+    {
+        "id": "23",
+        "nome": "1",
+        "password": "1",
+        "tipo": "Ospite"
     }
 ]
