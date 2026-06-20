@@ -1,15 +1,23 @@
 @startuml
 actor Utente
-participant Sistema
-participant Scenario
+participant Form <<boundary>>
+participant GestoreScenari <<control>>
+participant Scenario <<entity>>
 
-Utente -> Sistema : seleziona "Rimuovi scenario"
-activate Sistema
+Utente -> Form : seleziona "Rimuovi scenario"
+activate Form
 
-Utente -> Sistema : inserisce l'ID dello scenario da eliminare
-Sistema -> Scenario !! : <<distruggi>>
+Utente -> Form : inserisce l'ID dello scenario da eliminare
+
+Form -> GestoreScenari : eliminaScenario(Scenario)
+activate GestoreScenari
+
+GestoreScenari -> Scenario !! : <<distruggi>>
 destroy Scenario
 
-Sistema --> Utente : scenario eliminato
-deactivate Sistema
+GestoreScenari --> Form : rimozione effettuata
+deactivate GestoreScenari
+
+Form --> Utente : scenario eliminato con successo
+deactivate Form
 @enduml

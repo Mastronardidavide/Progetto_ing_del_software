@@ -1,14 +1,21 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreZone <<control>>
 
-Utente -> Sistema : seleziona "Associa Sensore"
-activate Sistema
+Utente -> Form : seleziona "Associa Sensore"
+activate Form
 
-Utente -> Sistema : inserisce l'ID della zona da configurare
-Utente -> Sistema : inserisce l'ID del sensore da associare
-Utente -> Sistema : inserisce il valore di soglia del sensore
+Utente -> Form : inserisce l'ID della zona
+Utente -> Form : inserisce l'ID del sensore da associare
+Utente -> Form : inserisce il valore di soglia
 
-Sistema --> Utente : sensore associato con successo
-deactivate Sistema
+Form -> GestoreZone : impostaAutomazioneSensore()
+activate GestoreZone
+
+GestoreZone --> Form : associazione effettuata
+deactivate GestoreZone
+
+Form --> Utente : sensore associato con successo
+deactivate Form
 @enduml

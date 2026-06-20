@@ -1,15 +1,23 @@
 @startuml
 actor Utente
-participant Sistema
-participant Zona
+participant Form <<boundary>>
+participant GestoreZone <<control>>
+participant Zona <<entity>>
 
-Utente -> Sistema : seleziona "Rimuovi Zona"
-activate Sistema
+Utente -> Form : seleziona "Rimuovi Zona"
+activate Form
 
-Utente -> Sistema : inserisce l'ID della zona da rimuovere
-Sistema -> Zona !! : <<distruggi>>
+Utente -> Form : inserisce l'ID della zona da rimuovere
+
+Form -> GestoreZone : eliminaZona(Zona)
+activate GestoreZone
+
+GestoreZone -> Zona !! : <<distruggi>>
 destroy Zona
 
-Sistema --> Utente : zona eliminata con successo
-deactivate Sistema
+GestoreZone --> Form : rimozione effettuata
+deactivate GestoreZone
+
+Form --> Utente : zona eliminata con successo
+deactivate Form
 @enduml

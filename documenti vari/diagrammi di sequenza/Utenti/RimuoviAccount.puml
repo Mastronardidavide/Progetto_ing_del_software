@@ -1,15 +1,23 @@
 @startuml
 actor Utente
-participant Sistema
-participant Account
+participant Form <<boundary>>
+participant GestoreUtenti <<control>>
+participant Account <<entity>>
 
-Utente -> Sistema : seleziona "Rimuovi Account"
-activate Sistema
+Utente -> Form : seleziona "Rimuovi Account"
+activate Form
 
-Utente -> Sistema : inserisce ID dell'account da eliminare
-Sistema -> Account !! : <<distruggi>>
+Utente -> Form : inserisce l'ID dell'account da eliminare
+
+Form -> GestoreUtenti : eliminaAccount(Account)
+activate GestoreUtenti
+
+GestoreUtenti -> Account !! : <<distruggi>>
 destroy Account
 
-Sistema --> Utente : account eliminato con successo
-deactivate Sistema
+GestoreUtenti --> Form : rimozione effettuata
+deactivate GestoreUtenti
+
+Form --> Utente : account eliminato con successo
+deactivate Form
 @enduml

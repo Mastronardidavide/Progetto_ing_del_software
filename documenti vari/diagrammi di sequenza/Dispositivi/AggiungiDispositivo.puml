@@ -1,18 +1,36 @@
 @startuml
 actor Utente
-participant Sistema
-participant Dispositivo
+participant Form <<boundary>>
+participant GestoreDispositivi <<control>>
+participant Sensore <<entity>>
+participant Attuatore <<entity>>
 
-Utente -> Sistema : inserisce ID dispositivo
-activate Sistema
+Utente -> Form : inserisce l'ID del dispositivo
+activate Form
 
-Utente -> Sistema : inserisce tipo (sensore o attuatore)
-Utente -> Sistema : inserisce nome
-Utente -> Sistema : inserisce orario di attivazione
-Utente -> Sistema : inserisce stato
+Utente -> Form : inserisce il tipo (sensore o attuatore)
+Utente -> Form : inserisce il nome
+Utente -> Form : inserisce l'orario di attivazione
+Utente -> Form : inserisce lo stato
 
-Sistema -> Dispositivo ** : <<crea>>
+Form -> GestoreDispositivi : aggiungiDispositivo()
+activate GestoreDispositivi
 
-Sistema --> Utente : dispositivo aggiunto con successo
-deactivate Sistema
+alt tipo == sensore
+    GestoreDispositivi -> Sensore ** : <<crea>>
+    activate Sensore
+    Sensore --> GestoreDispositivi
+    deactivate Sensore
+else tipo == attuatore
+    GestoreDispositivi -> Attuatore ** : <<crea>>
+    activate Attuatore
+    Attuatore --> GestoreDispositivi
+    deactivate Attuatore
+end
+
+GestoreDispositivi --> Form : nuovo dispositivo aggiunto
+deactivate GestoreDispositivi
+
+Form --> Utente : dispositivo aggiunto con successo
+deactivate Form
 @enduml

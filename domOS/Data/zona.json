@@ -1,3 +1,11 @@
 [
-
+  {
+    "id": "1",
+    "nome": "dac",
+    "orarioZona": "12:11:00",
+    "orarioDisattivazione": "13:22:00",
+    "sogliaZona": null,
+    "id_attuatori": [],
+    "id_sensore": null
+  }
 ]

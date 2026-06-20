@@ -1,10 +1,17 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreScenari <<control>>
 
-Utente -> Sistema : seleziona "Lista Scenari"
-activate Sistema
+Utente -> Form : seleziona "Lista Scenari"
+activate Form
 
-Sistema --> Utente : visualizza la lista degli scenari esistenti
-deactivate Sistema
+Form -> GestoreScenari : listaScenari()
+activate GestoreScenari
+
+GestoreScenari --> Form : restituisce la lista degli scenari
+deactivate GestoreScenari
+
+Form --> Utente : visualizza la lista degli scenari esistenti
+deactivate Form
 @enduml

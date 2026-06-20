@@ -1,10 +1,17 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreZone <<control>>
 
-Utente -> Sistema : seleziona "Lista Zone"
-activate Sistema
+Utente -> Form : seleziona "Lista Zone"
+activate Form
 
-Sistema --> Utente : visualizza le zone registrate nel sistema
-deactivate Sistema
+Form -> GestoreZone : listaZone()
+activate GestoreZone
+
+GestoreZone --> Form : restituisce la lista delle zone
+deactivate GestoreZone
+
+Form --> Utente : visualizza le zone registrate
+deactivate Form
 @enduml

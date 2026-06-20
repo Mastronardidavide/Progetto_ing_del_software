@@ -1,13 +1,29 @@
 @startuml
 actor Tempo
-participant Sistema
+participant Form <<boundary>>
+participant GestoreDispositivi <<control>>
+participant GestoreDati <<control>>
+participant Log <<entity>>
 
-Tempo -> Sistema : innesca backup periodico
-activate Sistema
+Tempo -> Form : trigger timer
+activate Form
 
-Sistema -> Sistema : recupera i dati dei dispositivi
-Sistema -> Sistema : salva i dati raccolti
+Form -> GestoreDispositivi : lista()
+activate GestoreDispositivi
+GestoreDispositivi --> Form : restituisce i dati
+deactivate GestoreDispositivi
 
-Sistema --> Tempo : dati dei dispositivi raccolti
-deactivate Sistema
+Form -> GestoreDati : eseguiBackup(dati)
+activate GestoreDati
+
+GestoreDati -> Log ** : <<crea>>
+activate Log
+Log --> GestoreDati
+deactivate Log
+
+GestoreDati --> Form : salvataggio completato
+deactivate GestoreDati
+
+Form --> Tempo : backup eseguito con successo
+deactivate Form
 @enduml

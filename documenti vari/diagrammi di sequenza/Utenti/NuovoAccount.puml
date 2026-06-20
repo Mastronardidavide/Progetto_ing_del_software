@@ -1,16 +1,26 @@
 @startuml
 actor Utente
-participant Sistema
-participant Account
+participant Form <<boundary>>
+participant GestoreUtenti <<control>>
+participant Account <<entity>>
 
-Utente -> Sistema : seleziona "Nuovo Account"
-activate Sistema
+Utente -> Form : seleziona "Nuovo Account"
+activate Form
 
-Utente -> Sistema : inserisce ID nuovo account
-Utente -> Sistema : inserisce nome e password
+Utente -> Form : inserisce l'ID del nuovo account
+Utente -> Form : inserisce nome e password del nuovo account
 
-Sistema -> Account ** : <<crea>>
+Form -> GestoreUtenti : creaAccount()
+activate GestoreUtenti
 
-Sistema --> Utente : nuovo account creato con successo
-deactivate Sistema
+GestoreUtenti -> Account ** : <<crea>>
+activate Account
+Account --> GestoreUtenti
+deactivate Account
+
+GestoreUtenti --> Form : nuovo account generato
+deactivate GestoreUtenti
+
+Form --> Utente : nuovo account creato con successo
+deactivate Form
 @enduml
