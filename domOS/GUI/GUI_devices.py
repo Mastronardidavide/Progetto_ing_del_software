@@ -232,18 +232,27 @@ class domOS_devices(QWidget):
                 #passo tutto a menu_disp dentro boundary dispositivi
                 feedback = self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, self.soglia)
                 self.centroNote(feedback) #invio il risultato al centro notifiche
+                if feedback == f"Errore: Dispositivo {self.id} già presente":
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.warning(
+                        self, 
+                        "Attenzione", 
+                        "Sensore già presente"
+                    )
+                    return
+                else:
                 #resetto il menù e mostro un info che notifica del successo dell'operazione
-                [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
-                [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
-                self.btn1.hide()
+                    [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
+                    [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
+                    self.btn1.hide()
 
-                from PyQt6.QtWidgets import QMessageBox
-                QMessageBox.information(
-                    self, 
-                    "Successo", 
-                    "Sensore aggiunto con successo!"
-                )
-                self.click1 = 0
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.information(
+                        self, 
+                        "Successo", 
+                        "Sensore aggiunto con successo!"
+                    )
+                    self.click1 = 0
 
             #in questo caso stiamo aggiungendo un attuatore
             elif self.usoConferma == 2:
@@ -285,18 +294,27 @@ class domOS_devices(QWidget):
                 soglia = None
                 feedback = self.boundary_disp.menu_disp(self.comando, self.id, self.tipo , self.nomeDisp, soglia, stato_iniziale, orario_attivazione)
                 self.centroNote(feedback) #invio il risultato al centro notifiche
-                #resetto il menù e mostro un info che notifica del successo dell'operazione
-                [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
-                [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
-                self.btn1.hide()
+                if feedback == f"Errore: Dispositivo {self.id} già presente":
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.warning(
+                        self, 
+                        "Attenzione", 
+                        "Attuatore già presente"
+                    )
+                    return
+                else:
+                    #resetto il menù e mostro un info che notifica del successo dell'operazione
+                    [campo.clear() for campo in [self.campo1, self.campo2, self.campo3]]
+                    [campo.hide() for campo in [self.campo1, self.campo2, self.campo3]]
+                    self.btn1.hide()
 
-                from PyQt6.QtWidgets import QMessageBox
-                QMessageBox.information(
-                    self, 
-                    "Successo", 
-                    "Attuatore aggiunto con successo!"
-                )
-                self.click1 = 0
+                    from PyQt6.QtWidgets import QMessageBox
+                    QMessageBox.information(
+                        self, 
+                        "Successo", 
+                        "Attuatore aggiunto con successo!"
+                    )
+                    self.click1 = 0
             
             #se usoConferma è 3, "conferma" si occupa della rimozione di dispositivi
             elif self.usoConferma == 3:
