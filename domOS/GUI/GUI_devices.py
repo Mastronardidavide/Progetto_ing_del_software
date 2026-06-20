@@ -393,7 +393,7 @@ class domOS_devices(QWidget):
                         "Attenzione", 
                         "Formato soglia non valido o vuoto. La soglia non verrà modificata."
                     )
-                    nuova_soglia = None
+                    soglia = None
                 else:
                     if not self.soglia_valida:
                         try:

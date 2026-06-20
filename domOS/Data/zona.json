@@ -1,22 +1,3 @@
 [
-  {
-    "id": "1",
-    "nome": "testZona",
-    "orarioZona": null,
-    "orarioDisattivazione": null,
-    "sogliaZona": null,
-    "id_attuatori": [
-      "1"
-    ],
-    "id_sensore": null
-  },
-  {
-    "id": "2",
-    "nome": "bagno",
-    "orarioZona": null,
-    "orarioDisattivazione": null,
-    "sogliaZona": null,
-    "id_attuatori": [],
-    "id_sensore": null
-  }
+
 ]
