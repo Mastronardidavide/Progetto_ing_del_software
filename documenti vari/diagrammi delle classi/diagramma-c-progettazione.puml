@@ -120,15 +120,15 @@ package "Gestione" {
         + checkSensori()
         + lista(): list
     }
-    class GestoreTempo <<control>>{
-        + checkOrario(getOrario)
+
+}
+
+
+    class Timer <<entity>> {
+        + avvia(): void
+        + ferma(): void
+        + loop(): void
     }
-}
-
-class Timer <<entity>>{
-    getTime(): time
-}
-
     class Utente <<entity>> {
     -id: str
     -nome: str
@@ -160,6 +160,8 @@ Form "1" o-down- "1" GestoreScenari
 Form "1" o-down- "1" GestoreUtenti
 Form "1" o-down- "1" GestoreDispositivi
 Form "1" o-down- "1" GestoreDati
+Form "1" o-down- "*" Timer
+
 
 GestoreZone "1" *-- "*" Zona
 GestoreScenari "1" *-- "*" Scenario
@@ -169,8 +171,6 @@ GestoreDati "1" *-- "*" Log
 Zona "1" o-- "*" Dispositivo
 Scenario "1" o-- "*" Dispositivo
 
-Timer "1" --* "1" GestoreTempo
-Form "1" o-- "1" GestoreTempo
 
 
 @enduml

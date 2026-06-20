@@ -47,7 +47,7 @@ frame "Analisi dei requisiti" {
         file "Want to have" #F5F1B3 {
                 card "RF24-Monitoraggio\ndispositivi" #DDF5D7
                 card "RNF25-Ottimizzazione\nprestazioni" #DDF5D7
-                card "RNF25-Risparmio\nenergetico e report" #DDF5D7
+                card "RNF26-Risparmio\nenergetico e report" #DDF5D7
         }
     }
     file "Requisiti non funzionali: sono tutti gli altri vincoli \nche influenzano il sistema ed il suo sviluppo " #FFFFFF {
