@@ -1,16 +1,26 @@
 @startuml
 actor Utente
-participant Sistema
-participant Zona
+participant Form <<boundary>>
+participant GestoreZone <<control>>
+participant Zona <<entity>>
 
-Utente -> Sistema : seleziona "Aggiungi Zona"
-activate Sistema
+Utente -> Form : seleziona "Aggiungi Zona"
+activate Form
 
-Utente -> Sistema : inserisce ID della zona
-Utente -> Sistema : inserisce il nome per la zona
+Utente -> Form : inserisce l'ID della zona
+Utente -> Form : inserisce il nome per la zona
 
-Sistema -> Zona ** : <<crea>>
+Form -> GestoreZone : creaZona()
+activate GestoreZone
 
-Sistema --> Utente : zona creata con successo
-deactivate Sistema
+GestoreZone -> Zona ** : <<crea>>
+activate Zona
+Zona --> GestoreZone
+deactivate Zona
+
+GestoreZone --> Form : zona generata
+deactivate GestoreZone
+
+Form --> Utente : zona creata con successo
+deactivate Form
 @enduml

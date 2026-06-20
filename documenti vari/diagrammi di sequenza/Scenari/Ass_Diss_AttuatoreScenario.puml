@@ -1,17 +1,25 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreScenari <<control>>
 
-Utente -> Sistema : seleziona l'ID dello scenario esistente
-activate Sistema
+Utente -> Form : seleziona l'ID dello scenario
+activate Form
 
-Utente -> Sistema : seleziona l'ID dell'attuatore da inserire
+Utente -> Form : seleziona l'ID dell'attuatore
 
-alt attuatore già associato allo scenario
-    Sistema --> Utente : attuatore dissociato con successo
-else attuatore non associato allo scenario
-    Sistema --> Utente : attuatore associato con successo
+alt attuatore NON associato allo scenario
+    Form -> GestoreScenari : associaAttuatoreScenario()
+    activate GestoreScenari
+    GestoreScenari --> Form : associazione effettuata
+    deactivate GestoreScenari
+else attuatore GIA' associato allo scenario
+    Form -> GestoreScenari : rimuoviAttuatoreDaScenario()
+    activate GestoreScenari
+    GestoreScenari --> Form : dissociazione effettuata
+    deactivate GestoreScenari
 end
 
-deactivate Sistema
+Form --> Utente : Attuatore associato/disassociato con successo
+deactivate Form
 @enduml

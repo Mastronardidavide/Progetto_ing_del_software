@@ -1,13 +1,20 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreScenari <<control>>
 
-Utente -> Sistema : seleziona "Rinomina scenario"
-activate Sistema
+Utente -> Form : seleziona "Rinomina scenario"
+activate Form
 
-Utente -> Sistema : inserisce l'ID dello scenario esistente
-Utente -> Sistema : inserisce il nuovo nome per lo scenario
+Utente -> Form : inserisce l'ID dello scenario esistente
+Utente -> Form : inserisce il nuovo nome per lo scenario
 
-Sistema --> Utente : scenario modificato
-deactivate Sistema
+Form -> GestoreScenari : modificaScenario(id, nuovoNome)
+activate GestoreScenari
+
+GestoreScenari --> Form : restituisce stringa di conferma
+deactivate GestoreScenari
+
+Form --> Utente : scenario rinominato con successo
+deactivate Form
 @enduml

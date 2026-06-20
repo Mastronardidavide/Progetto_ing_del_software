@@ -1,11 +1,20 @@
 @startuml
 actor Utente
-participant Sistema
-Utente -> Sistema : inserisce ID esistente
-activate Sistema
-Utente -> Sistema : inserisce Nome
-Utente -> Sistema : inserisce Password
+participant Form <<boundary>>
+participant GestoreUtenti <<control>>
 
-Sistema --> Utente : utente autenticato
-deactivate Sistema
+Utente -> Form : inserisce l'ID esistente
+activate Form
+
+Utente -> Form : inserisce il nome
+Utente -> Form : inserisce la password
+
+Form -> GestoreUtenti : login()
+activate GestoreUtenti
+
+GestoreUtenti --> Form : esito positivo
+deactivate GestoreUtenti
+
+Form --> Utente : autenticazione completata
+deactivate Form
 @enduml

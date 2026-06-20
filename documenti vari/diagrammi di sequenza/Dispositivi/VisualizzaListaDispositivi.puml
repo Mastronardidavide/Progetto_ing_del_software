@@ -1,10 +1,17 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreDispositivi <<control>>
 
-Utente -> Sistema : seleziona "Lista Dispositivi"
-activate Sistema
+Utente -> Form : seleziona "Lista Dispositivi"
+activate Form
 
-Sistema --> Utente : visualizza i dispositivi esistenti
-deactivate Sistema
+Form -> GestoreDispositivi : lista()
+activate GestoreDispositivi
+
+GestoreDispositivi --> Form : restituisce la lista dei dispositivi
+deactivate GestoreDispositivi
+
+Form --> Utente : visualizza i dispositivi esistenti
+deactivate Form
 @enduml

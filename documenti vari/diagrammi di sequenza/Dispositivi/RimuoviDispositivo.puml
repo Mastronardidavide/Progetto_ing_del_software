@@ -1,14 +1,21 @@
 @startuml
 actor Utente
-participant Sistema
-participant Dispositivo
+participant Form <<boundary>>
+participant GestoreDispositivi <<control>>
+participant Dispositivo <<entity>>
 
-Utente -> Sistema : inserisce ID dispositivo da eliminare
-activate Sistema
+Utente -> Form : inserisce l'ID del dispositivo da eliminare
+activate Form
 
-Sistema -> Dispositivo !! : <<distruggi>>
+Form -> GestoreDispositivi : rimuoviDispositivo(Dispositivo)
+activate GestoreDispositivi
+
+GestoreDispositivi -> Dispositivo !! : <<distruggi>>
 destroy Dispositivo
 
-Sistema --> Utente : dispositivo rimosso con successo
-deactivate Sistema
+GestoreDispositivi --> Form : rimozione effettuata
+deactivate GestoreDispositivi
+
+Form --> Utente : dispositivo rimosso con successo
+deactivate Form
 @enduml

@@ -1,13 +1,20 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreZone <<control>>
 
-Utente -> Sistema : seleziona "Rinomina Zona"
-activate Sistema
+Utente -> Form : seleziona "Rinomina Zona"
+activate Form
 
-Utente -> Sistema : inserisce l'ID della zona da rinominare
-Utente -> Sistema : inserisce il nuovo nome della zona
+Utente -> Form : inserisce l'ID della zona da rinominare
+Utente -> Form : inserisce il nuovo nome della zona
 
-Sistema --> Utente : zona rinominata con successo
-deactivate Sistema
+Form -> GestoreZone : modificaZona(id, nuovoNome)
+activate GestoreZone
+
+GestoreZone --> Form : restituisce stringa di conferma
+deactivate GestoreZone
+
+Form --> Utente : zona rinominata con successo
+deactivate Form
 @enduml

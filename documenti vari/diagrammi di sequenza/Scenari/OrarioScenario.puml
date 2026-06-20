@@ -1,13 +1,20 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreScenari <<control>>
 
-Utente -> Sistema : seleziona l'ID dello scenario da automatizzare
-activate Sistema
+Utente -> Form : seleziona l'ID dello scenario
+activate Form
 
-Utente -> Sistema : inserisce l'orario di attivazione
-Utente -> Sistema : inserisce l'orario di disattivazione
+Utente -> Form : inserisce l'orario di attivazione
+Utente -> Form : inserisce l'orario di disattivazione
 
-Sistema --> Utente : automazione dello scenario configurata
-deactivate Sistema
+Form -> GestoreScenari : impostaProgramazioneOraria()
+activate GestoreScenari
+
+GestoreScenari --> Form : programmazione oraria impostata
+deactivate GestoreScenari
+
+Form --> Utente : automazione dello scenario configurata
+deactivate Form
 @enduml

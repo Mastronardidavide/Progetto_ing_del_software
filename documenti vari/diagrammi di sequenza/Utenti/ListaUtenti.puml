@@ -1,10 +1,17 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreUtenti <<control>>
 
-Utente -> Sistema : seleziona "Lista Utenti"
-activate Sistema
+Utente -> Form : seleziona "Lista Utenti"
+activate Form
 
-Sistema --> Utente : visualizza elenco degli utenti
-deactivate Sistema
+Form -> GestoreUtenti : listaUtenti()
+activate GestoreUtenti
+
+GestoreUtenti --> Form : restituisce la lista degli account
+deactivate GestoreUtenti
+
+Form --> Utente : visualizza l'elenco degli utenti esistenti
+deactivate Form
 @enduml

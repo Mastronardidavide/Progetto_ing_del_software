@@ -1,14 +1,21 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreDispositivi <<control>>
 
-Utente -> Sistema : inserisce ID dispositivo
-activate Sistema
+Utente -> Form : inserisce l'ID del dispositivo da configurare
+activate Form
 
-Utente -> Sistema : inserisce soglia
-Utente -> Sistema : inserisce stato
-Utente -> Sistema : inserisce orario di attivazione
+Utente -> Form : inserisce l'eventuale soglia
+Utente -> Form : inserisce l'eventuale stato
+Utente -> Form : inserisce il nuovo orario di attivazione
 
-Sistema --> Utente : dispositivo configurato con successo
-deactivate Sistema
+Form -> GestoreDispositivi : configuraDispositivo(Dispositivo)
+activate GestoreDispositivi
+
+GestoreDispositivi --> Form : configurazione effettuata
+deactivate GestoreDispositivi
+
+Form --> Utente : dispositivo configurato con successo
+deactivate Form
 @enduml

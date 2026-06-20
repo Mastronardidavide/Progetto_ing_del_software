@@ -1,10 +1,22 @@
 @startuml
 actor Utente
-participant Sistema
+participant Form <<boundary>>
+participant GestoreDispositivi <<control>>
+participant GestoreDati <<control>>
 
-Utente -> Sistema : seleziona "stato"
-activate Sistema
+Utente -> Form : seleziona "stato"
+activate Form
 
-Sistema --> Utente : mostra ID, stato, orario attivazione e ultimo backup
-deactivate Sistema
+Form -> GestoreDispositivi : lista()
+activate GestoreDispositivi
+GestoreDispositivi --> Form : restituisce ID, stato e orario dei dispositivi
+deactivate GestoreDispositivi
+
+Form -> GestoreDati : recuperaContenutoBackup(GestoreDati)
+activate GestoreDati
+GestoreDati --> Form : restituisce dati dell'ultimo backup
+deactivate GestoreDati
+
+Form --> Utente : visualizza dispositivi e ultimo backup
+deactivate Form
 @enduml
